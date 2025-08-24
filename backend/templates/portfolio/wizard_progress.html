@@ -1,0 +1,465 @@
+{% load static %}
+
+<!-- Wizard Progress Component -->
+<style>
+    .wizard-header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .wizard-container {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        padding: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wizard-steps {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 8px;
+    }
+
+    .wizard-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        flex: 1;
+    }
+
+    .step-circle {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .step-circle.completed {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-color: #10b981;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .step-circle.current {
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        color: white;
+        border-color: #8b5cf6;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    }
+
+    .step-circle.pending {
+        background: #f3f4f6;
+        color: #6b7280;
+        border-color: #d1d5db;
+    }
+
+    .step-circle.disabled {
+        background: #e5e7eb;
+        color: #9ca3af;
+        border-color: #d1d5db;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    .step-circle:hover:not(.disabled) {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
+    }
+
+    .step-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .step-link:hover {
+        text-decoration: none;
+    }
+
+    .step-link.disabled {
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .connecting-line {
+        position: absolute;
+        top: 14px;
+        left: 20px;
+        right: 20px;
+        height: 2px;
+        background: #e5e7eb;
+        z-index: 1;
+    }
+
+    .progress-line {
+        position: absolute;
+        top: 14px;
+        left: 20px;
+        height: 2px;
+        background: linear-gradient(90deg, #10b981, #059669);
+        z-index: 1;
+        transition: width 0.5s ease;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .wizard-header-container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        .wizard-container {
+            padding: 6px;
+            margin-bottom: 8px;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .wizard-steps {
+            flex-wrap: nowrap;
+            gap: 8px;
+            min-width: max-content;
+            padding: 0 10px;
+        }
+
+        .wizard-step {
+            flex: 0 0 auto;
+            min-width: 24px;
+        }
+
+        .step-circle {
+            width: 20px;
+            height: 20px;
+            font-size: 9px;
+        }
+
+        .connecting-line,
+        .progress-line {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .wizard-container {
+            padding: 4px;
+        }
+
+        .wizard-steps {
+            gap: 6px;
+            padding: 0 8px;
+        }
+
+        .step-circle {
+            width: 18px;
+            height: 18px;
+            font-size: 8px;
+        }
+    }
+
+    /* Progress Summary */
+    .progress-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #f8f7ff, #f3f4f6);
+        border-radius: 12px;
+        border: 1px solid rgba(139, 92, 246, 0.1);
+    }
+
+    .progress-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .progress-percentage {
+        font-size: 16px;
+        font-weight: 700;
+        color: #8b5cf6;
+    }
+
+    .completed-count {
+        font-size: 12px;
+        color: #10b981;
+        font-weight: 600;
+    }
+</style>
+
+<div class="wizard-header-container">
+    <div class="wizard-container">
+        <div class="wizard-steps">
+            <!-- Connecting Lines -->
+            <div class="connecting-line"></div>
+            <div class="progress-line" style="width: {{ progress_width }}%;"></div>
+
+            <!-- Step 1: Personal Info -->
+            <div class="wizard-step">
+                <a href="{% url 'personal_info1' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'personal_info1' %}current{% elif step_completion.1 %}completed{% else %}pending{% endif %}">
+                        1
+                    </div>
+                </a>
+            </div>
+
+            <!-- Step 2: Education -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_education' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_education' %}current{% elif step_completion.2 %}completed{% else %}pending{% endif %}">
+                        2
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        2
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 3: Projects -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_project' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_project' %}current{% elif step_completion.3 %}completed{% else %}pending{% endif %}">
+                        3
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        3
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 4: Experience -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_experience' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_experience' %}current{% elif step_completion.4 %}completed{% else %}pending{% endif %}">
+                        4
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        4
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 5: Certifications -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_certification' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_certification' %}current{% elif step_completion.5 %}completed{% else %}pending{% endif %}">
+                        5
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        5
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 6: Skills -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_skill' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_skill' %}current{% elif step_completion.6 %}completed{% else %}pending{% endif %}">
+                        6
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        6
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 7: Languages -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_language' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_language' %}current{% elif step_completion.7 %}completed{% else %}pending{% endif %}">
+                        7
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        7
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 8: Hobbies -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_hobby' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_hobby' %}current{% elif step_completion.8 %}completed{% else %}pending{% endif %}">
+                        8
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        8
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 9: Extras -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'extras' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'extras' %}current{% elif step_completion.9 %}completed{% else %}pending{% endif %}">
+                        9
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        9
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 10: Summary -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'add_summary' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'add_summary' %}current{% elif step_completion.10 %}completed{% else %}pending{% endif %}">
+                        10
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        10
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Step 11: Social Links -->
+            <div class="wizard-step">
+                {% if step_completion.1 %}
+                <a href="{% url 'personal_info2' portfolio.pk %}" class="step-link">
+                    <div
+                        class="step-circle {% if current_step == 'personal_info2' %}current{% elif step_completion.11 %}completed{% else %}pending{% endif %}">
+                        11
+                    </div>
+                </a>
+                {% else %}
+                <div class="step-link disabled">
+                    <div class="step-circle disabled" title="Complete Personal Information first">
+                        11
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <!-- <div class="progress-summary">
+            <div class="progress-text">
+                Portfolio Progress
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="completed-count">
+                    {{ completed_steps|default:0 }}/11 completed
+                </div>
+                <div class="progress-percentage">
+                    {{ progress_percentage|default:0 }}%
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add tooltip functionality to step circles
+        const stepCircles = document.querySelectorAll('.step-circle');
+
+        stepCircles.forEach(function (circle) {
+            const stepNumber = circle.textContent.trim();
+            const stepNames = {
+                '1': 'Personal Info',
+                '2': 'Education',
+                '3': 'Projects',
+                '4': 'Experience',
+                '5': 'Certifications',
+                '6': 'Skills',
+                '7': 'Languages',
+                '8': 'Hobbies',
+                '9': 'Extras',
+                '10': 'Summary',
+                '11': 'Social Links'
+            };
+
+            const stepName = stepNames[stepNumber] || `Step ${stepNumber}`;
+
+            // Add title attribute for tooltip
+            circle.setAttribute('title', stepName);
+
+            // Add click feedback only for enabled steps
+            if (!circle.classList.contains('disabled')) {
+                circle.addEventListener('click', function () {
+                    // Add a brief visual feedback
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            }
+        });
+    });
+</script>

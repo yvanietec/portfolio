@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ full_name }} - Resume</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7fb;
+        }
+        .container {
+            display: flex;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .left {
+            background-color: #1f2c3d;
+            color: white;
+            width: 30%;
+            padding: 30px;
+            text-align: center;
+        }
+        .left img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .left h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .left p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .section-title {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        .right {
+            width: 70%;
+            padding: 30px;
+        }
+        .right h1 {
+            font-size: 26px;
+            margin-bottom: 0;
+        }
+        .right h1 span {
+            color: #4a6ee0;
+        }
+        .job {
+            margin-bottom: 20px;
+        }
+        .job h4 {
+            margin: 0;
+        }
+        .skills ul, .languages ul {
+            list-style-type: none;
+            padding: 0;
+            font-size: 14px;
+        }
+        .skills li, .languages li {
+            margin-bottom: 5px;
+        }
+        .profile p {
+            font-size: 14px;
+        }
+        .contact-item {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .education, .skills, .languages {
+            margin-top: 30px;
+        }
+        .reference {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left">
+        <img src="{{ profile_photo_url }}" alt="Profile Photo">
+        <h2>CONTACT</h2>
+        <div class="contact-item">📞 {{ phone }}</div>
+        <div class="contact-item">📧 {{ email }}</div>
+        <div class="contact-item">📍 {{ address }}</div>
+        <div class="contact-item">🌐 {{ website }}</div>
+
+        <div class="education">
+            <h2>EDUCATION</h2>
+            {% for edu in education %}
+                <p><strong>{{ edu.years }}</strong><br>
+                {{ edu.institution }}<br>
+                {{ edu.degree }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="skills">
+            <h2>SKILLS</h2>
+            <ul>
+                {% for skill in skills %}
+                    <li>• {{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="languages">
+            <h2>LANGUAGES</h2>
+            <ul>
+                {% for lang in languages %}
+                    <li>• {{ lang.name }} ({{ lang.level }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="right">
+        <h1><strong>{{ first_name }}</strong> <span>{{ last_name }}</span></h1>
+        <p><em>{{ job_title }}</em></p>
+
+        <div class="profile">
+            <div class="section-title">PROFILE</div>
+            <p>{{ profile_summary }}</p>
+        </div>
+
+        <div class="experience">
+            <div class="section-title">WORK EXPERIENCE</div>
+            {% for job in work_experience %}
+                <div class="job">
+                    <h4><strong>{{ job.company }}</strong> — {{ job.title }}</h4>
+                    <p><em>{{ job.start_year }} - {{ job.end_year }}</em></p>
+                    <ul>
+                        {% for point in job.responsibilities %}
+                            <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="reference">
+            <div class="section-title">REFERENCE</div>
+            {% for ref in references %}
+                <p><strong>{{ ref.name }}</strong><br>
+                {{ ref.position }}<br>
+                📞 {{ ref.phone }} | ✉️ {{ ref.email }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

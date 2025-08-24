@@ -1,0 +1,204 @@
+{% extends 'portfolio/base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_student_approvals.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_dashboard.js' %}"></script>
+<script src="{% static 'js/admin_student_approvals.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="student-approvals-container">
+    <a href="{% url 'admin_dashboard' %}" class="back-to-dashboard">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+
+    <div class="approvals-header">
+        <h1 class="approvals-title">
+            <i class="fas fa-user-check"></i> Student Approval Management
+        </h1>
+        <p class="approvals-subtitle">Review and approve student registrations</p>
+    </div>
+
+    <div class="approval-stats">
+        <div class="approval-stat-card">
+            <div class="approval-stat-number">{{ pending_students.count }}</div>
+            <div class="approval-stat-label">
+                <i class="fas fa-clock"></i> Pending Approvals
+            </div>
+        </div>
+        <div class="approval-stat-card">
+            <div class="approval-stat-number">{{ approved_students.count }}</div>
+            <div class="approval-stat-label">
+                <i class="fas fa-check-circle"></i> Recently Approved
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Students -->
+    <div class="approval-table-section">
+        <div class="approval-table-header">
+            <span class="approval-table-title">
+                <i class="fas fa-user-clock"></i> Pending Student Approvals
+            </span>
+            <span class="approval-table-count">{{ pending_students.count }} students waiting</span>
+        </div>
+
+        {% if pending_students %}
+        <form method="post" action="{% url 'bulk_approve_students' %}" id="bulk-form">
+            {% csrf_token %}
+            <div class="bulk-actions-container">
+                <label class="bulk-select-all">
+                    <input type="checkbox" id="select-all"> Select All
+                </label>
+                <button type="submit" class="bulk-approve-btn">
+                    <i class="fas fa-check-double"></i> Bulk Approve Selected <span class="count">(0)</span>
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="approval-data-table">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-cell"></th>
+                            <th>Student Details</th>
+                            <th>Contact</th>
+                            <th>Registered By</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in pending_students %}
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" name="student_ids" value="{{ student.user.id }}"
+                                    class="student-checkbox">
+                            </td>
+                            <td>
+                                <div class="student-info">
+                                    <div class="student-name">{{ student.first_name }} {{ student.last_name }}</div>
+                                    <div class="student-username">@{{ student.user.username }}</div>
+                                    <div class="student-email">{{ student.user.email }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if student.user.userprofile.contact %}
+                                <span class="text-primary">{{ student.user.userprofile.contact }}</span>
+                                {% else %}
+                                <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if student.created_by %}
+                                <div class="agent-info">
+                                    <div class="agent-name">{{ student.created_by.first_name }} {{
+                                        student.created_by.last_name }}</div>
+                                    <div class="agent-username">Agent: {{ student.created_by.user.username }}</div>
+                                </div>
+                                {% else %}
+                                <span class="direct-registration">Direct Registration</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="approval-date">{{ student.user.date_joined|date:"M d, Y H:i" }}</span>
+                            </td>
+                            <td>
+                                <div class="approval-actions">
+                                    <a href="{% url 'approve_student' student.user.id %}"
+                                        class="approval-btn approval-btn-approve" data-tooltip="Approve this student">
+                                        <i class="fas fa-check"></i> Approve
+                                    </a>
+                                    <a href="{% url 'reject_student' student.user.id %}"
+                                        class="approval-btn approval-btn-reject"
+                                        data-tooltip="Reject and delete this student">
+                                        <i class="fas fa-times"></i> Reject
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% else %}
+        <div class="approval-empty-state">
+            <i class="fas fa-user-check"></i>
+            <h3>No Pending Approvals</h3>
+            <p>All students have been processed.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recently Approved Students -->
+    <div class="approval-table-section">
+        <div class="approval-table-header">
+            <span class="approval-table-title">
+                <i class="fas fa-user-check"></i> Recently Approved Students
+            </span>
+            <span class="approval-table-count">Last 20 approvals</span>
+        </div>
+
+        {% if approved_students %}
+        <div class="table-responsive">
+            <table class="approval-data-table">
+                <thead>
+                    <tr>
+                        <th>Student Details</th>
+                        <th>Contact</th>
+                        <th>Registered By</th>
+                        <th>Approved Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in approved_students %}
+                    <tr>
+                        <td>
+                            <div class="student-info">
+                                <div class="student-name">{{ student.first_name }} {{ student.last_name }}</div>
+                                <div class="student-username">@{{ student.user.username }}</div>
+                                <div class="student-email">{{ student.user.email }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if student.user.userprofile.contact %}
+                            <span class="text-primary">{{ student.user.userprofile.contact }}</span>
+                            {% else %}
+                            <span class="text-muted">Not provided</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if student.created_by %}
+                            <div class="agent-info">
+                                <div class="agent-name">{{ student.created_by.first_name }} {{
+                                    student.created_by.last_name }}</div>
+                                <div class="agent-username">Agent: {{ student.created_by.user.username }}</div>
+                            </div>
+                            {% else %}
+                            <span class="direct-registration">Direct Registration</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="approval-date">{{ student.user.date_joined|date:"M d, Y H:i" }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="approval-empty-state">
+            <i class="fas fa-user-times"></i>
+            <h3>No Recently Approved Students</h3>
+            <p>No recently approved students found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

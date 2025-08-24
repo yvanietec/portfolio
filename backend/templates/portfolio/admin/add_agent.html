@@ -1,0 +1,178 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <!-- Form Header -->
+    <div class="admin-form-header">
+        <h1 class="admin-form-title">
+            <i class="fas fa-user-plus"></i>
+            Add New Agent
+        </h1>
+        <p class="admin-form-subtitle">Create a new agent account for portfolio management</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="admin-form-card">
+        <form method="post" id="addAgentForm">
+            {% csrf_token %}
+
+            <div class="admin-form-grid">
+                {% for field in form %}
+                <div
+                    class="admin-form-group {% if field.name == 'bio' or field.name == 'description' %}admin-form-grid-full{% endif %}">
+                    <label class="admin-form-label {% if field.field.required %}required{% endif %}"
+                        for="{{ field.id_for_label }}">
+                        {% if field.name == 'username' %}
+                        <i class="fas fa-user"></i>
+                        {% elif field.name == 'email' %}
+                        <i class="fas fa-envelope"></i>
+                        {% elif field.name == 'first_name' %}
+                        <i class="fas fa-user"></i>
+                        {% elif field.name == 'last_name' %}
+                        <i class="fas fa-user"></i>
+                        {% elif field.name == 'phone' or field.name == 'contact' %}
+                        <i class="fas fa-phone"></i>
+                        {% elif field.name == 'password' %}
+                        <i class="fas fa-lock"></i>
+                        {% elif field.name == 'confirm_password' %}
+                        <i class="fas fa-lock"></i>
+                        {% elif field.name == 'bio' or field.name == 'description' %}
+                        <i class="fas fa-file-text"></i>
+                        {% elif field.name == 'department' %}
+                        <i class="fas fa-building"></i>
+                        {% elif field.name == 'role' %}
+                        <i class="fas fa-id-badge"></i>
+                        {% else %}
+                        <i class="fas fa-edit"></i>
+                        {% endif %}
+                        {{ field.label }}
+                    </label>
+                    <div class="admin-form-input-group">
+                        {% if field.name == 'bio' or field.name == 'description' %}
+                        {{ field|add_class:"admin-form-control textarea" }}
+                        {% elif field.name == 'username' %}
+                        {{ field|add_class:"admin-form-control" }}
+                        <div id="username-availability" class="field-feedback mt-1"></div>
+                        {% else %}
+                        {{ field|add_class:"admin-form-control" }}
+                        {% endif %}
+                    </div>
+                    {% if field.errors %}
+                    <span class="admin-form-error">{{ field.errors.0 }}</span>
+                    {% endif %}
+                    {% if field.help_text %}
+                    <span class="admin-form-help">{{ field.help_text }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Form Actions -->
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-form-btn admin-form-btn-success">
+                    <i class="fas fa-plus"></i>
+                    Create Agent
+                </button>
+                <a href="{% url 'admin_dashboard' %}" class="admin-form-btn admin-form-btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Form validation
+        const form = document.getElementById('addAgentForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function (e) {
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+
+        // Real-time validation
+        const inputs = form.querySelectorAll('.admin-form-control');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                if (this.value.trim() !== '') {
+                    this.classList.add('valid');
+                    this.classList.remove('invalid');
+                }
+            });
+
+            // Password confirmation validation
+            if (input.name === 'confirm_password' || input.name === 'password2') {
+                input.addEventListener('input', function () {
+                    const passwordField = form.querySelector('input[name="password"], input[name="password1"]');
+                    if (passwordField && this.value !== passwordField.value) {
+                        this.setCustomValidity('Passwords do not match');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            }
+        });
+
+        // Email validation
+        const emailField = form.querySelector('input[type="email"]');
+        if (emailField) {
+            emailField.addEventListener('blur', function () {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (this.value && !emailRegex.test(this.value)) {
+                    this.classList.add('invalid');
+                    this.classList.remove('valid');
+                } else if (this.value) {
+                    this.classList.add('valid');
+                    this.classList.remove('invalid');
+                }
+            });
+        }
+        // Real-time username (agent ID) availability check
+        const usernameInput = form.querySelector('input[name="username"]');
+        const usernameFeedback = document.getElementById('username-availability');
+        let usernameTimeout = null;
+        if (usernameInput && usernameFeedback) {
+            usernameInput.addEventListener('input', function () {
+                const value = this.value.trim();
+                usernameFeedback.textContent = '';
+                usernameFeedback.className = 'field-feedback mt-1';
+                if (value.length < 3) {
+                    return;
+                }
+                clearTimeout(usernameTimeout);
+                usernameTimeout = setTimeout(function () {
+                    fetch('/ajax/check/?field=username&value=' + encodeURIComponent(value))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.available) {
+                                usernameFeedback.textContent = 'Agent ID is available';
+                                usernameFeedback.style.color = 'green';
+                            } else {
+                                usernameFeedback.textContent = data.error ? data.error : 'Agent ID is already taken';
+                                usernameFeedback.style.color = 'red';
+                            }
+                        })
+                        .catch(() => {
+                            usernameFeedback.textContent = 'Could not check Agent ID';
+                            usernameFeedback.style.color = 'orange';
+                        });
+                }, 400);
+            });
+        }
+    });
+</script>
+{% endblock %}

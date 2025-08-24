@@ -1,0 +1,120 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+
+{% block title %}Summary - Step 10{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+<link rel="stylesheet" href="{% static 'css/mobile_summary_buttons.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container" data-current-step="add_summary">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <!-- Wizard Progress Component -->
+        {% include "portfolio/wizard_progress.html" %}
+        <div class="portfolio-form-container portfolio-fade-in">
+            <div class="portfolio-text-center">
+                <h1 class="portfolio-title">Step 10: Professional Summary</h1>
+                <p class="portfolio-subtitle">Write a compelling summary that highlights your key strengths and career
+                    objectives</p>
+            </div>
+
+            <form method="post" id="summary-form" autocomplete="off">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="portfolio-alert portfolio-alert-error">
+                    {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="portfolio-form-content">
+                    <div class="portfolio-form-section">
+                        <div
+                            class="portfolio-flex portfolio-items-center portfolio-justify-between portfolio-spacing-sm">
+                            <h3 class="portfolio-section-title">Professional Summary</h3>
+                        </div>
+                        <div class="portfolio-form-group">
+
+                            <div class="portfolio-flex portfolio-flex-row portfolio-spacing-md">
+                                <div style="flex: 6; margin-right: 1rem;">
+                                    {{ form.content }}
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button type="button" id="ai-suggest-btn"
+                                        class="portfolio-btn portfolio-btn-secondary" title="Suggest with AI">
+                                        <i class="fas fa-magic"></i> AI Suggest
+                                    </button>
+                                    <button type="button" id="ai-regenerate-btn"
+                                        class="portfolio-btn portfolio-btn-secondary" title="Regenerate Suggestions"
+                                        style="display:none;">
+                                        <i class="fas fa-sync-alt"></i> Regenerate
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="ai-suggestions-list" class="portfolio-summary-output portfolio-hidden"
+                                aria-live="polite"></div>
+                            {% for error in form.content.errors %}
+                            <div class="portfolio-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standardized Button Group - Consistent Alignment -->
+                <div class="portfolio-btn-group">
+                    <button type="submit" class="portfolio-btn portfolio-btn-primary">
+                        Next <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/add_summary.js' %}"></script>
+
+<script>
+    // Auto-expanding textarea functionality
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Initialize auto-resize for all textareas
+    function initializeAutoResize() {
+        const textareas = document.querySelectorAll('.portfolio-textarea');
+        textareas.forEach(textarea => {
+            // Set initial height
+            autoResizeTextarea(textarea);
+
+            // Add event listeners
+            textarea.addEventListener('input', function () {
+                autoResizeTextarea(this);
+            });
+
+            textarea.addEventListener('focus', function () {
+                autoResizeTextarea(this);
+            });
+        });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeAutoResize();
+
+
+    });
+</script>
+{% endblock %}

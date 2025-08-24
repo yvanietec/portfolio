@@ -1,0 +1,402 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% load static %}
+
+{% block title %}Agent Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box,
+            linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .real-time-update {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.7;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include "go_back_button.html" %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-6xl mx-auto space-y-10">
+        <!-- Header with Notifications -->
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 mb-4">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h2
+                        class="text-2xl md:text-3xl font-bold mb-2 gradient-text flex items-center justify-center md:justify-start gap-2">
+                        <i class="fas fa-user-tie"></i> Agent Dashboard
+                    </h2>
+                    <p class="text-gray-600">Welcome back, {{ user.userprofile.first_name }}!</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
+                    <!-- Notification Bell -->
+                    <div class="relative">
+                        <button id="notificationBtn"
+                            class="btn-hover-effect bg-violet-100 hover:bg-violet-200 text-violet-700 px-4 py-2 rounded-xl font-medium shadow flex items-center">
+                            <i class="fas fa-bell mr-2"></i> Notifications
+                            <span id="notificationCount" class="notification-badge hidden">0</span>
+                        </button>
+                    </div>
+                    <!-- Quick Actions -->
+                    <div class="flex gap-2">
+                        <a href="{% url 'agent_analytics' %}"
+                            class="btn-hover-effect bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-xl font-medium shadow flex items-center">
+                            <i class="fas fa-chart-line mr-2"></i> Analytics
+                        </a>
+                        <a href="{% url 'agent_student_communication' %}"
+                            class="btn-hover-effect bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-xl font-medium shadow flex items-center">
+                            <i class="fas fa-comments mr-2"></i> Students
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-effect rounded-xl shadow p-6 text-center real-time-update" id="pendingCard">
+                <h3 class="text-3xl font-bold text-violet-700" id="pendingCount">{{ pending_invitations_count }}</h3>
+                <p class="text-gray-600 mt-2">Pending Approvals</p>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h3 class="text-3xl font-bold text-green-600">{{ approved_students_count }}</h3>
+                <p class="text-gray-600 mt-2">Approved Students</p>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center real-time-update" id="paymentCard">
+                <h3 class="text-3xl font-bold text-blue-600" id="paymentCount">{{ students_needing_payment }}</h3>
+                <p class="text-gray-600 mt-2">Need Payment</p>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h3 class="text-3xl font-bold text-yellow-500">{{ total_earnings }}</h3>
+                <p class="text-gray-600 mt-2">Total Earnings</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="glass-effect rounded-2xl shadow p-6">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i
+                        class="fas fa-user-plus"></i> Add New Student</h5>
+                <p class="text-gray-600 mb-4">Add students for admin approval. Once approved, you can pay for them in
+                    bulk.</p>
+                <a href="{% url 'agent_add_student' %}"
+                    class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center justify-center">
+                    <i class="fas fa-plus mr-2"></i> Add Student
+                </a>
+            </div>
+            <div class="glass-effect rounded-2xl shadow p-6">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-green-700"><i
+                        class="fas fa-credit-card"></i> Bulk Payment</h5>
+                {% if students_needing_payment > 0 %}
+                <p class="text-gray-600 mb-2">You have {{ students_needing_payment }} approved students waiting for
+                    payment.</p>
+                <p class="font-bold text-lg mb-4">Total: ₹{{ payment_amount_needed }} <span
+                        class="text-xs font-normal">(₹699 per student)</span></p>
+                <a href="{% url 'agent_bulk_payment' %}"
+                    class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center justify-center">
+                    <i class="fas fa-money-bill-wave mr-2"></i> Pay Now
+                </a>
+                {% else %}
+                <p class="text-gray-600 mb-4">No pending payments at the moment.</p>
+                <button
+                    class="btn-hover-effect bg-gray-200 text-gray-500 px-6 py-3 rounded-xl font-medium shadow flex items-center justify-center cursor-not-allowed"
+                    disabled>No Payment Needed</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Student Invitations with Enhanced Features -->
+        <div class="glass-effect rounded-2xl shadow p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <h5 class="font-semibold text-lg flex items-center gap-2 text-violet-700"><i class="fas fa-list"></i>
+                    Recent Student Invitations</h5>
+                <div class="flex gap-2 mt-4 md:mt-0">
+                    <button id="refreshBtn"
+                        class="btn-hover-effect bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium shadow flex items-center">
+                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                    </button>
+                    <a href="{% url 'export_invited_students_csv' %}"
+                        class="btn-hover-effect bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium shadow flex items-center">
+                        <i class="fas fa-download mr-2"></i> Export
+                    </a>
+                </div>
+            </div>
+            <div id="invitationsList">
+                {% for invitation in recent_invitations %}
+                <div
+                    class="flex flex-col md:flex-row md:items-center justify-between p-4 mb-2 rounded-xl bg-white/80 shadow-sm hover:bg-violet-50 transition-colors">
+                    <div class="flex-1">
+                        <span class="font-semibold">{{ invitation.student_first_name }} {{ invitation.student_last_name
+                            }}</span><br>
+                        <span class="text-gray-500 text-sm">{{ invitation.student_email }}</span>
+                    </div>
+                    <div class="flex items-center gap-4 mt-2 md:mt-0">
+                        <span class="inline-block px-3 py-1 rounded text-xs font-semibold
+                            {% if invitation.status == 'pending' %}bg-yellow-100 text-yellow-700
+                            {% elif invitation.status == 'approved' %}bg-green-100 text-green-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ invitation.get_status_display }}
+                        </span>
+                        <span class="text-gray-400 text-xs">{{ invitation.created_at|date:"M d, Y" }}</span>
+                        {% if invitation.status == 'approved' and invitation.agent_has_paid %}
+                        <span
+                            class="inline-block px-3 py-1 rounded bg-blue-100 text-blue-700 text-xs font-semibold">Paid</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No student invitations yet. <a href="{% url 'agent_add_student' %}"
+                        class="text-violet-600 underline">Add your first student</a></p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Enhanced Tools Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="glass-effect rounded-2xl shadow p-6 text-center">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i
+                        class="fas fa-qrcode"></i> Referral Tools</h5>
+                {% if qr_path %}
+                <img src="data:image/png;base64,{{ qr_path }}" alt="QR Code" class="mx-auto mb-3 rounded-lg shadow"
+                    style="max-width: 200px;">
+                {% endif %}
+                <p class="font-semibold">Referral URL:</p>
+                <div class="flex items-center gap-2 justify-center mt-2">
+                    <input type="text"
+                        class="form-input w-full max-w-xs px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none"
+                        value="{{ referral_url }}" readonly>
+                    <button
+                        class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center"
+                        onclick="copyToClipboard('{{ referral_url }}')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <div class="mt-4 flex gap-2 justify-center">
+                    <a href="https://wa.me/?text={{ referral_url|urlencode }}" target="_blank"
+                        class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center">
+                        <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                    </a>
+                    <button
+                        class="btn-hover-effect bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium shadow flex items-center"
+                        onclick="shareReferralLink()">
+                        <i class="fas fa-share mr-2"></i> Share
+                    </button>
+                </div>
+            </div>
+            <div class="glass-effect rounded-2xl shadow p-6">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-blue-700"><i
+                        class="fas fa-chart-line"></i> Performance</h5>
+                <p class="font-semibold">Rank: <span class="text-violet-700">#{{ rank }}</span> of {{ total_agents }}
+                    agents</p>
+                <p class="font-semibold">Referrals: <span class="text-violet-700">{{ referral_count }}</span></p>
+                <p class="font-semibold">Conversions: <span class="text-violet-700">{{ conversion_count }}</span></p>
+                <div class="w-full bg-gray-200 rounded-full h-4 mt-4">
+                    <div class="bg-gradient-to-r from-violet-600 to-indigo-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold transition-all"
+                        style="width: {{ conversion_rate }}%">{{ conversion_rate }}%</div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'agent_analytics' %}"
+                        class="btn-hover-effect bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                        <i class="fas fa-chart-bar mr-2"></i> View Detailed Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Modal -->
+<div id="notificationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div class="flex items-center justify-between p-6 border-b">
+                <h3 class="text-lg font-semibold">Notifications</h3>
+                <button onclick="closeNotificationModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="notificationList" class="p-6 max-h-96 overflow-y-auto">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Real-time updates
+    let updateInterval;
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function () {
+            showNotification('Referral URL copied to clipboard!', 'success');
+        });
+    }
+
+    function shareReferralLink() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join PortfolioPro',
+                text: 'Create your professional portfolio with PortfolioPro!',
+                url: '{{ referral_url }}'
+            });
+        } else {
+            copyToClipboard('{{ referral_url }}');
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+            }`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    function loadNotifications() {
+        fetch('{% url "agent_notifications_api" %}')
+            .then(response => response.json())
+            .then(data => {
+                // Update notification count
+                const countBadge = document.getElementById('notificationCount');
+                if (data.notifications.length > 0) {
+                    countBadge.textContent = data.notifications.length;
+                    countBadge.classList.remove('hidden');
+                } else {
+                    countBadge.classList.add('hidden');
+                }
+
+                // Update dashboard stats
+                document.getElementById('pendingCount').textContent = data.dashboard_stats.pending_invitations;
+                document.getElementById('paymentCount').textContent = data.dashboard_stats.students_needing_payment;
+
+                // Store notifications for modal
+                window.currentNotifications = data.notifications;
+            })
+            .catch(error => console.error('Error loading notifications:', error));
+    }
+
+    function openNotificationModal() {
+        const modal = document.getElementById('notificationModal');
+        const list = document.getElementById('notificationList');
+
+        if (window.currentNotifications && window.currentNotifications.length > 0) {
+            list.innerHTML = window.currentNotifications.map(notification => `
+                <div class="border-b border-gray-200 pb-3 mb-3">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-sm">${notification.title}</h4>
+                            <p class="text-gray-600 text-xs mt-1">${notification.message}</p>
+                            <p class="text-gray-400 text-xs mt-2">${new Date(notification.created_at).toLocaleString()}</p>
+                        </div>
+                        <button onclick="markAsRead(${notification.id})" class="text-blue-600 hover:text-blue-800 text-xs">
+                            Mark Read
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            list.innerHTML = '<p class="text-gray-500 text-center">No new notifications</p>';
+        }
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeNotificationModal() {
+        document.getElementById('notificationModal').classList.add('hidden');
+    }
+
+    function markAsRead(notificationId) {
+        fetch(`{% url "mark_notification_read" 0 %}`.replace('0', notificationId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadNotifications();
+                    closeNotificationModal();
+                }
+            });
+    }
+
+    // Event listeners
+    document.getElementById('notificationBtn').addEventListener('click', openNotificationModal);
+    document.getElementById('refreshBtn').addEventListener('click', loadNotifications);
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function () {
+        loadNotifications();
+
+        // Set up real-time updates every 30 seconds
+        updateInterval = setInterval(loadNotifications, 30000);
+    });
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function () {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+        }
+    });
+</script>
+{% endblock %}

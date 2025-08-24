@@ -1,0 +1,586 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/users.css' %}">
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_dashboard.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout-flex">
+    <nav id="sidebar" class="admin-sidebar-flex">
+        <div class="pt-3">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-tools"></i> Admin Panel</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="{% url 'admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_user_list' %}">
+                        <i class="fas fa-users me-2"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_agent_list' %}">
+                        <i class="fas fa-user-tie me-2"></i> Manage Agents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_student_approvals' %}">
+                        <i class="fas fa-user-check me-2"></i> Student Approvals
+                        {% if pending_invitations_count > 0 %}
+                        <span
+                            class="badge bg-warning text-dark ms-1 badge-notification">{{pending_invitations_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_portfolio_list' %}">
+                        <i class="fas fa-project-diagram me-2"></i> View Portfolios
+                    </a>
+                </li>
+
+                {% if request.session.impersonated_by %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{% url 'stop_impersonation' %}">
+                        <i class="fas fa-user-shield me-2"></i> Switch Back to Admin
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_payment_list' %}">
+                        <i class="fas fa-credit-card me-2"></i> Payments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'monitoring_dashboard' %}">
+                        <i class="fas fa-search me-2"></i> Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_review_success_stories' %}">
+                        <i class="fas fa-star me-2"></i> Review Success Stories
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer mt-auto p-3 text-center">
+                <small class="text-muted">v1.0.0</small>
+            </div>
+        </div>
+    </nav>
+    <div class="admin-container">
+        <div class="admin-main">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-users"></i> User Management
+                </h1>
+                <div class="btn-toolbar">
+                    <button type="button" class="action-btn btn-edit" onclick="exportData('csv', 'Users')">
+                        <i class="fas fa-download"></i> Export Users
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card border-start border-primary border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="text-primary mb-0">Total Users</h5>
+                                    <h3 class="mb-0">{{ total_users }}</h3>
+                                </div>
+                                <div class="text-primary">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-start border-success border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="text-success mb-0">Normal Users</h5>
+                                    <h3 class="mb-0">{{ normal_users|length }}</h3>
+                                </div>
+                                <div class="text-success">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-start border-info border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="text-info mb-0">Agents</h5>
+                                    <h3 class="mb-0">{{ agent_users|length }}</h3>
+                                </div>
+                                <div class="text-info">
+                                    <i class="fas fa-user-tie fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card border-start border-warning border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="text-warning mb-0">Students</h5>
+                                    <h3 class="mb-0">{{ student_users|length }}</h3>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="fas fa-user-graduate fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Normal Users Section -->
+            {% if normal_users %}
+            <div class="admin-table-container mb-4">
+                <div class="admin-table-header">
+                    <h3 class="admin-table-title">
+                        <i class="fas fa-user-friends"></i> Normal Users ({{ normal_users|length }})
+                    </h3>
+                    <div class="admin-table-actions">
+                        <input type="search" class="admin-search-input" placeholder="Search normal users..."
+                            onkeyup="performSearch(this.value, 'normal-users-table')">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-data-table" id="normal-users-table">
+                        <thead>
+                            <tr>
+                                <th class="counter-cell">#</th>
+                                <th>User</th>
+                                <th>Contact</th>
+                                <th>Referrer</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in normal_users %}
+                            <tr>
+                                <td class="counter-cell">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ user.username }}</div>
+                                            <div class="user-email">{{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.contact %}
+                                    <span class="text-primary">{{ user.userprofile.contact }}</span>
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.display_referral_info %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-user-check"></i>
+                                        {{ user.display_referral_info.referrer.username }}
+                                        {% if user.display_referral_info.is_referral == False %}
+                                        <small class="text-muted">(created by)</small>
+                                        {% endif %}
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-not-referred">
+                                        <i class="fas fa-user-slash"></i>
+                                        Not referred
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="date-display">{{ user.date_joined|date:"Y-m-d H:i" }}</span>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.is_blocked %}
+                                    <span class="status-indicator status-blocked">
+                                        <i class="fas fa-ban"></i>
+                                        Blocked
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="{% url 'edit_user_details' user.id %}"
+                                            class="action-btn-sm btn-sm-edit" data-bs-toggle="tooltip"
+                                            title="Edit User">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        {% if user.userprofile.is_blocked %}
+                                        <a href="{% url 'unblock_user' user.id %}" class="action-btn-sm btn-sm-unblock"
+                                            data-bs-toggle="tooltip" title="Unblock User">
+                                            <i class="fas fa-unlock"></i> Unblock
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'block_user' user.id %}" class="action-btn-sm btn-sm-block"
+                                            data-bs-toggle="tooltip" title="Block User">
+                                            <i class="fas fa-ban"></i> Block
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_user' user.id %}" class="action-btn-sm btn-sm-delete"
+                                            onclick="return confirmDelete('{{ user.username }}', this.href)"
+                                            data-bs-toggle="tooltip" title="Delete User">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                        <a href="{% url 'login_as_user' user.id %}" class="action-btn-sm btn-sm-login"
+                                            data-bs-toggle="tooltip" title="Login as this user">
+                                            <i class="fas fa-sign-in-alt"></i> Login As
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Agents Section -->
+            {% if agent_users %}
+            <div class="admin-table-container mb-4">
+                <div class="admin-table-header">
+                    <h3 class="admin-table-title">
+                        <i class="fas fa-user-tie"></i> Agents ({{ agent_users|length }})
+                    </h3>
+                    <div class="admin-table-actions">
+                        <input type="search" class="admin-search-input" placeholder="Search agents..."
+                            onkeyup="performSearch(this.value, 'agent-users-table')">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-data-table" id="agent-users-table">
+                        <thead>
+                            <tr>
+                                <th class="counter-cell">#</th>
+                                <th>User</th>
+                                <th>Contact</th>
+                                <th>Referrer</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in agent_users %}
+                            <tr>
+                                <td class="counter-cell">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar bg-info">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ user.username }} <span
+                                                    class="badge bg-info">Agent</span></div>
+                                            <div class="user-email">{{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.contact %}
+                                    <span class="text-primary">{{ user.userprofile.contact }}</span>
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.display_referral_info %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-user-check"></i>
+                                        {{ user.display_referral_info.referrer.username }}
+                                        {% if user.display_referral_info.is_referral == False %}
+                                        <small class="text-muted">(created by)</small>
+                                        {% endif %}
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-not-referred">
+                                        <i class="fas fa-user-slash"></i>
+                                        Not referred
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="date-display">{{ user.date_joined|date:"Y-m-d H:i" }}</span>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.is_blocked %}
+                                    <span class="status-indicator status-blocked">
+                                        <i class="fas fa-ban"></i>
+                                        Blocked
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="{% url 'edit_user_details' user.id %}"
+                                            class="action-btn-sm btn-sm-edit" data-bs-toggle="tooltip"
+                                            title="Edit User">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        {% if user.userprofile.is_blocked %}
+                                        <a href="{% url 'unblock_user' user.id %}" class="action-btn-sm btn-sm-unblock"
+                                            data-bs-toggle="tooltip" title="Unblock User">
+                                            <i class="fas fa-unlock"></i> Unblock
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'block_user' user.id %}" class="action-btn-sm btn-sm-block"
+                                            data-bs-toggle="tooltip" title="Block User">
+                                            <i class="fas fa-ban"></i> Block
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_user' user.id %}" class="action-btn-sm btn-sm-delete"
+                                            onclick="return confirmDelete('{{ user.username }}', this.href)"
+                                            data-bs-toggle="tooltip" title="Delete User">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                        <a href="{% url 'login_as_user' user.id %}" class="action-btn-sm btn-sm-login"
+                                            data-bs-toggle="tooltip" title="Login as this user">
+                                            <i class="fas fa-sign-in-alt"></i> Login As
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Students Section -->
+            {% if student_users %}
+            <div class="admin-table-container mb-4">
+                <div class="admin-table-header">
+                    <h3 class="admin-table-title">
+                        <i class="fas fa-user-graduate"></i> Students ({{ student_users|length }})
+                    </h3>
+                    <div class="admin-table-actions">
+                        <input type="search" class="admin-search-input" placeholder="Search students..."
+                            onkeyup="performSearch(this.value, 'student-users-table')">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-data-table" id="student-users-table">
+                        <thead>
+                            <tr>
+                                <th class="counter-cell">#</th>
+                                <th>User</th>
+                                <th>Contact</th>
+                                <th>Referrer</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in student_users %}
+                            <tr>
+                                <td class="counter-cell">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar bg-warning">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ user.username }} <span
+                                                    class="badge bg-warning">Student</span></div>
+                                            <div class="user-email">{{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.contact %}
+                                    <span class="text-primary">{{ user.userprofile.contact }}</span>
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.display_referral_info %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-user-check"></i>
+                                        {{ user.display_referral_info.referrer.username }}
+                                        {% if user.display_referral_info.is_referral == False %}
+                                        <small class="text-muted">(created by)</small>
+                                        {% endif %}
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-not-referred">
+                                        <i class="fas fa-user-slash"></i>
+                                        Not referred
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="date-display">{{ user.date_joined|date:"Y-m-d H:i" }}</span>
+                                </td>
+                                <td>
+                                    {% if user.userprofile.is_blocked %}
+                                    <span class="status-indicator status-blocked">
+                                        <i class="fas fa-ban"></i>
+                                        Blocked
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="{% url 'edit_user_details' user.id %}"
+                                            class="action-btn-sm btn-sm-edit" data-bs-toggle="tooltip"
+                                            title="Edit User">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        {% if user.userprofile.is_blocked %}
+                                        <a href="{% url 'unblock_user' user.id %}" class="action-btn-sm btn-sm-unblock"
+                                            data-bs-toggle="tooltip" title="Unblock User">
+                                            <i class="fas fa-unlock"></i> Unblock
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'block_user' user.id %}" class="action-btn-sm btn-sm-block"
+                                            data-bs-toggle="tooltip" title="Block User">
+                                            <i class="fas fa-ban"></i> Block
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_user' user.id %}" class="action-btn-sm btn-sm-delete"
+                                            onclick="return confirmDelete('{{ user.username }}', this.href)"
+                                            data-bs-toggle="tooltip" title="Delete User">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                        <a href="{% url 'login_as_user' user.id %}" class="action-btn-sm btn-sm-login"
+                                            data-bs-toggle="tooltip" title="Login as this user">
+                                            <i class="fas fa-sign-in-alt"></i> Login As
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Empty State -->
+            {% if not normal_users and not agent_users and not student_users %}
+            <div class="admin-table-container">
+                <div class="table-responsive">
+                    <table class="admin-data-table">
+                        <tbody>
+                            <tr>
+                                <td class="empty-state">
+                                    <i class="fas fa-users-slash"></i>
+                                    <h3>No Users Found</h3>
+                                    <p>No users have been registered yet.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    // Enhanced search function for specific tables
+    function performSearch(searchValue, tableId) {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cell = cells[j];
+                if (cell.textContent.toLowerCase().includes(searchValue.toLowerCase())) {
+                    found = true;
+                    break;
+                }
+            }
+
+            row.style.display = found ? '' : 'none';
+        }
+    }
+
+    // Global search function for all tables
+    function performSearch(searchValue) {
+        const tables = ['normal-users-table', 'agent-users-table', 'student-users-table'];
+
+        tables.forEach(tableId => {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cell = cells[j];
+                    if (cell.textContent.toLowerCase().includes(searchValue.toLowerCase())) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                row.style.display = found ? '' : 'none';
+            }
+        });
+    }
+
+    function confirmDelete(username, href) {
+        return confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`);
+    }
+</script>
+
+{% endblock %}

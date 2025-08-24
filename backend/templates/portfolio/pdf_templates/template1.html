@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ portfolio.first_name }} {{ portfolio.last_name }} - Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7fb;
+        }
+
+        .container {
+            display: flex;
+            max-width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .left {
+            background-color: #1f2c3d;
+            color: white;
+            width: 30%;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .left img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .left h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .left p, .left li {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .right {
+            width: 70%;
+            padding: 30px;
+        }
+
+        .right h1 {
+            font-size: 26px;
+            margin-bottom: 0;
+        }
+
+        .right h1 span {
+            color: #4a6ee0;
+        }
+
+        .right p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid #ccc;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+
+        .skills-list ul,
+        .languages ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .skills-list li,
+        .languages li {
+            margin-bottom: 6px;
+        }
+
+        .education-item, .experience-item, .project-item {
+            margin-bottom: 15px;
+        }
+
+        .date-range {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .project-item a {
+            color: #4a6ee0;
+            text-decoration: none;
+        }
+
+        .project-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left">
+        {% if portfolio.profile_photo %}
+            <img src="{{ portfolio.profile_photo.url }}" alt="Profile Photo">
+        {% endif %}
+        <h2>Contact</h2>
+        <p>{{ portfolio.contact }}</p>
+        {% if portfolio.email %}<p>{{ portfolio.email }}</p>{% endif %}
+        {% if portfolio.github_link %}<p>{{ portfolio.github_link }}</p>{% endif %}
+        <p>{{ portfolio.address }}</p>
+
+        <h2>Skills</h2>
+        <ul>
+            {% for skill in portfolio.skills.all %}
+                <li>{{ skill.name }}</li>
+            {% empty %}
+                <li>No skills listed</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Languages</h2>
+        <ul>
+            {% for lang in portfolio.languages.all %}
+                <li>{{ lang.name }} ({{ lang.level }})</li>
+            {% empty %}
+                <li>No languages added</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right">
+        <h1><strong>{{ portfolio.first_name }}</strong> <span>{{ portfolio.last_name }}</span></h1>
+        <p><em>{{ portfolio.title }}</em></p>
+
+        <div class="section">
+            <div class="section-title">About Me</div>
+            <p>{{ portfolio.extracurricular }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Education</div>
+            {% for edu in portfolio.educations.all %}
+                <div class="education-item">
+                    <p class="date-range">{{ edu.start_year }} - {{ edu.end_year }}</p>
+                    <p><strong>{{ edu.institution }}</strong><br>
+                    {{ edu.degree }}</p>
+                    {% if edu.description %}
+                        <p>{{ edu.description }}</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No education records added.</p>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <div class="section-title">Work Experience</div>
+            {% for exp in portfolio.experiences.all %}
+                <div class="experience-item">
+                    <p class="date-range">{{ exp.start_date }} - {{ exp.end_date }}</p>
+                    <p><strong>{{ exp.company }}</strong> — {{ exp.job_title }}</p>
+                    <ul>
+                        <li>{{ exp.description }}</li>
+                        {% if exp.achievements %}
+                            {% for achievement in exp.achievements.splitlines %}
+                                <li>{{ achievement }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% empty %}
+                <p>No work experience added.</p>
+            {% endfor %}
+        </div>
+
+        {% if portfolio.projects.all %}
+            <div class="section">
+                <div class="section-title">Projects</div>
+                {% for proj in portfolio.projects.all %}
+                    <div class="project-item">
+                        <p><strong>{{ proj.title }}</strong></p>
+                        <p>{{ proj.description }}</p>
+                        {% if proj.technologies_used %}
+                            <p><em>Technologies:</em> {{ proj.technologies_used }}</p>
+                        {% endif %}
+                        {% if proj.link %}
+                            <p><a href="{{ proj.link }}" target="_blank">View Project</a></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

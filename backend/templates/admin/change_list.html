@@ -1,0 +1,340 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .change-list {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .change-list .results {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .change-list .results thead th {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 18px 15px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .change-list .results tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .change-list .results tbody tr:nth-child(even) {
+        background: var(--background-light);
+    }
+
+    .change-list .results tbody tr:hover {
+        background: #e3f2fd;
+        transform: scale(1.01);
+    }
+
+    .change-list .results tbody td {
+        padding: 16px 15px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        vertical-align: middle;
+    }
+
+    .change-list .results tbody td a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .change-list .results tbody td a:hover {
+        text-decoration: underline;
+    }
+
+    .change-list .field-get_is_agent {
+        text-align: center;
+    }
+
+    .change-list .field-get_is_agent img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .change-list .field-status {
+        text-align: center;
+    }
+
+    .change-list .field-is_paid {
+        text-align: center;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-completed {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-in_progress {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-pending {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .payment-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .payment-paid {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .payment-unpaid {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn.view {
+        background: var(--primary);
+        color: white;
+    }
+
+    .action-btn.view:hover {
+        background: var(--secondary);
+        color: white;
+    }
+
+    .action-btn.change {
+        background: var(--info);
+        color: white;
+    }
+
+    .action-btn.change:hover {
+        background: #138496;
+        color: white;
+    }
+
+    .action-btn.delete {
+        background: var(--danger);
+        color: white;
+    }
+
+    .action-btn.delete:hover {
+        background: #c82333;
+        color: white;
+    }
+
+    .search-form {
+        background: var(--background-light);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .search-form h3 {
+        margin: 0 0 15px 0;
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .search-form input[type="text"] {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 10px 15px;
+        width: 300px;
+        margin-right: 10px;
+    }
+
+    .search-form input[type="submit"] {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .search-form input[type="submit"]:hover {
+        background: var(--secondary);
+    }
+
+    .filtered {
+        background: var(--background-light);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .filtered h2 {
+        color: var(--text);
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .filtered ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filtered li {
+        display: inline-block;
+    }
+
+    .filtered a {
+        background: var(--accent);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .filtered a:hover {
+        background: var(--primary);
+        transform: translateY(-1px);
+    }
+
+    .paginator {
+        background: var(--background-light);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .paginator a:link,
+    .paginator a:visited {
+        color: var(--primary);
+        padding: 10px 15px;
+        margin: 0 3px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .paginator a:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
+
+    .paginator .this-page {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .object-tools {
+        margin: 20px 0;
+        text-align: right;
+    }
+
+    .object-tools a:link,
+    .object-tools a:visited {
+        background: var(--success);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-left: 10px;
+        display: inline-block;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .object-tools a:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: white;
+        text-decoration: none;
+    }
+
+    .module h2 {
+        background: var(--primary);
+        color: white;
+        padding: 20px;
+        margin: 0;
+        border-radius: 8px 8px 0 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .search-form input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="change-list">
+    {{ block.super }}
+</div>
+{% endblock %}

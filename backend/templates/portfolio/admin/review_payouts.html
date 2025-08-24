@@ -1,0 +1,268 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-table-container">
+    <!-- Page Header -->
+    <div class="admin-table-header">
+        <div class="admin-table-title-section">
+            <h1 class="admin-table-title">
+                <i class="fas fa-hand-holding-usd"></i>
+                Referral Payouts
+            </h1>
+            <p class="admin-table-subtitle">Review and manage agent referral payments</p>
+        </div>
+        <div class="admin-table-actions">
+            <button class="admin-table-btn admin-table-btn-secondary" onclick="exportPayouts()">
+                <i class="fas fa-file-export"></i>
+                Export
+            </button>
+            <button class="admin-table-btn admin-table-btn-primary" onclick="generateNewPayouts()">
+                <i class="fas fa-plus"></i>
+                Generate Payouts
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="admin-table-stats">
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-rupee-sign"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">
+                    {% widthratio payouts|length 1 1000 %}K
+                </div>
+                <div class="admin-table-stat-label">Total Paid</div>
+            </div>
+        </div>
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">{{ payouts|length }}</div>
+                <div class="admin-table-stat-label">Agents Paid</div>
+            </div>
+        </div>
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">
+                    {% for payout in payouts %}{{ payout.referrals_paid.count }}{% endfor %}
+                </div>
+                <div class="admin-table-stat-label">Total Referrals</div>
+            </div>
+        </div>
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">
+                    {% if payouts %}
+                    {{ payouts.first.paid_on|date:"M d" }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </div>
+                <div class="admin-table-stat-label">Latest Payout</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="admin-table-filters">
+        <div class="admin-table-search-group">
+            <i class="fas fa-search admin-table-search-icon"></i>
+            <input type="text" id="searchInput" class="admin-table-search" placeholder="Search by agent name...">
+        </div>
+        <div class="admin-table-filter-group">
+            <select id="monthFilter" class="admin-table-filter">
+                <option value="">All Months</option>
+                <option value="this-month">This Month</option>
+                <option value="last-month">Last Month</option>
+                <option value="last-3-months">Last 3 Months</option>
+            </select>
+        </div>
+        <div class="admin-table-filter-group">
+            <select id="amountFilter" class="admin-table-filter">
+                <option value="">All Amounts</option>
+                <option value="0-5000">₹0 - ₹5,000</option>
+                <option value="5000-10000">₹5,000 - ₹10,000</option>
+                <option value="10000+">₹10,000+</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Payouts Table -->
+    <div class="admin-table-card">
+        <div class="admin-table-wrapper">
+            <table class="admin-table" id="payoutsTable">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" class="admin-table-checkbox">
+                        </th>
+                        <th>
+                            <i class="fas fa-user-tie"></i>
+                            Agent
+                        </th>
+                        <th>
+                            <i class="fas fa-rupee-sign"></i>
+                            Amount
+                        </th>
+                        <th>
+                            <i class="fas fa-calendar"></i>
+                            Paid On
+                        </th>
+                        <th>
+                            <i class="fas fa-handshake"></i>
+                            Referrals
+                        </th>
+                        <th>
+                            <i class="fas fa-chart-line"></i>
+                            Performance
+                        </th>
+                        <th>
+                            <i class="fas fa-cogs"></i>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payout in payouts %}
+                    <tr class="payout-row" data-agent="{{ payout.agent.username|lower }}"
+                        data-amount="{{ payout.amount }}" data-date="{{ payout.paid_on|date:'Y-m-d' }}">
+                        <td>
+                            <input type="checkbox" class="admin-table-checkbox payout-checkbox" value="{{ payout.id }}">
+                        </td>
+                        <td>
+                            <div class="admin-table-user">
+                                <div class="admin-table-user-avatar">
+                                    {{ payout.agent.username|first|upper }}
+                                </div>
+                                <div class="admin-table-user-info">
+                                    <div class="admin-table-user-name">{{ payout.agent.username }}</div>
+                                    <div class="admin-table-user-email">{{ payout.agent.email|default:"No email" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="payout-amount">
+                                <span class="payout-currency">₹</span>
+                                <span class="payout-value">{{ payout.amount|floatformat:2 }}</span>
+                                <div class="payout-commission">
+                                    <i class="fas fa-percentage"></i>
+                                    Commission
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-table-timestamp">
+                                <div class="admin-table-date">{{ payout.paid_on|date:"M d, Y" }}</div>
+                                <div class="admin-table-time">{{ payout.paid_on|date:"g:i A" }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="payout-referrals">
+                                <span class="payout-referral-count">{{ payout.referrals_paid.count }}</span>
+                                <div class="payout-referral-label">
+                                    <i class="fas fa-users"></i>
+                                    Referrals
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="payout-performance">
+                                {% widthratio payout.referrals_paid.count 10 100 as performance %}
+                                <div class="payout-performance-bar">
+                                    <div class="payout-performance-fill"
+                                        style="width: {% if performance > 100 %}100{% else %}{{ performance }}{% endif %}%">
+                                    </div>
+                                </div>
+                                <span class="payout-performance-text">
+                                    {% if performance > 80 %}Excellent
+                                    {% elif performance > 60 %}Good
+                                    {% elif performance > 40 %}Average
+                                    {% else %}Needs Improvement
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-table-action-group">
+                                <button class="admin-table-btn-sm admin-table-btn-info"
+                                    onclick="viewPayoutDetails({{ payout.id }})" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="admin-table-btn-sm admin-table-btn-secondary"
+                                    onclick="downloadPayoutReport({{ payout.id }})" title="Download Report">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="admin-table-btn-sm admin-table-btn-primary"
+                                    onclick="resendPayoutNotification({{ payout.id }})" title="Resend Notification">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="admin-table-empty">
+                            <div class="admin-table-empty-content">
+                                <i class="fas fa-hand-holding-usd"></i>
+                                <h3>No Payouts Found</h3>
+                                <p>No referral payouts have been processed yet.</p>
+                                <button class="admin-table-btn admin-table-btn-primary" onclick="generateNewPayouts()">
+                                    <i class="fas fa-plus"></i>
+                                    Generate First Payout
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="admin-table-bulk-actions" id="bulkActions" style="display: none;">
+            <div class="admin-table-bulk-info">
+                <span id="selectedCount">0</span> payouts selected
+            </div>
+            <div class="admin-table-bulk-buttons">
+                <button class="admin-table-btn admin-table-btn-info" onclick="bulkDownloadReports()">
+                    <i class="fas fa-download"></i>
+                    Download Reports
+                </button>
+                <button class="admin-table-btn admin-table-btn-secondary" onclick="bulkNotify()">
+                    <i class="fas fa-envelope"></i>
+                    Send Notifications
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="admin-table-footer">
+        <a href="{% url 'admin_dashboard' %}" class="admin-table-btn admin-table-btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_payouts.js' %}"></script>
+{% endblock %}

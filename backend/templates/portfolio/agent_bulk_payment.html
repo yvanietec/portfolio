@@ -1,0 +1,122 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+{% load static %}
+
+{% block title %}Bulk Payment for Students{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box,
+                    linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-5xl mx-auto">
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 mb-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 gradient-text flex items-center justify-center gap-2"><i class="fas fa-credit-card"></i> Bulk Payment for Students</h2>
+            <p class="text-gray-600">Pay for your approved students to activate their accounts</p>
+        </div>
+
+        {% if student_count > 0 %}
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="flex-1">
+                <div class="glass-effect rounded-2xl shadow p-6 mb-6">
+                    <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i class="fas fa-users"></i> Students Requiring Payment ({{ student_count }})</h5>
+                    <div class="divide-y divide-gray-200">
+                        {% for invitation in approved_invitations %}
+                        <div class="flex flex-col md:flex-row md:items-center justify-between py-4">
+                            <div>
+                                <span class="font-semibold">{{ invitation.student_first_name }} {{ invitation.student_last_name }}</span><br>
+                                <span class="text-gray-500 text-sm">{{ invitation.student_email }}</span>
+                            </div>
+                            <div class="flex flex-col md:items-end md:text-right mt-2 md:mt-0">
+                                <span class="inline-block px-3 py-1 rounded bg-green-100 text-green-700 text-xs font-semibold mb-1">Approved</span>
+                                <span class="text-gray-400 text-xs">{{ invitation.admin_approved_at|date:"M d, Y" }}</span>
+                                <span class="font-bold text-green-600 text-lg mt-1">₹{{ per_student_cost }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/3">
+                <div class="glass-effect rounded-2xl shadow p-6 mb-6">
+                    <h5 class="text-center font-semibold mb-4 gradient-text">Payment Summary</h5>
+                    <div class="flex justify-between mb-2">
+                        <span>Students:</span>
+                        <span>{{ student_count }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span>Rate per student:</span>
+                        <span>₹{{ per_student_cost }}</span>
+                    </div>
+                    <hr class="my-3">
+                    <div class="flex justify-between mb-4">
+                        <span class="font-bold">Total Amount:</span>
+                        <span class="text-2xl font-bold text-green-600">₹{{ total_amount }}</span>
+                    </div>
+                    <form method="post" class="text-center">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white w-full px-6 py-3 rounded-xl font-medium shadow-lg transition-all flex items-center justify-center text-lg">
+                            <i class="fas fa-money-bill-wave mr-2"></i> Pay Now
+                        </button>
+                    </form>
+                    <div class="mt-4 text-xs text-gray-500 text-center">
+                        <i class="fas fa-info-circle"></i>
+                        After payment, students will be able to create portfolios and you can collect your commission directly from them.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="glass-effect rounded-2xl shadow p-6 mt-8">
+            <h6 class="font-semibold mb-2 flex items-center gap-2 text-blue-700"><i class="fas fa-lightbulb"></i> How it works:</h6>
+            <ol class="list-decimal list-inside text-gray-700 space-y-1">
+                <li>Pay ₹{{ per_student_cost }} per student to unlock their portfolio creation</li>
+                <li>Students will pay ₹1,499 (discounted from ₹2,999) for their portfolio</li>
+                <li>You can collect your commission directly from students</li>
+                <li>Students get professional portfolios at a discounted rate</li>
+            </ol>
+        </div>
+        {% else %}
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 text-center">
+            <i class="fas fa-check-circle text-green-500 mb-4" style="font-size: 3rem;"></i>
+            <h4 class="text-xl font-bold mb-2">No Students Requiring Payment</h4>
+            <p class="text-gray-500 mb-6">All your approved students have been paid for, or you don't have any approved students yet.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="{% url 'agent_add_student' %}" class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center justify-center">
+                    <i class="fas fa-user-plus mr-2"></i> Add New Student
+                </a>
+                <a href="{% url 'agent_dashboard' %}" class="btn-hover-effect bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium shadow flex items-center justify-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

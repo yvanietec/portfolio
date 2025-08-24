@@ -1,0 +1,94 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Extras - Step 9{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container" data-current-step="extras">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <!-- Wizard Progress Component -->
+        {% include "portfolio/wizard_progress.html" %}
+        <div class="portfolio-form-container portfolio-fade-in">
+            <div class="portfolio-text-center">
+                <h1 class="portfolio-title">Step 9: Extras</h1>
+                <p class="portfolio-subtitle">Add any additional information that makes you unique</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="portfolio-form-content">
+                    <div class="portfolio-form-section">
+                        <div
+                            class="portfolio-flex portfolio-items-center portfolio-justify-between portfolio-spacing-sm">
+                            <h3 class="portfolio-section-title">Extracurricular Activities</h3>
+                        </div>
+
+                        <!-- Extracurricular Field - Full Width -->
+                        <div class="portfolio-form-group">
+                            <label for="{{ form.extracurricular.id_for_label }}" class="portfolio-label">
+
+                                {% if form.extracurricular.field.required %}<span style="color: #dc2626;">*</span>{%endif %}
+                            </label>
+                            <textarea id="{{ form.extracurricular.id_for_label }}"
+                                name="{{ form.extracurricular.name }}" class="portfolio-textarea" rows="5"
+                                placeholder="- Robotics Club Member&#10;- State-level football player&#10;- Volunteer at local NGO">{{ form.extracurricular.value|default:'' }}</textarea>
+                            <small class="portfolio-help-text">Mention one activity per line (e.g., "- Debating Club",
+                                "- NSS Volunteer").</small>
+                            {% for error in form.extracurricular.errors %}
+                            <div class="portfolio-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standardized Button Group - Consistent Alignment -->
+                <div class="portfolio-btn-group">
+                    <button type="submit" name="skip" class="portfolio-btn portfolio-btn-gray">Skip</button>
+                    <button type="submit" class="portfolio-btn portfolio-btn-primary">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-expanding textarea functionality
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Initialize auto-resize for all textareas
+    function initializeAutoResize() {
+        const textareas = document.querySelectorAll('.portfolio-textarea');
+        textareas.forEach(textarea => {
+            // Set initial height
+            autoResizeTextarea(textarea);
+
+            // Add event listeners
+            textarea.addEventListener('input', function () {
+                autoResizeTextarea(this);
+            });
+
+            textarea.addEventListener('focus', function () {
+                autoResizeTextarea(this);
+            });
+        });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeAutoResize();
+    });
+</script>
+{% endblock %}

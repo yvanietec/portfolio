@@ -1,0 +1,187 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_dashboard.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout-flex">
+  <nav id="sidebar" class="admin-sidebar-flex">
+        <div class="pt-3">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-tools"></i> Admin Panel</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="{% url 'admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_user_list' %}">
+                        <i class="fas fa-users me-2"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_agent_list' %}">
+                        <i class="fas fa-user-tie me-2"></i> Manage Agents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_student_approvals' %}">
+                        <i class="fas fa-user-check me-2"></i> Student Approvals
+                        {% if pending_invitations_count > 0 %}
+                        <span class="badge bg-warning text-dark ms-1 badge-notification">{{pending_invitations_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_portfolio_list' %}">
+                        <i class="fas fa-project-diagram me-2"></i> View Portfolios
+                    </a>
+                </li>
+
+                {% if request.session.impersonated_by %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{% url 'stop_impersonation' %}">
+                        <i class="fas fa-user-shield me-2"></i> Switch Back to Admin
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_payment_list' %}">
+                        <i class="fas fa-credit-card me-2"></i> Payments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'monitoring_dashboard' %}">
+                        <i class="fas fa-search me-2"></i> Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_review_success_stories' %}">
+                        <i class="fas fa-star me-2"></i> Review Success Stories
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer mt-auto p-3 text-center">
+                <small class="text-muted">v1.0.0</small>
+            </div>
+        </div>
+    </nav>
+<div class="admin-container">
+    <div class="admin-main">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <i class="fas fa-briefcase"></i> Portfolios Management
+            </h1>
+            <div class="btn-toolbar">
+                <button type="button" class="action-btn btn-edit" onclick="exportData('csv', 'Portfolios')">
+                    <i class="fas fa-download"></i> Export Portfolios
+                </button>
+            </div>
+        </div>
+
+        <div class="admin-table-container">
+            <div class="admin-table-header">
+                <h3 class="admin-table-title">
+                    <i class="fas fa-folder-open"></i> All Portfolios
+                </h3>
+                <div class="admin-table-actions">
+                    <input type="search" class="admin-search-input" placeholder="Search portfolios..."
+                        onkeyup="performSearch(this.value)">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-data-table">
+                    <thead>
+                        <tr>
+                            <th class="counter-cell">#</th>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for portfolio in portfolios %}
+                        <tr>
+                            <td class="counter-cell">{{ forloop.counter }}</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ portfolio.user.username|first|upper }}
+                                    </div>
+                                    <div class="user-details">
+                                        <div class="user-name">{{ portfolio.user.username }}</div>
+                                        <div class="user-email">{{ portfolio.user.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if portfolio.status == 'active' %}
+                                <span class="status-indicator status-active">
+                                    <i class="fas fa-check-circle"></i>
+                                    {{ portfolio.status|title }}
+                                </span>
+                                {% elif portfolio.status == 'draft' %}
+                                <span class="status-indicator status-pending">
+                                    <i class="fas fa-clock"></i>
+                                    {{ portfolio.status|title }}
+                                </span>
+                                {% else %}
+                                <span class="status-indicator status-blocked">
+                                    <i class="fas fa-ban"></i>
+                                    {{ portfolio.status|title }}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="date-display">{{ portfolio.created_at|naturaltime }}</span>
+                            </td>
+                            <td>
+                                <div class="action-group">
+                                    <a href="{% url 'admin_portfolio_view' portfolio.pk %}"
+                                        class="action-btn-sm btn-sm-view" data-bs-toggle="tooltip"
+                                        title="View Portfolio">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="{% url 'admin_portfolio_edit' portfolio.pk %}"
+                                        class="action-btn-sm btn-sm-edit" data-bs-toggle="tooltip"
+                                        title="Edit Portfolio">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'admin_portfolio_delete' portfolio.pk %}"
+                                        class="action-btn-sm btn-sm-delete" data-bs-toggle="tooltip"
+                                        title="Delete Portfolio">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-briefcase"></i>
+                                <h3>No Portfolios Found</h3>
+                                <p>No portfolios have been created yet or match your search criteria.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

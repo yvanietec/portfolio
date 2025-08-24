@@ -1,0 +1,279 @@
+/**
+ * Form Input Padding Fix
+ * Adds proper padding to form input fields for better text positioning
+ */
+
+/* All form input fields - add proper padding */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="search"],
+input[type="file"],
+textarea,
+select {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    box-sizing: border-box !important;
+}
+
+/* Focus state - maintain padding */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="search"]:focus,
+input[type="file"]:focus,
+textarea:focus,
+select:focus {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Mobile optimization - slightly more padding on mobile */
+@media (max-width: 768px) {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="week"],
+    input[type="search"],
+    input[type="file"],
+    textarea,
+    select {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    /* Focus state on mobile */
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="month"]:focus,
+    input[type="week"]:focus,
+    input[type="search"]:focus,
+    input[type="file"]:focus,
+    textarea:focus,
+    select:focus {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+}
+
+/* Extra small mobile devices - even more padding for better touch experience */
+@media (max-width: 480px) {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="week"],
+    input[type="search"],
+    input[type="file"],
+    textarea,
+    select {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        font-size: 16px !important;
+        /* Prevents zoom on iOS */
+    }
+
+    /* Focus state on extra small mobile */
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="month"]:focus,
+    input[type="week"]:focus,
+    input[type="search"]:focus,
+    input[type="file"]:focus,
+    textarea:focus,
+    select:focus {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+    }
+}
+
+/* Specific styling for textarea elements */
+textarea {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    line-height: 1.5 !important;
+}
+
+@media (max-width: 768px) {
+    textarea {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    textarea {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+    }
+}
+
+/* File input specific styling */
+input[type="file"] {
+    padding: 8px 12px !important;
+}
+
+@media (max-width: 768px) {
+    input[type="file"] {
+        padding: 10px 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    input[type="file"] {
+        padding: 12px 16px !important;
+    }
+}
+
+/* Select dropdown styling */
+select {
+    padding-left: 12px !important;
+    padding-right: 30px !important;
+    /* Extra space for dropdown arrow */
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    background-position: right 8px center !important;
+    background-repeat: no-repeat !important;
+}
+
+@media (max-width: 768px) {
+    select {
+        padding-left: 14px !important;
+        padding-right: 32px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        background-position: right 10px center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    select {
+        padding-left: 16px !important;
+        padding-right: 36px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        background-position: right 12px center !important;
+    }
+}
+
+/* Ensure consistent appearance across browsers */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="search"],
+textarea,
+select {
+    border-radius: 6px !important;
+    border: 1px solid #d1d5db !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+/* Focus state styling */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+    outline: none !important;
+    border-color: #6d28d9 !important;
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1) !important;
+}
+
+/* Placeholder text styling */
+input::placeholder,
+textarea::placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+}
+
+/* Disabled state */
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background-color: #f9fafb !important;
+    color: #6b7280 !important;
+    cursor: not-allowed !important;
+}

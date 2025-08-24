@@ -1,0 +1,347 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+{% load static %}
+
+{% block extra_js %}
+<script src="{% static 'js/register_clean.js' %}"></script>
+<script>
+  // Password show/hide toggle
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('id_password');
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.querySelector('i').classList.toggle('fa-eye');
+      this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+  }
+
+  const togglePasswordConfirm = document.getElementById('togglePasswordConfirm');
+  const passwordConfirmInput = document.getElementById('id_password_confirm');
+  if (togglePasswordConfirm && passwordConfirmInput) {
+    togglePasswordConfirm.addEventListener('click', function () {
+      const type = passwordConfirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordConfirmInput.setAttribute('type', type);
+      this.querySelector('i').classList.toggle('fa-eye');
+      this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+  }
+
+  // Password strength feedback
+  const passwordStrength = document.getElementById('passwordStrength');
+  if (passwordInput && passwordStrength) {
+    passwordInput.addEventListener('input', function () {
+      const val = this.value;
+
+      if (val.length === 0) {
+        passwordStrength.textContent = 'Password strength';
+        passwordStrength.className = 'text-xs text-gray-500 mt-1';
+        return;
+      }
+
+      let strength = 'Weak';
+      let color = 'text-red-600';
+      let score = 0;
+
+      // Length check
+      if (val.length >= 8) score++;
+      if (val.length >= 12) score++;
+
+      // Character variety checks
+      if (/[A-Z]/.test(val)) score++;
+      if (/[a-z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      // Determine strength based on score
+      if (score >= 5) {
+        strength = 'Very Strong';
+        color = 'text-green-600';
+      } else if (score >= 4) {
+        strength = 'Strong';
+        color = 'text-green-600';
+      } else if (score >= 3) {
+        strength = 'Medium';
+        color = 'text-yellow-600';
+      } else if (score >= 2) {
+        strength = 'Weak';
+        color = 'text-orange-600';
+      } else {
+        strength = 'Very Weak';
+        color = 'text-red-600';
+      }
+
+      passwordStrength.textContent = `Password strength: ${strength}`;
+      passwordStrength.className = `text-xs mt-1 ${color}`;
+    });
+  }
+
+  // Password match feedback
+  const passwordMatchFeedback = document.getElementById('password-match-feedback');
+  if (passwordInput && passwordConfirmInput && passwordMatchFeedback) {
+    function checkMatch() {
+      const password = passwordInput.value;
+      const confirmPassword = passwordConfirmInput.value;
+
+      if (confirmPassword.length === 0) {
+        passwordMatchFeedback.textContent = '';
+        passwordMatchFeedback.className = 'text-xs text-gray-500 mt-1';
+        return;
+      }
+
+      if (password === confirmPassword) {
+        passwordMatchFeedback.textContent = '✓ Passwords match';
+        passwordMatchFeedback.className = 'text-xs text-green-600 mt-1';
+      } else {
+        passwordMatchFeedback.textContent = '✗ Passwords do not match';
+        passwordMatchFeedback.className = 'text-xs text-red-600 mt-1';
+      }
+    }
+
+    passwordInput.addEventListener('input', checkMatch);
+    passwordConfirmInput.addEventListener('input', checkMatch);
+  }
+
+  // Check for terms acceptance from localStorage
+  const agreeTermsCheckbox = document.getElementById('id_agree_terms');
+  if (agreeTermsCheckbox && localStorage.getItem('termsAccepted') === 'true') {
+    agreeTermsCheckbox.checked = true;
+    // Clear the localStorage after using it
+    localStorage.removeItem('termsAccepted');
+
+    // Show a brief success message
+    const successMessage = document.createElement('div');
+    successMessage.className = 'bg-green-100 text-green-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2 mb-4';
+    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Terms and Conditions accepted successfully!';
+
+    const form = document.getElementById('registerForm');
+    if (form) {
+      form.parentNode.insertBefore(successMessage, form);
+
+      // Remove the message after 3 seconds
+      setTimeout(() => {
+        if (successMessage.parentNode) {
+          successMessage.parentNode.removeChild(successMessage);
+        }
+      }, 3000);
+    }
+  }
+</script>
+{% endblock %}
+
+{% block title %}Register - PortfolioPro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#f8f7ff] pt-16 pb-8">
+  <div class="container mx-auto px-4">
+    <!-- Hero Section -->
+    <div class="text-center mb-8">
+      <div
+        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-full mb-4">
+        <i class="fas fa-user-plus text-white text-2xl"></i>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold gradient-text mb-4">Start Your Journey</h1>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Ready to showcase your skills to the world? Create a stunning
+        portfolio that opens doors to amazing opportunities!</p>
+    </div>
+
+    <!-- Main Register Form -->
+    <div class="w-full max-w-lg mx-auto mb-8">
+      {% if messages %}
+      <div class="space-y-2 mb-4">
+        {% for message in messages %}
+        <div
+          class="rounded-lg px-4 py-3 text-sm flex items-center gap-2 {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+          <i
+            class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form method="post" class="glass-effect rounded-2xl shadow-xl p-8 space-y-6" id="registerForm" novalidate>
+        {% csrf_token %}
+        <div>
+          <label for="id_username" class="block text-sm font-medium text-gray-700 mb-1">
+            <i class="fas fa-user mr-1"></i> Username
+          </label>
+          <input type="text" name="username" id="id_username"
+            class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-violet-500 focus:border-violet-500"
+            placeholder="Choose a username" required minlength="3" maxlength="150" autocomplete="username">
+          <div id="username-feedback" class="text-xs text-gray-500 mt-1"></div>
+          {% if form.username.errors %}
+          <div class="text-red-600 text-xs mt-1 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{
+            form.username.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div>
+          <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1">
+            <i class="fas fa-envelope mr-1"></i> Email Address
+          </label>
+          <input type="email" name="email" id="id_email"
+            class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-violet-500 focus:border-violet-500"
+            placeholder="Your email address" required autocomplete="email">
+          <div id="email-feedback" class="text-xs text-gray-500 mt-1"></div>
+          {% if form.email.errors %}
+          <div class="text-red-600 text-xs mt-1 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{
+            form.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div>
+          <label for="id_password" class="block text-sm font-medium text-gray-700 mb-1">
+            <i class="fas fa-lock mr-1"></i> Password
+          </label>
+          <div class="relative">
+            <input type="password" name="password" id="id_password"
+              class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-violet-500 focus:border-violet-500 pr-12"
+              placeholder="Create password" required minlength="8" maxlength="128" autocomplete="new-password">
+            <button type="button"
+              class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-violet-600 focus:outline-none"
+              id="togglePassword">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="text-xs text-gray-500 mt-1" id="passwordStrength">Password strength</div>
+          {% if form.password.errors %}
+          <div class="text-red-600 text-xs mt-1 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{
+            form.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div>
+          <label for="id_password_confirm" class="block text-sm font-medium text-gray-700 mb-1">
+            <i class="fas fa-lock mr-1"></i> Confirm Password
+          </label>
+          <div class="relative">
+            <input type="password" name="password_confirm" id="id_password_confirm"
+              class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-violet-500 focus:border-violet-500 pr-12"
+              placeholder="Repeat password" required minlength="8" maxlength="128" autocomplete="new-password">
+            <button type="button"
+              class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-violet-600 focus:outline-none"
+              id="togglePasswordConfirm">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div id="password-match-feedback" class="text-xs text-gray-500 mt-1"></div>
+          {% if form.password_confirm.errors %}
+          <div class="text-red-600 text-xs mt-1 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{
+            form.password_confirm.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="flex items-center mb-2">
+          <input type="checkbox" name="agree_terms" id="id_agree_terms"
+            class="h-4 w-4 text-violet-600 focus:ring-violet-500 border-gray-300 rounded" required>
+          <label for="id_agree_terms" class="ml-2 block text-sm text-gray-700">
+            I agree to the <a href="{% url 'terms' %}" target="_blank" class="text-violet-600 hover:underline">Terms and
+              Conditions</a>
+          </label>
+        </div>
+        {% if form.agree_terms.errors %}
+        <div class="text-red-600 text-xs mt-1 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{
+          form.agree_terms.errors.0 }}</div>
+        {% endif %}
+        <button type="submit"
+          class="btn-hover-effect w-full bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+        <div class="flex flex-col items-center mt-4 space-y-2">
+          <div class="text-gray-400 text-xs">Already have an account?</div>
+          <a href="{% url 'login' %}"
+            class="btn-hover-effect w-full bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-lg font-semibold shadow flex items-center justify-center gap-2">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Motivational Section -->
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <!-- Feature 1 -->
+        <div class="glass-effect rounded-xl p-6 border border-violet-200 text-center">
+          <div class="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-rocket text-violet-600 text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Quick Setup</h3>
+          <p class="text-sm text-gray-600">Create a professional portfolio in under 10 minutes with our intuitive
+            builder</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="glass-effect rounded-xl p-6 border border-violet-200 text-center">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-mobile-alt text-green-600 text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Mobile Ready</h3>
+          <p class="text-sm text-gray-600">Your portfolio looks perfect on all devices - desktop, tablet, and mobile</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="glass-effect rounded-xl p-6 border border-violet-200 text-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-2">Track Success</h3>
+          <p class="text-sm text-gray-600">Monitor views, downloads, and engagement with built-in analytics</p>
+        </div>
+      </div>
+
+      <!-- Trust & Motivation -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Why Choose Us -->
+        <div class="glass-effect rounded-xl p-6 border border-violet-200">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-heart text-purple-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800">Why Choose Us</h3>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-purple-500 mt-1 text-xs"></i>
+              <span>Beautiful, professional templates</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-purple-500 mt-1 text-xs"></i>
+              <span>No coding skills required</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-purple-500 mt-1 text-xs"></i>
+              <span>Free hosting included</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-purple-500 mt-1 text-xs"></i>
+              <span>24/7 customer support</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Success Stories -->
+        <div class="glass-effect rounded-xl p-6 border border-violet-200">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-star text-yellow-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800">Success Stories</h3>
+          </div>
+          <div class="text-sm text-gray-600 space-y-3">
+            <div class="bg-yellow-50 p-3 rounded-lg">
+              <p class="italic">"PortfolioPro helped me land my dream job! The templates are stunning and easy to
+                customize."</p>
+              <p class="text-xs text-gray-500 mt-2">- Sarah, Frontend Developer</p>
+            </div>
+            <div class="bg-blue-50 p-3 rounded-lg">
+              <p class="italic">"Within a week of creating my portfolio, I got 3 interview calls. Highly recommended!"
+              </p>
+              <p class="text-xs text-gray-500 mt-2">- Mike, UX Designer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

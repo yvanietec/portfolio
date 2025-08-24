@@ -1,0 +1,439 @@
+/* Personal Information Form Enhancements */
+
+/* Personal Info Container */
+.personal-info-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Personal Info Header */
+.personal-info-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+.personal-info-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6d28d9;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.personal-info-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Personal Info Form Groups */
+.personal-info-form-group {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: 1px solid rgba(109, 40, 217, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.personal-info-form-group:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: rgba(109, 40, 217, 0.15);
+}
+
+.personal-info-form-group label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+
+.personal-info-form-group input,
+.personal-info-form-group textarea,
+.personal-info-form-group select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    min-height: 3rem;
+}
+
+.personal-info-form-group input:focus,
+.personal-info-form-group textarea:focus,
+.personal-info-form-group select:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.personal-info-form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* Contact Number Styling */
+.contact-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.contact-prefix {
+    padding: 1rem 1.25rem;
+    background: #f3f4f6;
+    border: 2px solid #e5e7eb;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.contact-input-group input {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+
+.contact-input-group input:focus {
+    border-left: 2px solid #6d28d9;
+}
+
+/* Profile Photo Upload */
+.profile-photo-group {
+    text-align: center;
+    padding: 2rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-photo-group:hover {
+    border-color: #6d28d9;
+    background: rgba(109, 40, 217, 0.05);
+}
+
+.profile-photo-group input[type="file"] {
+    display: none;
+}
+
+.profile-photo-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.profile-photo-icon {
+    font-size: 2.5rem;
+    color: #6d28d9;
+    opacity: 0.7;
+}
+
+.profile-photo-text {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.profile-photo-hint {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+/* Address Field Enhancement */
+.address-field {
+    position: relative;
+}
+
+.address-field textarea {
+    padding-bottom: 2.5rem;
+}
+
+.address-character-count {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* Form Row Layout for Personal Info */
+.personal-info-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Required Field Indicator */
+.required-field {
+    color: #dc2626;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+/* Help Text Enhancement */
+.personal-info-help-text {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(109, 40, 217, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #6d28d9;
+    line-height: 1.4;
+}
+
+/* Error Message Enhancement */
+.personal-info-error {
+    font-size: 0.85rem;
+    color: #dc2626;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(220, 38, 38, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #dc2626;
+    line-height: 1.4;
+}
+
+/* Button Group for Personal Info */
+.personal-info-btn-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.personal-info-btn {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    min-height: 3rem;
+    min-width: 140px;
+    box-sizing: border-box;
+}
+
+.personal-info-btn-primary {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+}
+
+.personal-info-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
+}
+
+.personal-info-btn-secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: #6d28d9;
+    border: 2px solid #6d28d9;
+}
+
+.personal-info-btn-secondary:hover {
+    background: #6d28d9;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Progress Indicator */
+.personal-info-progress {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .personal-info-container {
+        padding: 1.5rem;
+        margin: 0.5rem;
+    }
+
+    .personal-info-form-group {
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .personal-info-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .personal-info-btn-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .personal-info-btn {
+        width: 100%;
+        min-width: auto;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+        min-height: 2.75rem;
+    }
+
+    .personal-info-form-group input,
+    .personal-info-form-group textarea,
+    .personal-info-form-group select {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+        min-height: 2.75rem;
+    }
+
+    .contact-prefix {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+        min-height: 2.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .personal-info-container {
+        padding: 1rem;
+        margin: 0.25rem;
+    }
+
+    .personal-info-form-group {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .personal-info-title {
+        font-size: 1.25rem;
+    }
+
+    .personal-info-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .personal-info-form-group input,
+    .personal-info-form-group textarea,
+    .personal-info-form-group select {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.85rem;
+        min-height: 2.5rem;
+    }
+
+    .contact-prefix {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.85rem;
+        min-height: 2.5rem;
+    }
+
+    .personal-info-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+        min-height: 2.5rem;
+    }
+}
+
+/* Animation Enhancements */
+.personal-info-fade-in {
+    animation: personalInfoFadeIn 0.5s ease-out;
+}
+
+@keyframes personalInfoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus Management */
+.personal-info-form-group input:focus-visible,
+.personal-info-form-group textarea:focus-visible,
+.personal-info-form-group select:focus-visible {
+    outline: 2px solid #6d28d9;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+
+    .personal-info-form-group input,
+    .personal-info-form-group textarea,
+    .personal-info-form-group select {
+        border-width: 2px;
+    }
+
+    .personal-info-btn {
+        border-width: 2px;
+    }
+
+    .personal-info-form-group {
+        border-width: 2px;
+    }
+}

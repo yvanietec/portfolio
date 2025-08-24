@@ -1,0 +1,149 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+{% load static %}
+
+{% block title %}Process Payment{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box,
+                    linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-2xl mx-auto">
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8">
+            <div class="flex flex-col items-center text-center">
+                <div class="mb-8">
+                    <span class="inline-block mb-2">
+                        <i class="fas fa-credit-card text-violet-600 text-5xl"></i>
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-bold gradient-text mb-2">Complete Your Payment</h2>
+                    <p class="text-gray-600">Secure payment processing for your student registrations</p>
+                </div>
+                <div class="w-full max-w-md mx-auto mb-8">
+                    <h4 class="text-lg font-semibold mb-2 gradient-text">Payment Summary</h4>
+                    <div class="text-4xl font-bold text-green-600 mb-2">₹{{ amount }}</div>
+                    <div class="text-lg text-gray-500 mb-4">For {{ student_count }} student{{ student_count|pluralize }}</div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-medium">Per Student Cost:</span>
+                        <span>₹699</span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span class="font-medium">Total Students:</span>
+                        <span>{{ student_count }}</span>
+                    </div>
+                    <hr class="my-4">
+                    <div class="mb-4">
+                        <h6 class="font-semibold mb-2">Students Included in This Payment:</h6>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            {% for invitation in approved_invitations %}
+                            <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded font-medium">{{ invitation.student_first_name }} {{ invitation.student_last_name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Razorpay Payment Button -->
+                    <button id="rzp-button1" class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white w-full px-6 py-3 rounded-xl font-medium shadow-lg transition-all flex items-center justify-center text-lg mb-4">
+                        <i class="fas fa-lock mr-2"></i> Pay ₹{{ amount }} Securely
+                    </button>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mt-4 text-left">
+                        <i class="fas fa-shield-alt text-blue-400 mr-2"></i>
+                        <span class="font-semibold">Secure Payment:</span> Your payment is processed securely through Razorpay. We do not store your card details.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ amount|floatformat:0 }}00", // Amount in paise
+        "currency": "INR",
+        "name": "Portfolio Creator",
+        "description": "Bulk payment for {{ student_count }} student{{ student_count|pluralize }}",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response) {
+            // Create form and submit payment details
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{% url "agent_payment_success" %}';
+
+            // Add CSRF token
+            var csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = 'csrfmiddlewaretoken';
+            csrfToken.value = '{{ csrf_token }}';
+            form.appendChild(csrfToken);
+
+            // Add payment details
+            var paymentId = document.createElement('input');
+            paymentId.type = 'hidden';
+            paymentId.name = 'razorpay_payment_id';
+            paymentId.value = response.razorpay_payment_id;
+            form.appendChild(paymentId);
+
+            var orderId = document.createElement('input');
+            orderId.type = 'hidden';
+            orderId.name = 'razorpay_order_id';
+            orderId.value = response.razorpay_order_id;
+            form.appendChild(orderId);
+
+            var signature = document.createElement('input');
+            signature.type = 'hidden';
+            signature.name = 'razorpay_signature';
+            signature.value = response.razorpay_signature;
+            form.appendChild(signature);
+
+            document.body.appendChild(form);
+            form.submit();
+        },
+        "prefill": {
+            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "email": "{{ user.email }}",
+            "contact": "{{ user.userprofile.contact }}"
+        },
+        "notes": {
+            "agent_id": "{{ user.id }}",
+            "payment_type": "bulk_student_payment"
+        },
+        "theme": {
+            "color": "#667eea"
+        }
+    };
+
+    document.getElementById('rzp-button1').onclick = function (e) {
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

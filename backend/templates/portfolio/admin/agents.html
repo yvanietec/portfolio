@@ -1,0 +1,208 @@
+{# templates/admin/agents.html #}
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_dashboard.js' %}"></script>
+{% endblock %}
+{% block content %}
+<div class="admin-dashboard-wrapper">
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="admin-sidebar-flex">
+        <div class="pt-3">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-tools"></i> Admin Panel</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_user_list' %}">
+                        <i class="fas fa-users me-2"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="{% url 'admin_agent_list' %}">
+                        <i class="fas fa-user-tie me-2"></i> Manage Agents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_student_approvals' %}">
+                        <i class="fas fa-user-check me-2"></i> Student Approvals
+                        {% if pending_invitations_count > 0 %}
+                        <span class="badge bg-warning text-dark ms-1 badge-notification">{{pending_invitations_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_portfolio_list' %}">
+                        <i class="fas fa-project-diagram me-2"></i> View Portfolios
+                    </a>
+                </li>
+                {% if request.session.impersonated_by %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{% url 'stop_impersonation' %}">
+                        <i class="fas fa-user-shield me-2"></i> Switch Back to Admin
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_payment_list' %}">
+                        <i class="fas fa-credit-card me-2"></i> Payments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'monitoring_dashboard' %}">
+                        <i class="fas fa-search me-2"></i> Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_review_success_stories' %}">
+                        <i class="fas fa-star me-2"></i> Review Success Stories
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer mt-auto p-3 text-center">
+                <small class="text-muted">v1.0.0</small>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <div class="admin-main">
+
+            <!-- Page Header -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-user-tie"></i> Agents Management
+                </h1>
+                <div class="btn-toolbar">
+                    <a href="{% url 'add_agent' %}" class="action-btn btn-create">
+                        <i class="fas fa-user-plus"></i> Add New Agent
+                    </a>
+                    <button type="button" class="action-btn btn-edit" onclick="exportData('csv', 'Agents')">
+                        <i class="fas fa-download"></i> Export Agents
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h3 class="admin-table-title">
+                        <i class="fas fa-users"></i> All Agents
+                    </h3>
+                    <div class="admin-table-actions">
+                        <input type="search" class="admin-search-input" placeholder="Search agents..."
+                            onkeyup="performSearch(this.value)">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th class="counter-cell">#</th>
+                                <th>Agent</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Referrals</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in agents %}
+                            <tr>
+                                <td class="counter-cell">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            {{ agent.username|first|upper }}
+                                        </div>
+                                        <div class="user-details">
+                                            <div class="user-name">{{ agent.username }}</div>
+                                            <div class="user-email">{{ agent.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if agent.userprofile.contact %}
+                                    <span class="text-primary">{{ agent.userprofile.contact }}</span>
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if agent.userprofile.is_blocked %}
+                                    <span class="status-indicator status-blocked">
+                                        <i class="fas fa-ban"></i>
+                                        Blocked
+                                    </span>
+                                    {% else %}
+                                    <span class="status-indicator status-active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="count-badge">{{ agent.referred_by.count }}</span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="{% url 'edit_user_details' agent.id %}" class="action-btn-sm btn-sm-edit"
+                                            data-bs-toggle="tooltip" title="Edit Agent">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        {% if agent.userprofile.is_blocked %}
+                                        <a href="{% url 'unblock_user' agent.id %}" class="action-btn-sm btn-sm-unblock"
+                                            data-bs-toggle="tooltip" title="Unblock Agent">
+                                            <i class="fas fa-unlock"></i> Unblock
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'block_user' agent.id %}" class="action-btn-sm btn-sm-block"
+                                            data-bs-toggle="tooltip" title="Block Agent">
+                                            <i class="fas fa-ban"></i> Block
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_user' agent.id %}" class="action-btn-sm btn-sm-delete"
+                                            onclick="return confirmDelete('{{ agent.username }}', this.href)"
+                                            data-bs-toggle="tooltip" title="Delete Agent">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                        <a href="{% url 'login_as_user' agent.id %}" class="action-btn-sm btn-sm-login"
+                                            data-bs-toggle="tooltip" title="Login as this agent">
+                                            <i class="fas fa-sign-in-alt"></i> Login As
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <i class="fas fa-user-tie"></i>
+                                    <h3>No Agents Found</h3>
+                                    <p>No agents have been registered yet or match your search criteria.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

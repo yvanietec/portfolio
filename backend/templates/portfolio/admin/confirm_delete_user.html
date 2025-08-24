@@ -1,0 +1,171 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block title %}Confirm Delete User{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <!-- Warning Header -->
+    <div class="admin-form-header" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+        <h1 class="admin-form-title">
+            <i class="fas fa-exclamation-triangle"></i>
+            Confirm User Deletion
+        </h1>
+        <p class="admin-form-subtitle">This action cannot be undone - proceed with extreme caution</p>
+    </div>
+
+    <!-- Deletion Confirmation Card -->
+    <div class="admin-form-card">
+        <!-- Critical Warning -->
+        <div class="deletion-warning">
+            <div class="deletion-warning-icon">
+                <i class="fas fa-skull-crossbones"></i>
+            </div>
+            <div class="deletion-warning-content">
+                <h3>DANGER: Permanent Deletion</h3>
+                <p>You are about to permanently delete the following user and all associated data.</p>
+            </div>
+        </div>
+
+        <!-- User Information Grid -->
+        <div class="deletion-info-grid">
+            <!-- User Details Section -->
+            <div class="deletion-info-section">
+                <h4 class="deletion-section-title">
+                    <i class="fas fa-user"></i>
+                    User Details
+                </h4>
+                <div class="deletion-detail-list">
+                    <div class="deletion-detail-item">
+                        <span class="deletion-detail-label">Username:</span>
+                        <span class="deletion-detail-value">{{ user_to_delete.username }}</span>
+                    </div>
+                    <div class="deletion-detail-item">
+                        <span class="deletion-detail-label">Email:</span>
+                        <span class="deletion-detail-value">{{ user_to_delete.email }}</span>
+                    </div>
+                    <div class="deletion-detail-item">
+                        <span class="deletion-detail-label">User Type:</span>
+                        <span class="deletion-user-type deletion-type-{{ user_type }}">
+                            {% if user_type == 'agent' %}
+                            <i class="fas fa-user-tie"></i>
+                            {% elif user_type == 'student' %}
+                            <i class="fas fa-graduation-cap"></i>
+                            {% else %}
+                            <i class="fas fa-user"></i>
+                            {% endif %}
+                            {{ user_type|title }}
+                        </span>
+                    </div>
+                    <div class="deletion-detail-item">
+                        <span class="deletion-detail-label">Date Joined:</span>
+                        <span class="deletion-detail-value">{{ user_to_delete.date_joined|date:"F d, Y" }}</span>
+                    </div>
+                    {% if user_to_delete.userprofile %}
+                    <div class="deletion-detail-item">
+                        <span class="deletion-detail-label">Full Name:</span>
+                        <span class="deletion-detail-value">
+                            {{ user_to_delete.userprofile.first_name }} {{ user_to_delete.userprofile.last_name }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Impact Section -->
+            <div class="deletion-info-section">
+                <h4 class="deletion-section-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Deletion Impact
+                </h4>
+                {% if deletion_info %}
+                <div class="deletion-impact-warning">
+                    <h5>Data that will be affected:</h5>
+                    <ul class="deletion-impact-list">
+                        {% for info in deletion_info %}
+                        <li>{{ info }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <div class="deletion-impact-safe">
+                    <i class="fas fa-check-circle"></i>
+                    No related data will be affected.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- What Will Happen Section -->
+        <div class="deletion-consequences">
+            <h4 class="deletion-section-title">
+                <i class="fas fa-list-check"></i>
+                What Will Happen
+            </h4>
+            <div class="deletion-consequences-list">
+                <div class="deletion-consequence-item">
+                    <i class="fas fa-user-times"></i>
+                    <span>The user account will be permanently deleted</span>
+                </div>
+                <div class="deletion-consequence-item">
+                    <i class="fas fa-id-card"></i>
+                    <span>The user profile will be removed</span>
+                </div>
+                {% if user_type == 'agent' %}
+                <div class="deletion-consequence-item">
+                    <i class="fas fa-users"></i>
+                    <span>Students created by this agent will have their creator reference cleared</span>
+                </div>
+                <div class="deletion-consequence-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>All referrals and payouts associated with this agent will be deleted</span>
+                </div>
+                {% endif %}
+                <div class="deletion-consequence-item">
+                    <i class="fas fa-folder"></i>
+                    <span>All portfolios, payments, and activity records will be deleted</span>
+                </div>
+                <div class="deletion-consequence-item critical">
+                    <i class="fas fa-ban"></i>
+                    <span>This action is <strong>irreversible</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Confirmation -->
+        <div class="deletion-confirmation">
+            <div class="deletion-confirmation-checkbox">
+                <input type="checkbox" id="confirmDeletion" class="deletion-checkbox">
+                <label for="confirmDeletion" class="deletion-checkbox-label">
+                    I understand that this action is permanent and cannot be undone
+                </label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="admin-form-actions deletion-actions">
+            <form method="post" class="deletion-form" id="deleteForm">
+                {% csrf_token %}
+                <button type="submit" class="admin-form-btn admin-form-btn-danger deletion-btn" id="deleteBtn" disabled>
+                    <i class="fas fa-trash-alt"></i>
+                    Yes, Delete User Permanently
+                </button>
+            </form>
+            <a href="{% if user_type == 'agent' %}{% url 'admin_agent_list' %}{% else %}{% url 'admin_user_list' %}{% endif %}"
+                class="admin-form-btn admin-form-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Cancel & Go Back
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_delete_confirmation.js' %}"></script>
+{% endblock %}

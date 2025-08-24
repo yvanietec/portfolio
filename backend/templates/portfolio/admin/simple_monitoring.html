@@ -1,0 +1,267 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_dashboard.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<nav id="sidebar" class="admin-sidebar-flex">
+    <div class="pt-3">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-tools"></i> Admin Panel</h4>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active text-white" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_user_list' %}">
+                    <i class="fas fa-users me-2"></i> Manage Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_agent_list' %}">
+                    <i class="fas fa-user-tie me-2"></i> Manage Agents
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_student_approvals' %}">
+                    <i class="fas fa-user-check me-2"></i> Student Approvals
+                    {% if pending_invitations_count > 0 %}
+                    <span
+                        class="badge bg-warning text-dark ms-1 badge-notification">{{pending_invitations_count}}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_portfolio_list' %}">
+                    <i class="fas fa-project-diagram me-2"></i> View Portfolios
+                </a>
+            </li>
+
+            {% if request.session.impersonated_by %}
+            <li class="nav-item">
+                <a class="nav-link text-warning fw-bold" href="{% url 'stop_impersonation' %}">
+                    <i class="fas fa-user-shield me-2"></i> Switch Back to Admin
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_payment_list' %}">
+                    <i class="fas fa-credit-card me-2"></i> Payments
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'monitoring_dashboard' %}">
+                    <i class="fas fa-search me-2"></i> Monitoring
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'admin_review_success_stories' %}">
+                    <i class="fas fa-star me-2"></i> Review Success Stories
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-footer mt-auto p-3 text-center">
+            <small class="text-muted">v1.0.0</small>
+        </div>
+    </div>
+</nav>
+<!-- Main content -->
+<main class="admin-main-flex">
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Monitoring Dashboard</h1>
+            <p>Real-time system monitoring and security overview</p>
+        </div>
+
+        <!-- Security Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card security">
+                <div class="metric-title">Blocked IPs</div>
+                <div class="metric-value">{{ security_metrics.blocked_ips }}</div>
+                <div class="metric-description">IPs blocked due to suspicious activity</div>
+            </div>
+
+            <div class="metric-card security">
+                <div class="metric-title">Suspicious Activities</div>
+                <div class="metric-value">{{ security_metrics.suspicious_activities }}</div>
+                <div class="metric-description">Potential security threats detected</div>
+            </div>
+
+            <div class="metric-card performance">
+                <div class="metric-title">Slow Queries</div>
+                <div class="metric-value">{{ performance_report.slow_queries|length }}</div>
+                <div class="metric-description">Database queries taking >1 second</div>
+            </div>
+
+            <div class="metric-card errors">
+                <div class="metric-title">Total Errors</div>
+                <div class="metric-value">{{ error_metrics.total_errors }}</div>
+                <div class="metric-description">Application errors logged</div>
+            </div>
+        </div>
+
+        <!-- Status Alerts -->
+        <div class="alerts">
+            {% if security_metrics.suspicious_activities > 0 %}
+            <div class="alert alert-warning">
+                <strong>⚠️ Security Alert:</strong> {{ security_metrics.suspicious_activities }} suspicious activities
+                detected
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+                <strong>✅ All Clear:</strong> No suspicious activities detected
+            </div>
+            {% endif %}
+
+            {% if performance_report.slow_queries|length > 0 %}
+            <div class="alert alert-warning">
+                <strong>⚠️ Performance Alert:</strong> {{ performance_report.slow_queries|length }} slow queries
+                detected
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+                <strong>✅ Performance OK:</strong> No slow queries detected
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Database Stats -->
+        <div class="metric-card">
+            <h3>📊 Database Performance</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div>
+                    <strong>Total Queries:</strong><br>
+                    <span style="color: #007bff; font-size: 24px;">{{ db_stats.total_queries }}</span>
+                </div>
+                <div>
+                    <strong>Slow Queries:</strong><br>
+                    <span style="color: #ffc107; font-size: 24px;">{{ db_stats.slow_queries }}</span>
+                </div>
+                <div>
+                    <strong>Avg Query Time:</strong><br>
+                    <span style="color: #17a2b8; font-size: 24px;">{{ db_stats.average_query_time|floatformat:3
+                        }}s</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        {% if recent_activities %}
+        <div class="metric-card">
+            <h3>📝 Recent User Activities</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Description</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in recent_activities %}
+                    <tr>
+                        <td>{{ activity.user.username }}</td>
+                        <td>
+                            <span style="
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 12px;
+                                background-color: {% if activity.action == 'login' %}#28a745{% elif activity.action == 'payment' %}#17a2b8{% else %}#6c757d{% endif %};
+                                color: white;
+                            ">
+                                {{ activity.action }}
+                            </span>
+                        </td>
+                        <td>{{ activity.description|default:"-" }}</td>
+                        <td>{{ activity.timestamp|date:"M d, Y H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <div class="metric-card">
+            <h3>⚡ Quick Actions</h3>
+            <div>
+                <a href="{% url 'security_logs' %}" class="btn btn-danger">
+                    🔒 Security Logs
+                </a>
+                <a href="{% url 'performance_metrics' %}" class="btn btn-info">
+                    📈 Performance
+                </a>
+                <a href="{% url 'export_monitoring_data' %}?type=security" class="btn btn-warning">
+                    📥 Export Data
+                </a>
+                <button onclick="clearLogs('security')" class="btn btn-danger">
+                    🗑️ Clear Logs
+                </button>
+            </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="metric-card">
+            <h3>ℹ️ System Information</h3>
+            <p><strong>Status:</strong> <span style="color: #28a745;">✅ Operational</span></p>
+            <p><strong>Monitoring:</strong> <span style="color: #28a745;">✅ Active</span></p>
+            <p><strong>Security:</strong> <span style="color: #28a745;">✅ Protected</span></p>
+            <p><strong>Last Updated:</strong> <span id="last-updated">{{ "now"|date:"M d, Y H:i:s" }}</span></p>
+        </div>
+    </div>
+</main>
+</div>
+
+<script>
+    // Auto-refresh every 30 seconds
+    setInterval(function () {
+        fetch('{% url "api_monitoring_data" %}')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Monitoring data updated:', data);
+                document.getElementById('last-updated').textContent = new Date().toLocaleString();
+            })
+            .catch(error => console.error('Error fetching monitoring data:', error));
+    }, 30000);
+
+    function clearLogs(logType) {
+        if (confirm('Are you sure you want to clear ' + logType + ' logs?')) {
+            fetch('{% url "clear_logs" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: 'log_type=' + logType
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Logs cleared successfully');
+                        location.reload();
+                    } else {
+                        alert('Error clearing logs: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error clearing logs');
+                });
+        }
+    }
+</script>
+
+{% endblock %}

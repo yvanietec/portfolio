@@ -1,0 +1,242 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <!-- Settings Header -->
+    <div class="admin-form-header" style="background: linear-gradient(135deg, #6c757d 0%, #495057 100%);">
+        <h1 class="admin-form-title">
+            <i class="fas fa-cog"></i>
+            System Settings
+        </h1>
+        <p class="admin-form-subtitle">Configure application settings and preferences</p>
+    </div>
+
+    <!-- Settings Cards -->
+    <div class="settings-grid">
+        <!-- Application Info Card -->
+        <div class="admin-form-card">
+            <div class="settings-card-header">
+                <h3 class="settings-card-title">
+                    <i class="fas fa-info-circle"></i>
+                    Application Information
+                </h3>
+            </div>
+            <div class="settings-card-body">
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-tag"></i>
+                        App Name
+                    </div>
+                    <div class="settings-item-value">{{ app_name|default:"Portfolio Management System" }}</div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-code-branch"></i>
+                        Version
+                    </div>
+                    <div class="settings-item-value">
+                        <span class="settings-version-badge">v{{ version|default:"1.0.0" }}</span>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-envelope"></i>
+                        Support Email
+                    </div>
+                    <div class="settings-item-value">{{ support_email|default:"support@example.com" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status Card -->
+        <div class="admin-form-card">
+            <div class="settings-card-header">
+                <h3 class="settings-card-title">
+                    <i class="fas fa-server"></i>
+                    System Status
+                </h3>
+            </div>
+            <div class="settings-card-body">
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-tools"></i>
+                        Maintenance Mode
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-toggle">
+                            <input type="checkbox" id="maintenanceToggle" class="settings-toggle-input" {% if
+                                maintenance_mode %}checked{% endif %}>
+                            <label for="maintenanceToggle" class="settings-toggle-label">
+                                <span class="settings-toggle-switch"></span>
+                                <span class="settings-toggle-text">
+                                    {% if maintenance_mode %}Enabled{% else %}Disabled{% endif %}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-database"></i>
+                        Database Status
+                    </div>
+                    <div class="settings-item-value">
+                        <span class="settings-status-badge settings-status-success">
+                            <i class="fas fa-check-circle"></i>
+                            Connected
+                        </span>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-memory"></i>
+                        System Load
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-progress-bar">
+                            <div class="settings-progress-fill" style="width: 35%"></div>
+                        </div>
+                        <span class="settings-progress-text">35% CPU</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Settings Card -->
+        <div class="admin-form-card">
+            <div class="settings-card-header">
+                <h3 class="settings-card-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Security Settings
+                </h3>
+            </div>
+            <div class="settings-card-body">
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-lock"></i>
+                        Two-Factor Auth
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-toggle">
+                            <input type="checkbox" id="twoFactorToggle" class="settings-toggle-input">
+                            <label for="twoFactorToggle" class="settings-toggle-label">
+                                <span class="settings-toggle-switch"></span>
+                                <span class="settings-toggle-text">Disabled</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-user-shield"></i>
+                        Session Timeout
+                    </div>
+                    <div class="settings-item-value">
+                        <select class="admin-form-control settings-select">
+                            <option value="30">30 minutes</option>
+                            <option value="60" selected>1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="240">4 hours</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-key"></i>
+                        Password Policy
+                    </div>
+                    <div class="settings-item-value">
+                        <span class="settings-status-badge settings-status-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Medium
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Card -->
+        <div class="admin-form-card">
+            <div class="settings-card-header">
+                <h3 class="settings-card-title">
+                    <i class="fas fa-bell"></i>
+                    Notification Settings
+                </h3>
+            </div>
+            <div class="settings-card-body">
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-envelope"></i>
+                        Email Notifications
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-toggle">
+                            <input type="checkbox" id="emailNotificationsToggle" class="settings-toggle-input" checked>
+                            <label for="emailNotificationsToggle" class="settings-toggle-label">
+                                <span class="settings-toggle-switch"></span>
+                                <span class="settings-toggle-text">Enabled</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-mobile-alt"></i>
+                        SMS Notifications
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-toggle">
+                            <input type="checkbox" id="smsNotificationsToggle" class="settings-toggle-input">
+                            <label for="smsNotificationsToggle" class="settings-toggle-label">
+                                <span class="settings-toggle-switch"></span>
+                                <span class="settings-toggle-text">Disabled</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-label">
+                        <i class="fas fa-desktop"></i>
+                        Push Notifications
+                    </div>
+                    <div class="settings-item-value">
+                        <div class="settings-toggle">
+                            <input type="checkbox" id="pushNotificationsToggle" class="settings-toggle-input" checked>
+                            <label for="pushNotificationsToggle" class="settings-toggle-label">
+                                <span class="settings-toggle-switch"></span>
+                                <span class="settings-toggle-text">Enabled</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="admin-form-actions settings-actions">
+        <button type="button" class="admin-form-btn admin-form-btn-primary" onclick="saveSettings()">
+            <i class="fas fa-save"></i>
+            Save Settings
+        </button>
+        <button type="button" class="admin-form-btn admin-form-btn-secondary" onclick="resetSettings()">
+            <i class="fas fa-undo"></i>
+            Reset to Defaults
+        </button>
+        <button type="button" class="admin-form-btn admin-form-btn-warning" onclick="exportSettings()">
+            <i class="fas fa-download"></i>
+            Export Configuration
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_settings.js' %}"></script>
+{% endblock %}

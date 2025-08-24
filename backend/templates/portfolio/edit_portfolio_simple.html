@@ -1,0 +1,449 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-5xl mx-auto">
+
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 mb-8">
+            <div class="mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold gradient-text flex items-center gap-2">
+                    <i class="fas fa-edit"></i> Edit Portfolio
+                </h2>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="mb-4">
+                <div
+                    class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg flex items-center justify-between">
+                    <span><i class="fas fa-check-circle mr-2"></i> {{ message }}</span>
+                    <button type="button"
+                        class="text-green-700 hover:text-green-900 text-xl font-bold focus:outline-none"
+                        onclick="this.parentNode.parentNode.remove()">&times;</button>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-8">
+                <h5 class="font-semibold mb-2 flex items-center gap-2 text-blue-700"><i class="fas fa-info-circle"></i>
+                    Editing Tips</h5>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li>Fill out each section completely to create a professional portfolio</li>
+                    <li>For additional items (Education, Experience, Projects, etc.), use the respective "Add" buttons
+                        below</li>
+                </ul>
+            </div>
+            <!-- Personal Information Section -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i class="fas fa-user"></i>
+                    Personal Information</h3>
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="{{ personal_form.first_name.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">First Name</label>
+                            {{ personal_form.first_name }}
+                            {% if personal_form.first_name.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ personal_form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ personal_form.last_name.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Last Name</label>
+                            {{ personal_form.last_name }}
+                            {% if personal_form.last_name.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ personal_form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ personal_form.email.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Email</label>
+                            {{ personal_form.email }}
+                        </div>
+                        <div>
+                            <label for="{{ personal_form.contact.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Contact</label>
+                            {{ personal_form.contact }}
+                        </div>
+                    </div>
+                    <div>
+                        <label for="{{ personal_form.address.id_for_label }}"
+                            class="block font-medium text-gray-700 mb-1">Address</label>
+                        {{ personal_form.address }}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="{{ personal_form.profile_photo.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Profile Photo</label>
+
+                            <!-- Current Photo Display -->
+                            {% if user_profile.profile_photo %}
+                            <div class="mb-3">
+                                <img src="{{ user_profile.profile_photo.url }}" alt="Current Profile Photo"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-violet-200 shadow-md">
+                                <small class="text-gray-400 block mt-1">Current photo</small>
+                            </div>
+                            {% endif %}
+
+                            <!-- File Input with Better Styling -->
+                            <div class="relative">
+                                <input type="file" name="profile_photo" accept="image/*"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200 transition-colors"
+                                    onchange="previewProfilePhoto(this)">
+                                <small class="text-gray-400 block mt-1">Recommended: Square image, 200x200 pixels or
+                                    larger</small>
+                            </div>
+
+                            <!-- Photo Preview Area -->
+                            <div id="photoPreview" class="mt-3 hidden">
+                                <img id="previewImg" src="" alt="Photo Preview"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-violet-200 shadow-md">
+                                <small class="text-gray-400 block mt-1">Preview</small>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="{{ personal_form.resume.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Resume</label>
+                            {{ personal_form.resume }}
+                            {% if user_profile.resume %}
+                            <small class="text-gray-400">Current: <a href="{{ user_profile.resume.url }}"
+                                    target="_blank" class="underline">View Resume</a></small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button type="submit" name="personal_info"
+                        class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center mt-4">
+                        <i class="fas fa-save mr-2"></i> Update Personal Info
+                    </button>
+                </form>
+            </div>
+            <!-- Social Information Section -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-share-alt"></i> Social Links</h3>
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="{{ social_form.github_link.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">GitHub</label>
+                            {{ social_form.github_link }}
+                            {% if social_form.github_link.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ social_form.github_link.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ social_form.facebook_link.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Facebook</label>
+                            {{ social_form.facebook_link }}
+                            {% if social_form.facebook_link.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ social_form.facebook_link.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ social_form.instagram_link.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Instagram</label>
+                            {{ social_form.instagram_link }}
+                            {% if social_form.instagram_link.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ social_form.instagram_link.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ social_form.other_social_link.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Other Website</label>
+                            {{ social_form.other_social_link }}
+                            {% if social_form.other_social_link.errors %}
+                            <div class="text-red-500 text-xs mt-1">{{ social_form.other_social_link.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button type="submit" name="social_info"
+                        class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center mt-4">
+                        <i class="fas fa-save mr-2"></i> Update Social Links
+                    </button>
+                </form>
+            </div>
+            <!-- Summary Section -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-align-left"></i> Professional Summary</h3>
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <label for="{{ summary_form.content.id_for_label }}"
+                            class="block font-medium text-gray-700 mb-1">Summary</label>
+                        {{ summary_form.content }}
+                        {% if summary_form.content.errors %}
+                        <div class="text-red-500 text-xs mt-1">{{ summary_form.content.errors }}</div>
+                        {% endif %}
+                        <small class="text-gray-400">Write a brief professional summary about yourself</small>
+                    </div>
+                    <button type="submit" name="summary"
+                        class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center mt-4">
+                        <i class="fas fa-save mr-2"></i> Update Summary
+                    </button>
+                </form>
+            </div>
+            <!-- Additional Information Section -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-plus-circle"></i> Additional Information</h3>
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="{{ extras_form.date_of_birth.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Date of Birth</label>
+                            {{ extras_form.date_of_birth }}
+                            <small class="text-gray-400">Optional personal information</small>
+                        </div>
+                        <div>
+                            <label for="{{ extras_form.nationality.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Nationality</label>
+                            {{ extras_form.nationality }}
+                        </div>
+                        <div>
+                            <label for="{{ extras_form.marital_status.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Marital Status</label>
+                            {{ extras_form.marital_status }}
+                        </div>
+                        <div>
+                            <label for="{{ extras_form.resume.id_for_label }}"
+                                class="block font-medium text-gray-700 mb-1">Resume</label>
+                            {{ extras_form.resume }}
+                            {% if user_profile.resume %}
+                            <small class="text-gray-400">Current: <a href="{{ user_profile.resume.url }}"
+                                    target="_blank" class="underline">View Resume</a></small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <label for="{{ extras_form.extracurricular.id_for_label }}"
+                            class="block font-medium text-gray-700 mb-1">Extracurricular Activities</label>
+                        {{ extras_form.extracurricular }}
+                        <small class="text-gray-400">Mention your extracurricular activities, volunteer work,
+                            etc.</small>
+                    </div>
+                    <button type="submit" name="extras"
+                        class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center mt-4">
+                        <i class="fas fa-save mr-2"></i> Update Additional Info
+                    </button>
+                </form>
+            </div>
+            <!-- Education Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-graduation-cap"></i> Education</h3>
+                {% if education_items %}
+                {% for edu in education_items %}
+                <div class="border-b border-gray-200 pb-3 mb-3">
+                    <h6 class="font-semibold">{{ edu.degree }} - {{ edu.institution }}</h6>
+                    <p class="text-gray-500 mb-1">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</p>
+                    {% if edu.grade %}<p class="mb-0"><strong>Grade:</strong> {{ edu.grade }}</p>{% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-gray-500">No education information added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_education' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if education_items %}Edit{% else %}Add{% endif %} Education
+                </a>
+            </div>
+            <!-- Experience Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-briefcase"></i> Experience</h3>
+                {% if experience_items %}
+                {% for exp in experience_items %}
+                <div class="border-b border-gray-200 pb-3 mb-3">
+                    <h6 class="font-semibold">{{ exp.job_title }} - {{ exp.company }}</h6>
+                    <p class="text-gray-500 mb-1">{{ exp.start_year }} - {{ exp.end_year|default:"Present" }}</p>
+                    {% if exp.description %}<p class="mb-0">{{ exp.description }}</p>{% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-gray-500">No experience information added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_experience' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if experience_items %}Edit{% else %}Add{% endif %} Experience
+                </a>
+            </div>
+            <!-- Projects Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-project-diagram"></i> Projects</h3>
+                {% if project_items %}
+                {% for project in project_items %}
+                <div class="border-b border-gray-200 pb-3 mb-3">
+                    <h6 class="font-semibold">{{ project.title }}</h6>
+                    {% if project.description %}<p class="mb-1">{{ project.description }}</p>{% endif %}
+                    {% if project.link %}<p class="mb-0"><a href="{{ project.link }}" target="_blank"
+                            class="text-violet-600 underline">View Project</a></p>{% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-gray-500">No projects added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_project' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if project_items %}Edit{% else %}Add{% endif %} Projects
+                </a>
+            </div>
+            <!-- Skills Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-tools"></i> Skills</h3>
+                {% if skill_items %}
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    {% for skill in skill_items %}
+                    <span class="inline-block bg-violet-100 text-violet-700 px-3 py-1 rounded font-medium">{{ skill.name
+                        }}{% if skill.level %} <span class="text-xs">({{ skill.level }})</span>{% endif %}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500">No skills added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_skill' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if skill_items %}Edit{% else %}Add{% endif %} Skills
+                </a>
+            </div>
+            <!-- Certifications Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-certificate"></i> Certifications</h3>
+                {% if certification_items %}
+                {% for cert in certification_items %}
+                <div class="border-b border-gray-200 pb-2 mb-2">
+                    <strong>{{ cert.name }}</strong>
+                    {% if cert.organization %} - {{ cert.organization }}{% endif %}
+                    {% if cert.year %}<small class="text-gray-500">({{ cert.year }})</small>{% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-gray-500">No certifications added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_certification' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if certification_items %}Edit{% else %}Add{% endif %}
+                    Certifications
+                </a>
+            </div>
+            <!-- Languages Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-language"></i> Languages</h3>
+                {% if language_items %}
+                <div class="mb-3">
+                    {% for lang in language_items %}
+                    <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded font-medium mr-2 mb-1">{{
+                        lang.name }} ({{ lang.proficiency }})</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500">No languages added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_language' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if language_items %}Edit{% else %}Add{% endif %} Languages
+                </a>
+            </div>
+            <!-- Hobbies Section - Display Only -->
+            <div class="glass-effect rounded-xl shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold gradient-text mb-4 flex items-center gap-2"><i
+                        class="fas fa-heart"></i> Hobbies</h3>
+                {% if hobby_items %}
+                <div class="mb-3">
+                    {% for hobby in hobby_items %}
+                    <span class="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded font-medium mr-2 mb-1">{{
+                        hobby.name }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500">No hobbies added yet.</p>
+                {% endif %}
+                <a href="{% url 'add_hobby' portfolio.pk %}"
+                    class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center mt-4 transition-all">
+                    <i class="fas fa-plus mr-2"></i> {% if hobby_items %}Edit{% else %}Add{% endif %} Hobbies
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Clear messages after 5 seconds to prevent accumulation
+    document.addEventListener('DOMContentLoaded', function () {
+        // Auto-remove messages after 5 seconds
+        const messages = document.querySelectorAll('.bg-green-100');
+        messages.forEach(message => {
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.parentNode.remove();
+                }
+            }, 5000);
+        });
+
+        // Add form submission confirmation and loading state
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    // Add loading state
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    submitBtn.disabled = true;
+                    // Re-enable after 3 seconds in case something goes wrong
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = submitBtn.innerHTML.replace('<i class="fas fa-spinner fa-spin"></i> Saving...', submitBtn.innerHTML);
+                    }, 3000);
+                }
+            });
+        });
+        // Add character counter for summary
+        const summaryTextarea = document.querySelector('textarea[name="content"]');
+        if (summaryTextarea) {
+            const charCounter = document.createElement('small');
+            charCounter.className = 'text-gray-400 block text-right mt-1';
+            function updateCounter() {
+                const length = summaryTextarea.value.length;
+                charCounter.textContent = `${length}/500 characters`;
+                if (length < 30) {
+                    charCounter.className = 'text-yellow-500 block text-right mt-1';
+                } else if (length > 450) {
+                    charCounter.className = 'text-red-500 block text-right mt-1';
+                } else {
+                    charCounter.className = 'text-green-600 block text-right mt-1';
+                }
+            }
+            summaryTextarea.addEventListener('input', updateCounter);
+            summaryTextarea.parentNode.appendChild(charCounter);
+            updateCounter();
+        }
+    });
+
+    // Profile photo preview function
+    function previewProfilePhoto(input) {
+        const previewDiv = document.getElementById('photoPreview');
+        const previewImg = document.getElementById('previewImg');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewDiv.classList.remove('hidden');
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewDiv.classList.add('hidden');
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}

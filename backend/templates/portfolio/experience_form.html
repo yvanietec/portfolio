@@ -1,0 +1,355 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Professional Experience - Step 4{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+<style>
+    /* Modern Professional Delete Button */
+    .modern-delete-btn {
+        position: relative;
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border: 2px solid #e2e8f0;
+        color: #64748b;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        min-width: 120px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .modern-delete-btn:hover {
+        background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        border-color: #fecaca;
+        color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+    }
+
+    .modern-delete-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+    }
+
+    .modern-delete-btn .delete-btn-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .modern-delete-btn .delete-btn-hover {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #dc2626;
+        transition: all 0.3s ease;
+    }
+
+    .modern-delete-btn:hover .delete-btn-content {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    .modern-delete-btn:hover .delete-btn-hover {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .modern-delete-btn i {
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .modern-delete-btn:hover i {
+        color: #dc2626;
+    }
+
+    .modern-delete-btn .delete-text {
+        font-weight: 500;
+        letter-spacing: 0.025em;
+    }
+
+    /* Focus states for accessibility */
+    .modern-delete-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+        .modern-delete-btn {
+            min-width: 100px;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .modern-delete-btn .delete-text {
+            display: none;
+        }
+
+        .modern-delete-btn .delete-btn-hover span {
+            display: none;
+        }
+
+        .modern-delete-btn {
+            min-width: 40px;
+            width: 40px;
+        }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .modern-delete-btn {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-color: #475569;
+            color: #94a3b8;
+        }
+
+        .modern-delete-btn:hover {
+            background: linear-gradient(135deg, #450a0a, #7f1d1d);
+            border-color: #dc2626;
+            color: #fca5a5;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container" data-current-step="add_experience">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <!-- Wizard Progress Component -->
+        {% include "portfolio/wizard_progress.html" %}
+        <div class="portfolio-form-container portfolio-fade-in">
+            <div class="portfolio-text-center">
+                <h1 class="portfolio-title">Step 4: Professional Experience</h1>
+                <p class="portfolio-subtitle">Highlight your work history to showcase your career journey</p>
+            </div>
+
+            <form method="post" class="portfolio-w-full" autocomplete="off">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <div class="portfolio-form-content">
+                    {% if formset.non_form_errors %}
+                    <div class="portfolio-alert portfolio-alert-error">
+                        {% for error in formset.non_form_errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% for form in formset %}
+                    <div class="portfolio-form-section">
+                        <div
+                            class="portfolio-flex portfolio-items-center portfolio-justify-between portfolio-spacing-sm">
+                            <h3 class="portfolio-section-title">Experience #{{ forloop.counter }}</h3>
+                            <button type="button" class="modern-delete-btn remove-entry"
+                                data-index="{{ forloop.counter0 }}" title="Remove this experience entry">
+                                <div class="delete-btn-content">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <span class="delete-text">Remove</span>
+                                </div>
+                                <div class="delete-btn-hover">
+                                    <i class="fas fa-times"></i>
+                                    <span>Delete</span>
+                                </div>
+                            </button>
+                        </div>
+                        {% if form.non_field_errors %}
+                        <div class="portfolio-alert portfolio-alert-error">
+                            {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="portfolio-form-row">
+                            <!-- Job Title and Company Name -->
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.job_title.id_for_label }}" class="portfolio-label">
+                                    {{ form.job_title.label }}
+                                    {% if form.job_title.field.required %}<span style="color: #dc2626;">*</span>{%endif%}
+
+                                </label>
+                                {{ form.job_title }}
+                                {% if form.job_title.help_text %}
+                                <small class="portfolio-help-text">{{ form.job_title.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.job_title.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.company_name.id_for_label }}" class="portfolio-label">
+                                    {{ form.company_name.label }}
+                                    {% if form.company_name.field.required %}<span
+                                        style="color: #dc2626;">*</span>{%endif %}
+
+                                </label>
+                                {{ form.company_name }}
+                                {% if form.company_name.help_text %}
+                                <small class="portfolio-help-text">{{ form.company_name.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.company_name.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="portfolio-form-row">
+                            <!-- Location and Description -->
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.location.id_for_label }}" class="portfolio-label">
+                                    {{ form.location.label }}
+                                    {% if form.location.field.required %}<span style="color: #dc2626;">*</span>{%endif%}
+
+                                </label>
+                                {{ form.location }}
+                                {% if form.location.help_text %}
+                                <small class="portfolio-help-text">{{ form.location.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.location.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.description.id_for_label }}" class="portfolio-label">
+                                    {{ form.description.label }}
+                                    {% if form.description.field.required %}<span style="color: #dc2626;">*</span>{%endif %}
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.help_text %}
+                                <small class="portfolio-help-text">{{ form.description.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.description.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="portfolio-form-row">
+                            <!-- Start Month and Start Year -->
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.start_month.id_for_label }}" class="portfolio-label">
+                                    {{ form.start_month.label }}
+                                    {% if form.start_month.field.required %}<span style="color: #dc2626;">*</span>{%endif %}
+                                </label>
+                                {{ form.start_month }}
+                                {% if form.start_month.help_text %}
+                                <small class="portfolio-help-text">{{ form.start_month.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.start_month.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.start_year.id_for_label }}" class="portfolio-label">
+                                    {{ form.start_year.label }}
+                                    {% if form.start_year.field.required %}<span style="color: #dc2626;">*</span>{%  endif %}
+
+                                </label>
+                                {{ form.start_year }}
+                                {% if form.start_year.help_text %}
+                                <small class="portfolio-help-text">{{ form.start_year.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.start_year.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="portfolio-form-row">
+                            <!-- End Month and End Year -->
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.end_month.id_for_label }}" class="portfolio-label">
+                                    {{ form.end_month.label }}
+                                    {% if form.end_month.field.required %}<span style="color: #dc2626;">*</span>{% endif%}
+                                </label>
+                                {{ form.end_month }}
+                                {% if form.end_month.help_text %}
+                                <small class="portfolio-help-text">{{ form.end_month.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.end_month.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.end_year.id_for_label }}" class="portfolio-label">
+                                    {{ form.end_year.label }}
+                                    {% if form.end_year.field.required %}<span style="color: #dc2626;">*</span>{%  endif%}
+                                </label>
+                                {{ form.end_year }}
+                                {% if form.end_year.help_text %}
+                                <small class="portfolio-help-text">{{ form.end_year.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.end_year.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Standardized Button Group - Consistent Alignment -->
+                <div class="portfolio-btn-group">
+                    <button type="button" id="add-experience" class="portfolio-btn portfolio-btn-secondary">
+                        <i class="fas fa-plus"></i> Add Another
+                    </button>
+                    <button type="submit" name="skip" class="portfolio-btn portfolio-btn-gray">Skip</button>
+                    <button type="submit" class="portfolio-btn portfolio-btn-primary">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/forms.js' %}"></script>
+<script src="{% static 'js/experience_formset.js' %}"></script>
+
+<script>
+    // Auto-expanding textarea functionality
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Initialize auto-resize for all textareas
+    document.addEventListener('DOMContentLoaded', function () {
+        const textareas = document.querySelectorAll('textarea.portfolio-textarea');
+        textareas.forEach(textarea => {
+            // Set initial height
+            autoResizeTextarea(textarea);
+
+            // Add event listeners
+            textarea.addEventListener('input', function () {
+                autoResizeTextarea(this);
+            });
+
+            textarea.addEventListener('focus', function () {
+                autoResizeTextarea(this);
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Social Links - Step 11{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container" data-current-step="personal_info2">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <!-- Wizard Progress Component -->
+        {% include "portfolio/wizard_progress.html" %}
+
+        <div class="portfolio-form-container portfolio-fade-in">
+            <div class="portfolio-text-center">
+                <h1 class="portfolio-title">Step 11: Social Links</h1>
+                <p class="portfolio-subtitle">Connect your professional profiles elegantly</p>
+            </div>
+
+            <form method="post" autocomplete="off">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="portfolio-alert portfolio-alert-error">
+                    {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="portfolio-form-content">
+                    <div class="portfolio-form-section">
+                        <div
+                            class="portfolio-flex portfolio-items-center portfolio-justify-between portfolio-spacing-sm">
+                            <h3 class="portfolio-section-title">Social Media Profiles</h3>
+                        </div>
+
+                        <div class="portfolio-form-row">
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.github_link.id_for_label }}" class="portfolio-label">
+                                    <i class="fab fa-github"></i> GitHub Profile
+                                    {% if form.github_link.field.required %}<span style="color: #dc2626;">*</span>{%endif %}
+                                </label>
+                                {{ form.github_link }}
+                                {% if form.github_link.help_text %}
+                                <small class="portfolio-help-text">{{ form.github_link.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.github_link.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.facebook_link.id_for_label }}" class="portfolio-label">
+                                    <i class="fab fa-facebook-f"></i> Facebook Profile
+                                    {% if form.facebook_link.field.required %}<span
+                                        style="color: #dc2626;">*</span>{%endif %}
+                                </label>
+                                {{ form.facebook_link }}
+                                {% if form.facebook_link.help_text %}
+                                <small class="portfolio-help-text">{{ form.facebook_link.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.facebook_link.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="portfolio-form-row">
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.instagram_link.id_for_label }}" class="portfolio-label">
+                                    <i class="fab fa-instagram"></i> Instagram Profile
+                                    {% if form.instagram_link.field.required %}<span
+                                        style="color: #dc2626;">*</span>{%endif %}
+                                </label>
+                                {{ form.instagram_link }}
+                                {% if form.instagram_link.help_text %}
+                                <small class="portfolio-help-text">{{ form.instagram_link.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.instagram_link.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="portfolio-form-group">
+                                <label for="{{ form.other_social_link.id_for_label }}" class="portfolio-label">
+                                    <i class="fas fa-link"></i> Other Professional Link
+                                    {% if form.other_social_link.field.required %}<span
+                                        style="color: #dc2626;">*</span>{% endif %}
+                                </label>
+                                {{ form.other_social_link }}
+                                {% if form.other_social_link.help_text %}
+                                <small class="portfolio-help-text">{{ form.other_social_link.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.other_social_link.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standardized Button Group - Consistent Alignment -->
+                <div class="portfolio-btn-group">
+                    <button type="submit" class="portfolio-btn portfolio-btn-primary">
+                        Preview & Choose Template <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/social_links.js' %}"></script>
+{% endblock %}

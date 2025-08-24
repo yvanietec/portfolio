@@ -1,0 +1,33 @@
+    /* registration form styling */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.form-control {
+    border-radius: 5px;
+    padding: 10px 15px;
+}
+
+.btn-primary {
+    background-color: #4a6fa5;
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #3a5a8c;
+}
+
+.alert {
+    border-radius: 5px;
+}
+
+.text-danger {
+    font-size: 0.9rem;
+}

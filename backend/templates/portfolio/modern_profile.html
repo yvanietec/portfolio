@@ -1,0 +1,817 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mobile_profile_settings.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="modern-profile-container max-w-5xl mx-auto px-4 md:px-6">
+    <!-- Hero/Profile Section -->
+    <div
+        class="glass-effect rounded-3xl shadow-xl p-4 md:p-8 flex flex-col md:flex-row items-center gap-4 md:gap-8 mb-8 md:mb-10 relative">
+        <!-- Profile Photo Section -->
+        <div class="relative flex flex-col items-center">
+            {% if user_profile.profile_photo %}
+            <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo"
+                class="w-36 h-36 md:w-48 md:h-48 rounded-full object-cover border-4 border-violet-200 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105"
+                onclick="openImageModal('{{ user_profile.profile_photo.url }}', '{{ user_profile.first_name }} {{ user_profile.last_name }}')">
+            {% else %}
+            <div
+                class="w-36 h-36 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-violet-100 to-violet-200 flex items-center justify-center text-2xl md:text-4xl text-violet-500 border-4 border-violet-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                <i class="fas fa-user" aria-hidden="true"></i>
+            </div>
+            {% endif %}
+            <!-- Camera Upload Button - Enhanced styling -->
+            <button
+                class="absolute bottom-2 right-2 bg-white border border-gray-300 rounded-full p-1.5 w-7 h-7 shadow-md hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center justify-center"
+                style="min-width: 28px; min-height: 28px; max-width: 28px; max-height: 28px;"
+                onclick="togglePhotoUpload()" aria-label="Upload profile photo">
+                <i class="fas fa-camera text-gray-600 text-[11px] hover:text-gray-700 transition-colors"
+                    aria-hidden="true"></i>
+            </button>
+            <!-- Hidden File Upload Form -->
+            <form id="photoUploadForm" method="post" enctype="multipart/form-data"
+                action="{% url 'upload_profile_photo' %}" style="display: none;">
+                {% csrf_token %}
+                <input type="file" id="photoInput" name="profile_photo" accept="image/*" onchange="this.form.submit()"
+                    aria-label="Select profile photo">
+            </form>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="flex-1 flex flex-col gap-2 items-center md:items-start text-center md:text-left">
+            <h1 class="text-2xl md:text-3xl font-bold mb-1">
+                {% if user_profile.first_name or user_profile.last_name %}
+                {{ user_profile.first_name }} {{ user_profile.last_name }}
+                {% else %}
+                {{ request.user.username }}
+                {% endif %}
+            </h1>
+            <p class="text-violet-600 font-medium">@{{ request.user.username }}</p>
+            <p class="text-gray-500">{{ user_profile.email|default:request.user.email }}</p>
+        </div>
+
+        <!-- Settings Button -->
+        <button
+            class="settings-btn absolute top-2 right-2 md:top-4 md:right-4 bg-violet-600 text-white p-1 md:px-4 md:py-2 rounded-2xl md:rounded-xl shadow-lg hover:shadow-xl flex items-center justify-center md:gap-2 transition-all duration-300 w-6 h-5 md:w-auto md:h-auto backdrop-blur-sm border border-violet-400/20 hover:from-violet-600 hover:to-violet-700 active:scale-95"
+            onclick="openSettings()" aria-label="Open settings">
+            <i class="fas fa-cog text-[8px] md:text-base animate-spin-slow" aria-hidden="true"></i>
+            <span class="hidden md:inline">Settings</span>
+        </button>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+        <div class="glass-effect rounded-2xl p-4 md:p-6 flex items-center gap-3 md:gap-4">
+            <div
+                class="bg-violet-100 text-violet-600 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl text-xl md:text-2xl">
+                <i class="fas fa-trophy" aria-hidden="true"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-sm md:text-base">Profile Completion</h3>
+                <p class="text-xl md:text-2xl font-bold">{{ profile_completion }}%</p>
+            </div>
+        </div>
+        <div class="glass-effect rounded-2xl p-4 md:p-6 flex items-center gap-3 md:gap-4">
+            <div
+                class="bg-violet-100 text-violet-600 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl text-xl md:text-2xl">
+                <i class="fas fa-calendar" aria-hidden="true"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-sm md:text-base">Member Since</h3>
+                <p class="text-xl md:text-2xl font-bold">{{ request.user.date_joined|date:"M Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mb-4 md:mb-6">
+        <h2 class="text-lg md:text-xl font-bold mb-2 md:mb-3 gradient-text">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {% if portfolio %}
+            <!-- View Portfolio Card -->
+            <div class="h-full">
+                <a href="{% url 'public_portfolio' portfolio.slug %}" target="_blank"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">View Portfolio</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">See how your portfolio looks to the world</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <!-- Edit Portfolio Card -->
+            <div class="h-full">
+                <a href="{% url 'edit_portfolio_simple' %}"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Edit Portfolio</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Polish and perfect your professional story</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <!-- Share Portfolio Card -->
+            <div class="h-full">
+                <a href="#" onclick="copyPortfolioLink(); return false;"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-share" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Share Portfolio</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Spread your brilliance across the digital world</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <!-- Change Template Card -->
+            {% if portfolio.paid or template_changes_left > 0 %}
+            <div class="h-full">
+                <a href="{% url 'select_template' portfolio.pk %}"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-palette" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Change Template</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Give your portfolio a fresh new look</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Submit Success Story Card -->
+            {% if portfolio %}
+            <div class="h-full">
+                <a href="{% url 'submit_success_story' %}"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-feather-alt" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Submit Success Story</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Inspire others with your journey to success</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+            {% endif %}
+            {% else %}
+            <!-- For new users without portfolio, show only one action button -->
+            {% if user_profile.user_type == 'normal' and not has_paid %}
+            <!-- Get Started Card - Single action for new users -->
+            <div class="h-full">
+                <a href="{% url 'initiate_payment' %}"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-rocket" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Get Started</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Create your professional portfolio
+                        <span
+                            class="ml-1 bg-violet-200 text-violet-800 px-1.5 py-0.5 rounded text-xs font-semibold">₹1499</span>
+                    </p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+            {% else %}
+            <!-- Create Portfolio Card - For users who have already paid -->
+            <div class="h-full">
+                <a href="{% url 'create_portfolio' %}"
+                    class="glass-effect rounded-xl p-4 md:p-6 flex flex-col gap-2 hover:shadow-xl transition-all duration-200 group border-2 border-violet-100 hover:border-violet-400 h-full">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm md:text-base">Create Portfolio</h3>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm">Begin your journey to professional excellence</p>
+                    <i class="fas fa-arrow-right ml-auto text-violet-400 group-hover:translate-x-1 transition mt-auto"
+                        aria-hidden="true"></i>
+                </a>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Getting Started Guide -->
+    {% if not portfolio or profile_completion < 50 %} <div class="mb-4 md:mb-6">
+        <h2 class="text-lg md:text-xl font-bold mb-2 md:mb-3 gradient-text">Getting Started Guide</h2>
+        <div
+            class="glass-effect rounded-xl p-3 md:p-4 border-2 border-violet-200 bg-gradient-to-r from-violet-50/50 to-indigo-50/50">
+            <div class="flex items-start gap-2 md:gap-3">
+                <div
+                    class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl flex-shrink-0">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-base md:text-lg mb-2 text-violet-800">Create Your Professional
+                        Portfolio</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mb-3 md:mb-4">Ready to make a lasting impression? Follow
+                        these simple steps
+                        to build a stunning portfolio that showcases your skills, experience, and personality. Each step
+                        brings you closer to landing your dream job or attracting new clients!</p>
+
+                    <div class="space-y-2 md:space-y-3">
+                        <!-- Step 1: Basic Info -->
+                        <div
+                            class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg {% if user_profile.first_name and user_profile.last_name %}bg-green-50 border border-green-200{% else %}bg-gray-50 border border-gray-200{% endif %}">
+                            <div
+                                class="w-6 h-6 md:w-8 md:h-8 rounded-full {% if user_profile.first_name and user_profile.last_name %}bg-green-500{% else %}bg-gray-300{% endif %} flex items-center justify-center text-white text-xs md:text-sm font-bold flex-shrink-0">
+                                {% if user_profile.first_name and user_profile.last_name %}✓{% else %}1{% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h4
+                                    class="font-semibold text-xs md:text-sm {% if user_profile.first_name and user_profile.last_name %}text-green-700{% else %}text-gray-700{% endif %} mb-1">
+                                    Add Your Basic Information
+                                </h4>
+                                <p class="text-xs text-gray-600 mb-1 md:mb-2">Create a strong first impression by adding
+                                    your
+                                    full name, professional email, and contact details. This helps employers and clients
+                                    reach you easily.
+                                </p>
+                                {% if not user_profile.first_name or not user_profile.last_name %}
+                                <a href="{% url 'edit_profile' %}"
+                                    class="inline-flex items-center gap-1 text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                    Add info <i class="fas fa-arrow-right text-xs"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Create Portfolio -->
+                        <div
+                            class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg {% if portfolio %}bg-green-50 border border-green-200{% else %}bg-gray-50 border border-gray-200{% endif %}">
+                            <div
+                                class="w-6 h-6 md:w-8 md:h-8 rounded-full {% if portfolio %}bg-green-500{% else %}bg-gray-300{% endif %} flex items-center justify-center text-white text-xs md:text-sm font-bold flex-shrink-0">
+                                {% if portfolio %}✓{% else %}2{% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h4
+                                    class="font-semibold text-xs md:text-sm {% if portfolio %}text-green-700{% else %}text-gray-700{% endif %} mb-1">
+                                    Create Your Portfolio
+                                </h4>
+                                <p class="text-xs text-gray-600 mb-1 md:mb-2">Choose from our beautiful, responsive
+                                    templates to
+                                    showcase your work. Each template is designed to highlight your skills and make your
+                                    portfolio stand out from the crowd.
+                                </p>
+                                {% if not portfolio %}
+                                <a href="{% url 'create_portfolio' %}"
+                                    class="inline-flex items-center gap-1 text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                    Create now <i class="fas fa-arrow-right text-xs"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Add Content -->
+                        <div
+                            class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg {% if portfolio and profile_completion >= 70 %}bg-green-50 border border-green-200{% else %}bg-gray-50 border border-gray-200{% endif %}">
+                            <div
+                                class="w-6 h-6 md:w-8 md:h-8 rounded-full {% if portfolio and profile_completion >= 70 %}bg-green-500{% else %}bg-gray-300{% endif %} flex items-center justify-center text-white text-xs md:text-sm font-bold flex-shrink-0">
+                                {% if portfolio and profile_completion >= 70 %}✓{% else %}3{% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h4
+                                    class="font-semibold text-xs md:text-sm {% if portfolio and profile_completion >= 70 %}text-green-700{% else %}text-gray-700{% endif %} mb-1">
+                                    Add Your Content
+                                </h4>
+                                <p class="text-xs text-gray-600 mb-1 md:mb-2">Tell your story! Add your education
+                                    background,
+                                    showcase your best projects, highlight your work experience, and list your key
+                                    skills. The more complete your profile, the better your chances of getting noticed.
+                                    ({{ profile_completion }}% complete)</p>
+                                {% if portfolio and profile_completion < 70 %} <a
+                                    href="{% url 'edit_portfolio_simple' %}"
+                                    class="inline-flex items-center gap-1 text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                    Add content <i class="fas fa-arrow-right text-xs"></i>
+                                    </a>
+                                    {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Customize & Share -->
+                        <div
+                            class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg {% if portfolio and profile_completion >= 80 %}bg-green-50 border border-green-200{% else %}bg-gray-50 border border-gray-200{% endif %}">
+                            <div
+                                class="w-6 h-6 md:w-8 md:h-8 rounded-full {% if portfolio and profile_completion >= 80 %}bg-green-500{% else %}bg-gray-300{% endif %} flex items-center justify-center text-white text-xs md:text-sm font-bold flex-shrink-0">
+                                {% if portfolio and profile_completion >= 80 %}✓{% else %}4{% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h4
+                                    class="font-semibold text-xs md:text-sm {% if portfolio and profile_completion >= 80 %}text-green-700{% else %}text-gray-700{% endif %} mb-1">
+                                    Customize & Share
+                                </h4>
+                                <p class="text-xs text-gray-600 mb-1 md:mb-2">Make it personal! Add a professional
+                                    photo,
+                                    experiment with different templates to find your perfect style, and share your
+                                    portfolio link with potential employers, clients, and your professional network.</p>
+                                {% if portfolio and profile_completion >= 70 %}
+                                <div class="flex gap-1 md:gap-2 mt-1 md:mt-2">
+                                    <button onclick="togglePhotoUpload()"
+                                        class="text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                        Add photo
+                                    </button>
+                                    <span class="text-gray-400">•</span>
+                                    <a href="{% url 'select_template' portfolio.pk %}"
+                                        class="text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                        Change template
+                                    </a>
+                                    <span class="text-gray-400">•</span>
+                                    <button onclick="copyPortfolioLink()"
+                                        class="text-violet-600 hover:text-violet-700 text-xs font-medium">
+                                        Share portfolio
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 md:mt-4 pt-2 md:pt-3 border-t border-violet-200">
+                        <div class="flex items-start gap-2 text-violet-700 text-xs">
+                            <i class="fas fa-lightbulb mt-0.5"></i>
+                            <span><strong>Pro tip:</strong> Complete all steps to unlock premium features, increase your
+                                visibility to employers, and boost your chances of landing interviews by up to 3x! A
+                                complete portfolio shows dedication and professionalism.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+{% endif %}
+
+<!-- Recent Activity -->
+<div class="mb-4 md:mb-6">
+    <h2 class="text-lg md:text-xl font-bold mb-2 md:mb-3 gradient-text">Recent Activity</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <!-- Profile Updated Activity -->
+        <div class="glass-effect rounded-xl p-4 md:p-6 flex items-center gap-3 md:gap-4">
+            <div
+                class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                <i class="fas fa-user-edit" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="font-semibold text-sm md:text-base">Profile updated</p>
+                <span class="text-gray-400 text-xs md:text-sm">{{ profile_update_text }}</span>
+            </div>
+        </div>
+
+        <!-- Portfolio Viewed Activity -->
+        <!-- <div class="glass-effect rounded-xl p-4 md:p-6 flex items-center gap-3 md:gap-4">
+                <div
+                    class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-sm md:text-base">Portfolio viewed by visitor</p>
+                    <span class="text-gray-400 text-xs md:text-sm">5 hours ago</span>
+                </div>
+            </div> -->
+
+        <!-- Template Changed Activity -->
+        <div class="glass-effect rounded-xl p-4 md:p-6 flex items-center gap-3 md:gap-4">
+            <div
+                class="bg-violet-100 text-violet-600 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-lg md:text-xl">
+                <i class="fas fa-palette" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="font-semibold text-sm md:text-base">Template changed to
+                    {{portfolio.template.name|default:"Template 1" }}</p>
+                <span class="text-gray-400 text-xs md:text-sm">1 day ago</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center p-4" role="dialog"
+    aria-modal="true" aria-labelledby="settings-title">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="p-6 md:p-8 relative">
+            <!-- Close Button -->
+            <button
+                class="absolute top-4 right-4 bg-gray-100 border border-gray-300 rounded-full px-3 py-1.5 text-gray-700 hover:bg-gray-200 transition-all duration-200"
+                onclick="closeSettings()" aria-label="Close settings">
+                <i class="fas fa-times text-sm" aria-hidden="true"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="mb-6">
+                <h2 id="settings-title" class="text-xl md:text-2xl font-bold">Profile Settings</h2>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="grid grid-cols-4 gap-2 md:gap-4 mb-6">
+                <button
+                    class="tab-btn active px-3 py-2 text-sm md:text-base w-full h-12 flex items-center justify-center"
+                    onclick="showTab('profile')">
+                    <i class="fas fa-user mr-2" aria-hidden="true"></i>Profile
+                </button>
+                <button class="tab-btn px-3 py-2 text-sm md:text-base w-full h-12 flex items-center justify-center"
+                    onclick="showTab('security')">
+                    <i class="fas fa-shield-alt mr-2" aria-hidden="true"></i>Security
+                </button>
+                <button class="tab-btn px-3 py-2 text-sm md:text-base w-full h-12 flex items-center justify-center"
+                    onclick="showTab('portfolio')">
+                    <i class="fas fa-briefcase mr-2" aria-hidden="true"></i>Portfolio
+                </button>
+                <button class="tab-btn px-3 py-2 text-sm md:text-base w-full h-12 flex items-center justify-center"
+                    onclick="showTab('billing')">
+                    <i class="fas fa-credit-card mr-2" aria-hidden="true"></i>Billing
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="profile-tab" class="tab-content active h-96 overflow-y-auto">
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-3 text-lg">Personal Information</h3>
+
+                    <!-- Profile Photo Update Section -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold mb-3 text-base">Profile Photo</h4>
+                        <div class="flex items-center gap-4">
+                            <!-- Current Photo Display -->
+                            <div class="relative">
+                                {% if user_profile.profile_photo %}
+                                <img src="{{ user_profile.profile_photo.url }}" alt="Current Profile Photo"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-violet-200 shadow-md">
+                                {% else %}
+                                <div
+                                    class="w-16 h-16 rounded-full bg-violet-100 flex items-center justify-center text-xl text-violet-500 border-2 border-violet-200">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Photo Update Form -->
+                            <div class="flex-1">
+                                <form method="post" enctype="multipart/form-data"
+                                    action="{% url 'upload_profile_photo' %}" class="space-y-3">
+                                    {% csrf_token %}
+                                    <div class="flex items-center gap-3">
+                                        <input type="file" name="profile_photo" accept="image/*"
+                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200 transition-colors"
+                                            onchange="previewImage(this)">
+                                        <button type="submit"
+                                            class="btn-hover-effect bg-violet-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-violet-700 transition-all duration-200">
+                                            <i class="fas fa-upload mr-2" aria-hidden="true"></i>Upload
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-500">Recommended: Square image, 200x200 pixels or
+                                        larger</p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-gray-500 text-sm">Full Name</label>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="font-medium">{{ user_profile.first_name }} {{ user_profile.last_name
+                                    }}</span>
+                                <a href="{% url 'edit_profile' %}" class="text-violet-600 hover:underline"
+                                    aria-label="Edit full name">
+                                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-gray-500 text-sm">Email</label>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="font-medium">{{ user_profile.email|default:request.user.email }}</span>
+                                <a href="{% url 'edit_profile' %}" class="text-violet-600 hover:underline"
+                                    aria-label="Edit email">
+                                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-gray-500 text-sm">Contact</label>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="font-medium">{{ user_profile.contact|default:"Not provided" }}</span>
+                                <a href="{% url 'edit_profile' %}" class="text-violet-600 hover:underline"
+                                    aria-label="Edit contact">
+                                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-gray-500 text-sm">Address</label>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="font-medium">{{ user_profile.address|default:"Not provided" }}</span>
+                                <a href="{% url 'edit_profile' %}" class="text-violet-600 hover:underline"
+                                    aria-label="Edit address">
+                                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Full Profile Button -->
+                    <div class="mt-6 text-center">
+                        <a href="{% url 'edit_profile' %}"
+                            class="btn-hover-effect bg-violet-600 text-white px-4 py-2 md:px-6 md:py-2 rounded-lg font-medium shadow hover:bg-violet-700 inline-flex items-center gap-2 transition-all duration-200">
+                            <i class="fas fa-user-edit" aria-hidden="true"></i> Edit Full Profile
+                        </a>
+                    </div>
+
+                    <!-- Profile Completion -->
+                    <!-- <div class="mt-6">
+                            <h4 class="font-semibold mb-3">Profile Completion</h4>
+                            <div class="flex flex-wrap gap-2">
+                                {% for field in completion_fields %}
+                                <div
+                                    class="flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs md:text-sm {{ field.status }}">
+                                    <i class="fas {{ field.icon }}" aria-hidden="true"></i>
+                                    <span>{{ field.name }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div> -->
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div id="security-tab" class="tab-content hidden h-96 overflow-y-auto">
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-3 text-lg">Security Settings</h3>
+                    <div class="space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                            <div>
+                                <h4 class="font-semibold">Password</h4>
+                                <p class="text-gray-500 text-sm">Last changed: Never</p>
+                            </div>
+                            <a href="{% url 'password_change' %}"
+                                class="btn-hover-effect border border-violet-600 text-violet-600 px-4 py-2 rounded-lg font-medium hover:bg-violet-50 transition-all duration-200 inline-block text-center">
+                                Change Password
+                            </a>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                            <div>
+                                <h4 class="font-semibold">Login History</h4>
+                                <p class="text-gray-500 text-sm">Last login: {{ request.user.last_login|date:"F j,
+                                    Y, g:i a" }}</p>
+                            </div>
+                            <button
+                                class="btn-hover-effect border border-violet-600 text-violet-600 px-4 py-2 rounded-lg font-medium hover:bg-violet-50 transition-all duration-200">
+                                View History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Tab -->
+            <div id="portfolio-tab" class="tab-content hidden h-96 overflow-y-auto">
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-3 text-lg">Portfolio Settings</h3>
+                    {% if portfolio %}
+                    <div class="mb-4">
+                        <div class="flex flex-col md:flex-row md:items-center gap-2 mb-4">
+                            <label class="text-gray-500 text-sm">Template</label>
+                            <span class="font-semibold">{{ portfolio.template.name }}</span>
+                            <span class="bg-violet-100 text-violet-800 px-2 py-1 rounded text-xs font-semibold">
+                                {{ template_changes_left }} changes left
+                            </span>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-3 mb-6">
+                            <a href="{% url 'edit_portfolio_simple' %}"
+                                class="btn-hover-effect bg-violet-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-violet-700 transition-all duration-200 text-center">
+                                Edit Portfolio
+                            </a>
+                            <a href="{% url 'select_template' portfolio.pk %}"
+                                class="btn-hover-effect border border-violet-600 text-violet-600 px-4 py-2 rounded-lg font-medium hover:bg-violet-50 transition-all duration-200 text-center">
+                                Change Template
+                            </a>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Danger Zone</h4>
+                            <p class="text-red-600 text-sm mb-3">Permanently delete your portfolio. This action
+                                cannot be undone.</p>
+                            <form method="post" action="{% url 'delete_portfolio' %}"
+                                onsubmit="return confirm('Are you sure you want to delete your portfolio? This action cannot be undone.');">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="btn-hover-effect bg-red-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-red-700 transition-all duration-200">
+                                    Delete Portfolio
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="flex flex-col items-center gap-3 py-8">
+                        <i class="fas fa-folder-open text-4xl text-violet-300" aria-hidden="true"></i>
+                        <h4 class="font-semibold">No Portfolio Created</h4>
+                        <p class="text-gray-500 text-center">Create your first portfolio to get started</p>
+                        <a href="{% url 'create_portfolio' %}"
+                            class="btn-hover-effect bg-violet-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-violet-700 transition-all duration-200">
+                            Create Portfolio
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Billing Tab -->
+            <div id="billing-tab" class="tab-content hidden h-96 overflow-y-auto">
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-3 text-lg">Billing & Payments</h3>
+                    {% if payments %}
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-3">Payment History</h4>
+                        <div class="space-y-2">
+                            {% for payment in payments %}
+                            <div
+                                class="flex flex-col md:flex-row md:items-center md:justify-between bg-gray-50 rounded-lg p-3">
+                                <div>
+                                    <strong class="text-sm">Invoice #{{ payment.invoice_number }}</strong>
+                                    <span class="ml-2 text-gray-500 text-xs">{{ payment.created_at|date:"M j, Y"
+                                        }}</span>
+                                </div>
+                                <a href="{% url 'download_invoice' payment.id %}"
+                                    class="btn-hover-effect border border-violet-600 text-violet-600 px-3 py-1 rounded-lg font-medium hover:bg-violet-50 text-xs transition-all duration-200 mt-2 md:mt-0 inline-block text-center">
+                                    Download
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if user_profile.user_type == 'normal' and not has_paid %}
+                    <div class="mt-6">
+                        <h4 class="font-semibold mb-2">Upgrade to Pro</h4>
+                        <p class="text-gray-500 mb-3">Unlock premium features and templates</p>
+                        <a href="{% url 'initiate_payment' %}"
+                            class="btn-hover-effect bg-yellow-400 text-yellow-900 px-4 py-2 rounded-lg font-medium shadow hover:bg-yellow-500 transition-all duration-200 inline-block">
+                            Upgrade Now - ₹1499
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal"
+    class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm" role="dialog"
+    aria-modal="true" aria-labelledby="image-modal-title">
+    <div class="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center">
+        <!-- Close Button -->
+        <button
+            class="absolute top-4 right-4 md:top-6 md:right-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-3 text-white hover:bg-white/20 transition-all duration-200 z-10"
+            onclick="closeImageModal()" aria-label="Close image modal">
+            <i class="fas fa-times text-lg" aria-hidden="true"></i>
+        </button>
+
+        <!-- Image Container -->
+        <div class="relative w-full h-full flex items-center justify-center">
+            <img id="modalImage" src="" alt="Profile Photo"
+                class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+
+            <!-- Image Info -->
+            <div id="imageInfo"
+                class="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm text-white p-3 rounded-lg">
+                <h3 id="image-modal-title" class="font-semibold text-lg"></h3>
+                <p class="text-sm opacity-90">Click outside or press ESC to close</p>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows (for future use if needed) -->
+        <button
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-3 text-white hover:bg-white/20 transition-all duration-200 hidden"
+            onclick="previousImage()" aria-label="Previous image">
+            <i class="fas fa-chevron-left text-lg" aria-hidden="true"></i>
+        </button>
+        <button
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-3 text-white hover:bg-white/20 transition-all duration-200 hidden"
+            onclick="nextImage()" aria-label="Next image">
+            <i class="fas fa-chevron-right text-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/modern_profile.js' %}"></script>
+{% if portfolio %}
+<script>
+    // Set portfolio slug for sharing
+    window.portfolioSlug = '{{ portfolio.slug }}';
+</script>
+{% endif %}
+
+<script>
+    // Image Modal Functions
+    function openImageModal(imageSrc, userName) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('image-modal-title');
+
+        // Set image source and title
+        modalImage.src = imageSrc;
+        modalTitle.textContent = userName || 'Profile Photo';
+
+        // Show modal with animation
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Add fade-in animation
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.style.transition = 'opacity 0.3s ease-in-out';
+        }, 10);
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+
+        // Focus management for accessibility
+        modal.focus();
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+
+        // Add fade-out animation
+        modal.style.opacity = '0';
+        modal.style.transition = 'opacity 0.3s ease-in-out';
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    // Close modal when clicking outside the image
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('imageModal');
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeImageModal();
+            }
+        });
+    });
+
+    // Future functions for image navigation (if needed)
+    function previousImage() {
+        // Implementation for previous image navigation
+        console.log('Previous image');
+    }
+
+    function nextImage() {
+        // Implementation for next image navigation
+        console.log('Next image');
+    }
+</script>
+{% endblock %}

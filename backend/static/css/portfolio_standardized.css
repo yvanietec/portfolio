@@ -1,0 +1,1205 @@
+/* Portfolio Standardized CSS - Ultra Compact Single Screen */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+* {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.portfolio-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f7ff 0%, #f3f4f6 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    overflow-x: hidden;
+}
+
+.portfolio-main-content {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.portfolio-form-container {
+    width: 100%;
+    max-width: 900px;
+    /* Allow container to expand with content */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)) padding-box,
+        linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    /* Allow content to expand naturally */
+}
+
+.portfolio-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+    margin-bottom: 0.2rem;
+    line-height: 1.1;
+}
+
+.portfolio-subtitle {
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 0.4rem;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.portfolio-section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin-bottom: 0.4rem;
+    line-height: 1.1;
+}
+
+.portfolio-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.3rem;
+    display: block;
+    line-height: 1.2;
+    padding: 0.15rem 0;
+}
+
+.portfolio-help-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.15rem;
+    line-height: 1.2;
+    padding: 0.15rem 0;
+}
+
+.portfolio-error {
+    font-size: 0.75rem;
+    color: #dc2626;
+    margin-top: 0.15rem;
+    line-height: 1.2;
+    padding: 0.15rem 0;
+}
+
+.portfolio-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #374151;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+    line-height: 1.4;
+    min-height: 2.5rem;
+    box-sizing: border-box;
+}
+
+.portfolio-input:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 1.5px rgba(109, 40, 217, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.portfolio-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #374151;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+    line-height: 1.4;
+    min-height: 2.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.portfolio-textarea:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 1.5px rgba(109, 40, 217, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.portfolio-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #374151;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+    line-height: 1.4;
+    min-height: 2.5rem;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.portfolio-select:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 1.5px rgba(109, 40, 217, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.portfolio-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    line-height: 1.2;
+    min-height: 2.5rem;
+    min-width: 80px;
+    box-sizing: border-box;
+}
+
+.portfolio-btn-primary {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    box-shadow: 0 1px 4px 0 rgba(109, 40, 217, 0.15);
+}
+
+.portfolio-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px 0 rgba(109, 40, 217, 0.2);
+}
+
+.portfolio-btn-secondary {
+    background: rgba(255, 255, 255, 0.95);
+    color: #6d28d9;
+    border: 1px solid #6d28d9;
+}
+
+.portfolio-btn-secondary:hover {
+    background: rgba(109, 40, 217, 0.05);
+    transform: translateY(-1px);
+}
+
+.portfolio-btn-gray {
+    background: rgba(243, 244, 246, 0.95);
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+}
+
+.portfolio-btn-gray:hover {
+    background: rgba(229, 231, 235, 0.95);
+    transform: translateY(-1px);
+}
+
+.portfolio-btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
+.portfolio-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    transform: translateY(-1px);
+}
+
+.portfolio-form-group {
+    margin-bottom: 0.25rem;
+    padding: 0.1rem;
+}
+
+.portfolio-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.15rem;
+    margin-bottom: 0.25rem;
+    padding: 0.15rem;
+}
+
+.portfolio-form-section {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.portfolio-form-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.portfolio-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+}
+
+.portfolio-table th {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    padding: 0.3rem 0.5rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-align: left;
+    line-height: 1.1;
+}
+
+.portfolio-table td {
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.75rem;
+    line-height: 1.1;
+}
+
+.portfolio-table tr:hover {
+    background: rgba(109, 40, 217, 0.03);
+}
+
+.portfolio-alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.portfolio-alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+}
+
+.portfolio-alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.12);
+    color: #16a34a;
+}
+
+.portfolio-alert-info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+}
+
+.portfolio-spacing-xs {
+    margin: 0.1rem;
+}
+
+.portfolio-spacing-sm {
+    margin: 0.2rem;
+}
+
+.portfolio-spacing-md {
+    margin: 0.4rem;
+}
+
+.portfolio-spacing-lg {
+    margin: 0.6rem;
+}
+
+.portfolio-spacing-xl {
+    margin: 0.8rem;
+}
+
+.portfolio-padding-xs {
+    padding: 0.1rem;
+}
+
+.portfolio-padding-sm {
+    padding: 0.2rem;
+}
+
+.portfolio-padding-md {
+    padding: 0.4rem;
+}
+
+.portfolio-padding-lg {
+    padding: 0.6rem;
+}
+
+.portfolio-padding-xl {
+    padding: 0.8rem;
+}
+
+@media (max-width: 600px) {
+    .portfolio-container {
+        min-height: 100vh;
+        padding: 0.25rem;
+        overflow-x: hidden;
+    }
+
+    .portfolio-main-content {
+        min-height: 100vh;
+        padding-top: 0.25rem;
+        padding-bottom: 1rem;
+    }
+
+    .portfolio-form-container {
+        max-width: 95vw;
+        padding: 1rem;
+        min-height: auto;
+        height: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-bottom: 1rem;
+        max-height: 85vh;
+        /* Ensure content is fully visible with scrolling */
+    }
+
+    .portfolio-form-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .portfolio-title {
+        font-size: 1rem;
+    }
+
+    .portfolio-subtitle {
+        font-size: 0.7rem;
+    }
+
+    .portfolio-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        min-width: 80px;
+        min-height: 44px;
+        /* iOS recommended touch target */
+    }
+
+    /* Ensure text content is fully visible */
+    .portfolio-text-gray-800 {
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-spacing-md {
+        margin-bottom: 1.5rem;
+    }
+
+    .portfolio-spacing-lg {
+        margin-bottom: 2rem;
+    }
+
+    /* Improve scrolling on mobile */
+    body {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
+    }
+
+    /* Custom scrollbar styling for better visibility */
+    .portfolio-form-container::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    .portfolio-form-container::-webkit-scrollbar-track {
+        background: rgba(109, 40, 217, 0.1);
+        border-radius: 6px;
+        margin: 4px;
+    }
+
+    .portfolio-form-container::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        border-radius: 6px;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .portfolio-form-container::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5b21b6, #7c3aed);
+    }
+
+    /* Global scrollbar styling for the entire page */
+    ::-webkit-scrollbar {
+        width: 14px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(109, 40, 217, 0.05);
+        border-radius: 8px;
+        margin: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        min-height: 40px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5b21b6, #7c3aed);
+        box-shadow: 0 2px 8px rgba(109, 40, 217, 0.3);
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: rgba(109, 40, 217, 0.05);
+    }
+
+    /* Firefox scrollbar styling */
+    .portfolio-form-container {
+        scrollbar-width: auto;
+        scrollbar-color: #6d28d9 rgba(109, 40, 217, 0.1);
+    }
+
+    /* Additional mobile scrollbar improvements */
+    .portfolio-form-container {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Make scrollbar even more prominent on very small screens */
+    @media (max-width: 480px) {
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        .portfolio-form-container::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            min-height: 50px;
+            border-width: 3px;
+        }
+    }
+
+    /* Ensure terms content is fully visible */
+    .portfolio-spacing-lg.portfolio-text-gray-800.portfolio-text-sm {
+        padding-bottom: 2rem;
+        margin-bottom: 0;
+    }
+
+    /* Fix any potential height issues with the terms container */
+    .portfolio-form-container.portfolio-fade-in {
+        height: auto;
+        min-height: auto;
+        max-height: 85vh;
+        position: relative;
+    }
+
+    /* Add scroll indicator for long content */
+    .portfolio-form-container.portfolio-fade-in::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: linear-gradient(transparent, rgba(255, 255, 255, 0.8));
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Additional mobile optimizations for terms page */
+    .portfolio-spacing-md {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .portfolio-section-title {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+
+    /* Ensure proper text wrapping and spacing */
+    .portfolio-text-sm {
+        line-height: 1.5;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Improve list readability on mobile */
+    .portfolio-list-disc {
+        margin-left: 1rem;
+        padding-left: 0.5rem;
+    }
+
+    .portfolio-list-disc li {
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    /* Fix checkbox alignment with text */
+    .portfolio-flex.portfolio-items-start.portfolio-gap-4 {
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .portfolio-flex-shrink-0.portfolio-mt-0\\.5 {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    /* Style the checkbox properly */
+    .portfolio-h-5.portfolio-w-5.portfolio-text-violet-600.portfolio-focus\\:ring-violet-500.portfolio-border-gray-300.portfolio-rounded.portfolio-transition-all.portfolio-duration-200.portfolio-cursor-pointer {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6d28d9;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 0.125rem;
+    }
+
+    .portfolio-h-5.portfolio-w-5.portfolio-text-violet-600.portfolio-focus\\:ring-violet-500.portfolio-border-gray-300.portfolio-rounded.portfolio-transition-all.portfolio-duration-200.portfolio-cursor-pointer:checked {
+        background-color: #6d28d9;
+        border-color: #6d28d9;
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        background-size: 12px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    /* Align label text with checkbox */
+    .portfolio-block.portfolio-text-lg.portfolio-font-semibold.portfolio-text-gray-800.portfolio-mb-3.portfolio-cursor-pointer.portfolio-leading-relaxed.portfolio-select-none {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /* Add outer box for accept button */
+    .portfolio-bg-violet-600.portfolio-hover\\:bg-violet-700.portfolio-text-white.portfolio-px-8.portfolio-py-3.portfolio-rounded-lg.portfolio-text-base.portfolio-font-semibold.portfolio-transition-colors.portfolio-duration-200.portfolio-opacity-50.portfolio-cursor-not-allowed.portfolio-flex.portfolio-items-center.portfolio-justify-center.portfolio-gap-2.portfolio-min-w-\\[200px\\].portfolio-shadow-md.portfolio-hover\\:portfolio-shadow-lg {
+        border: 2px solid #6d28d9;
+        box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .portfolio-bg-violet-600.portfolio-hover\\:bg-violet-700.portfolio-text-white.portfolio-px-8.portfolio-py-3.portfolio-rounded-lg.portfolio-text-base.portfolio-font-semibold.portfolio-transition-colors.portfolio-duration-200.portfolio-opacity-50.portfolio-cursor-not-allowed.portfolio-flex.portfolio-items-center.portfolio-justify-center.portfolio-gap-2.portfolio-min-w-\\[200px\\].portfolio-shadow-md.portfolio-hover\\:portfolio-shadow-lg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border-radius: 6px;
+        pointer-events: none;
+    }
+
+    .portfolio-bg-violet-600.portfolio-hover\\:bg-violet-700.portfolio-text-white.portfolio-px-8.portfolio-py-3.portfolio-rounded-lg.portfolio-text-base.portfolio-font-semibold.portfolio-transition-colors.portfolio-duration-200.portfolio-opacity-50.portfolio-cursor-not-allowed.portfolio-flex.portfolio-items-center.portfolio-justify-center.portfolio-gap-2.portfolio-min-w-\\[200px\\].portfolio-shadow-md.portfolio-hover\\:portfolio-shadow-lg:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(109, 40, 217, 0.3);
+    }
+
+    /* Style the back button consistently */
+    .portfolio-bg-white.portfolio-hover\\:bg-gray-50.portfolio-text-gray-700.portfolio-border.portfolio-border-gray-300.portfolio-hover\\:border-violet-400.portfolio-px-8.portfolio-py-3.portfolio-rounded-lg.portfolio-text-base.portfolio-font-semibold.portfolio-transition-colors.portfolio-duration-200.portfolio-flex.portfolio-items-center.portfolio-justify-center.portfolio-gap-2.portfolio-min-w-\\[200px\\].portfolio-shadow-sm.portfolio-hover\\:portfolio-shadow-md {
+        border: 2px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+    }
+
+    .portfolio-bg-white.portfolio-hover\\:bg-gray-50.portfolio-text-gray-700.portfolio-border.portfolio-border-gray-300.portfolio-hover\\:border-violet-400.portfolio-px-8.portfolio-py-3.portfolio-rounded-lg.portfolio-text-base.portfolio-font-semibold.portfolio-transition-colors.portfolio-duration-200.portfolio-flex.portfolio-items-center.portfolio-justify-center.portfolio-gap-2.portfolio-min-w-\\[200px\\].portfolio-shadow-sm.portfolio-hover\\:portfolio-shadow-md:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: #6d28d9;
+    }
+
+    /* Additional improvements for better alignment */
+    .portfolio-flex.portfolio-items-start.portfolio-gap-4 {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        border: 1px solid rgba(109, 40, 217, 0.1);
+    }
+
+    /* Ensure proper spacing for the checkbox container */
+    .portfolio-flex-shrink-0.portfolio-mt-0\\.5 {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        margin-top: 0.125rem;
+    }
+
+    /* Improve the checkbox appearance */
+    .portfolio-h-5.portfolio-w-5.portfolio-text-violet-600.portfolio-focus\\:ring-violet-500.portfolio-border-gray-300.portfolio-rounded.portfolio-transition-all.portfolio-duration-200.portfolio-cursor-pointer {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6d28d9;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .portfolio-h-5.portfolio-w-5.portfolio-text-violet-600.portfolio-focus\\:ring-violet-500.portfolio-border-gray-300.portfolio-rounded.portfolio-transition-all.portfolio-duration-200.portfolio-cursor-pointer:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    }
+
+    /* Enhanced button styling for better visual hierarchy */
+    .portfolio-flex.portfolio-flex-col.sm\\:portfolio-flex-row.portfolio-gap-4.portfolio-justify-center {
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    /* Add subtle animation for better UX */
+    .portfolio-h-5.portfolio-w-5.portfolio-text-violet-600.portfolio-focus\\:ring-violet-500.portfolio-border-gray-300.portfolio-rounded.portfolio-transition-all.portfolio-duration-200.portfolio-cursor-pointer:hover {
+        transform: scale(1.05);
+        border-color: #5b21b6;
+    }
+}
+
+.portfolio-fade-in {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.portfolio-slide-up {
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.portfolio-text-center {
+    text-align: center;
+}
+
+.portfolio-text-left {
+    text-align: left;
+}
+
+.portfolio-text-right {
+    text-align: right;
+}
+
+.portfolio-flex {
+    display: flex;
+}
+
+.portfolio-flex-col {
+    flex-direction: column;
+}
+
+.portfolio-flex-row {
+    flex-direction: row;
+}
+
+.portfolio-items-center {
+    align-items: center;
+}
+
+.portfolio-justify-center {
+    justify-content: center;
+}
+
+.portfolio-justify-between {
+    justify-content: space-between;
+}
+
+.portfolio-hidden {
+    display: none;
+}
+
+.portfolio-block {
+    display: block;
+}
+
+.portfolio-inline-block {
+    display: inline-block;
+}
+
+.portfolio-w-full {
+    width: 100%;
+}
+
+.portfolio-h-full {
+    height: 100%;
+}
+
+.portfolio-max-w-4xl {
+    max-width: 56rem;
+}
+
+.portfolio-mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.portfolio-overflow-x-auto {
+    overflow-x: auto;
+}
+
+.portfolio-text-gray-500 {
+    color: #6b7280;
+}
+
+.portfolio-text-gray-800 {
+    color: #1f2937;
+}
+
+.portfolio-text-xl {
+    font-size: 1.25rem;
+}
+
+.portfolio-text-gray-400 {
+    color: #9ca3af;
+}
+
+.portfolio-bg-violet-50 {
+    background-color: rgba(237, 233, 254, 0.8);
+}
+
+.portfolio-border {
+    border: 1px solid;
+}
+
+.portfolio-border-violet-200 {
+    border-color: #c4b5fd;
+}
+
+.portfolio-rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.portfolio-font-semibold {
+    font-weight: 600;
+}
+
+.portfolio-text-violet-700 {
+    color: #7c3aed;
+}
+
+.portfolio-flex-wrap {
+    flex-wrap: wrap;
+}
+
+.portfolio-summary-output {
+    width: 100%;
+    max-width: 100%;
+    word-break: break-word;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.portfolio-btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.portfolio-btn-group-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Enhanced Form Spacing and Layout */
+.portfolio-form-container form {
+    padding: 0.3rem 0;
+    display: flex;
+    flex-direction: column;
+    /* Allow form to expand with content */
+}
+
+.portfolio-form-content {
+    flex: 1;
+    padding-right: 0.5rem;
+    /* Allow natural page scrolling */
+}
+
+.portfolio-form-container .portfolio-text-center {
+    margin-bottom: 1rem;
+    padding: 0.25rem;
+}
+
+/* Checkbox and Radio Button Styling */
+.portfolio-form-group input[type="checkbox"],
+.portfolio-form-group input[type="radio"] {
+    margin-right: 0.1rem;
+    transform: scale(1.1);
+}
+
+.portfolio-form-group label:has(input[type="checkbox"]),
+.portfolio-form-group label:has(input[type="radio"]) {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+/* File Upload Styling */
+.portfolio-form-group input[type="file"] {
+    padding: 0.1rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+}
+
+.portfolio-form-group input[type="file"]:hover {
+    border-color: #6d28d9;
+    background: rgba(109, 40, 217, 0.05);
+}
+
+/* Button Group Spacing - Updated for consistency */
+.portfolio-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.portfolio-btn-group-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Section Title Enhancement */
+.portfolio-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid rgba(109, 40, 217, 0.1);
+}
+
+/* Enhanced Spacing Utilities */
+.portfolio-spacing-xs {
+    margin: 0.25rem;
+}
+
+.portfolio-spacing-sm {
+    margin: 0.5rem;
+}
+
+.portfolio-spacing-md {
+    margin: 0.75rem;
+}
+
+.portfolio-spacing-lg {
+    margin: 1rem;
+}
+
+.portfolio-spacing-xl {
+    margin: 1.5rem;
+}
+
+.portfolio-padding-xs {
+    padding: 0.25rem;
+}
+
+.portfolio-padding-sm {
+    padding: 0.5rem;
+}
+
+.portfolio-padding-md {
+    padding: 0.75rem;
+}
+
+.portfolio-padding-lg {
+    padding: 1rem;
+}
+
+.portfolio-padding-xl {
+    padding: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .portfolio-btn-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.2rem;
+        justify-content: center;
+    }
+
+    .portfolio-btn-group-right {
+        flex-direction: row;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .portfolio-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        min-width: auto;
+        flex: 1;
+        min-width: 80px;
+    }
+}
+
+.portfolio-summary-output {
+    font-size: 0.85rem;
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+
+
+.portfolio-form-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.portfolio-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    min-height: 2.25rem;
+}
+
+.portfolio-input,
+.portfolio-textarea,
+.portfolio-select {
+    padding: 5px;
+    font-size: 0.8rem;
+    min-height: 2.25rem;
+}
+
+/* Force input inner padding */
+input.portfolio-input,
+textarea.portfolio-textarea,
+select.portfolio-select {
+    padding: 5px !important;
+}
+
+/* Optional: Increase height for breathing room */
+input.portfolio-input,
+select.portfolio-select {
+    height: 2.5rem;
+}
+
+textarea.portfolio-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 2.5rem !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+    resize: none !important;
+    padding: 5px !important;
+    line-height: 1.2 !important;
+}
+
+/* Profile Photo Row Layout */
+.portfolio-profile-photo-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-top: 0.3rem;
+}
+
+.portfolio-current-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.portfolio-profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #c4b5fd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-profile-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(109, 40, 217, 0.1);
+    border: 2px solid #c4b5fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6d28d9;
+    font-size: 1.5rem;
+}
+
+.portfolio-photo-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.3rem;
+    text-align: center;
+}
+
+.portfolio-file-upload {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.portfolio-file-input {
+    padding: 0.75rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.portfolio-file-input:hover {
+    border-color: #6d28d9;
+    background: rgba(109, 40, 217, 0.05);
+}
+
+.portfolio-preview-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+/* Mobile Responsive for Profile Photo Row */
+@media (max-width: 600px) {
+    .portfolio-profile-photo-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .portfolio-current-photo {
+        min-width: auto;
+    }
+
+    .portfolio-file-upload {
+        width: 100%;
+    }
+}
+
+/* Form Error Display Styling */
+#form-errors {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+#form-errors .font-bold {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #dc2626;
+}
+
+#form-errors ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+#form-errors li {
+    margin-bottom: 0.25rem;
+}
+
+/* Field feedback styling */
+.field-feedback {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0;
+}
+
+.field-feedback.success {
+    color: #16a34a;
+}
+
+.field-feedback.error {
+    color: #dc2626;
+}
+
+/* Loading state styling */
+.field-feedback .fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

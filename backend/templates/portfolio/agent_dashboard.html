@@ -1,0 +1,371 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-6xl mx-auto space-y-10">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold gradient-text mb-4 md:mb-0">Agent Dashboard</h2>
+            <div class="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
+                <span class="inline-flex items-center bg-gradient-to-r from-violet-600 to-indigo-500 text-white rounded-full px-4 py-2 font-medium">
+                    <i class="fas fa-user-tie mr-2"></i> Agent ID: {{ request.user.username }}
+                </span>
+                <a href="{% url 'agent_add_student' %}" class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i> Add Student
+                </a>
+                <a href="{% url 'logout' %}" class="btn-hover-effect bg-red-100 hover:bg-red-200 text-red-700 px-6 py-3 rounded-xl font-medium shadow flex items-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h6 class="text-gray-500 mb-2">Total Referrals</h6>
+                <h3 class="text-3xl font-bold text-violet-700">{{ referral_count }}</h3>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h6 class="text-gray-500 mb-2">Conversions</h6>
+                <h3 class="text-3xl font-bold text-green-600">{{ conversion_count }}</h3>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h6 class="text-gray-500 mb-2">Total Earned</h6>
+                <h3 class="text-3xl font-bold text-yellow-500">₹{{ commission }}</h3>
+            </div>
+            <div class="glass-effect rounded-xl shadow p-6 text-center">
+                <h6 class="text-gray-500 mb-2">Pending Payout</h6>
+                <h3 class="text-3xl font-bold text-blue-600">₹{{ pending_commission }}</h3>
+            </div>
+        </div>
+
+        <!-- Invited Students Table -->
+        <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 mb-8">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <h5 class="font-semibold text-lg flex items-center gap-2 text-violet-700 mb-4 md:mb-0"><i class="fas fa-user-plus"></i> Invited Students</h5>
+                <div class="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
+                    <span class="inline-block bg-violet-100 text-violet-700 px-3 py-1 rounded font-medium">Total Invited: {{ total_invited }}</span>
+                    <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded font-medium">Accepted: {{ accepted_students_count }}</span>
+                    <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded font-medium">Acceptance Rate: {{ acceptance_rate }}%</span>
+                    {% if last_invited_date %}
+                    <span class="text-gray-400 text-xs">Last Invited: {{ last_invited_date|date:'Y-m-d H:i' }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-4 mb-6">
+                <div class="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold transition-all" style="width: {{ acceptance_rate }}%">{{ acceptance_rate }}%</div>
+            </div>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                <input type="text" id="studentSearch" class="form-input w-full md:w-1/3 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none" placeholder="Search by name or email...">
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-left">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-violet-600 to-indigo-500 text-white">
+                            <th class="px-6 py-3 font-semibold">Name</th>
+                            <th class="px-6 py-3 font-semibold">Email</th>
+                            <th class="px-6 py-3 font-semibold">Status</th>
+                            <th class="px-6 py-3 font-semibold">Invitation Date</th>
+                            <th class="px-6 py-3 font-semibold">Actions</th>
+                            <th class="px-6 py-3 font-semibold">Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/80">
+                        {% for student in invited_students %}
+                        <tr class="border-b last:border-0 hover:bg-violet-50 transition-colors">
+                            <td class="px-6 py-4">{{ student.first_name }} {{ student.last_name }}</td>
+                            <td class="px-6 py-4 flex items-center gap-2">
+                                {{ student.email }}
+                                <button class="text-violet-600 hover:text-violet-800" title="Copy Email" onclick="navigator.clipboard.writeText('{{ student.email }}');"><i class="fas fa-copy"></i></button>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if student.user.is_active %}
+                                <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded font-medium">Accepted</span>
+                                {% else %}
+                                <span class="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded font-medium">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">{{ student.user.date_joined|date:'Y-m-d H:i' }}</td>
+                            <td class="px-6 py-4">
+                                {% if not student.user.is_active %}
+                                <button class="btn-hover-effect bg-violet-100 text-violet-700 px-4 py-2 rounded-lg font-medium shadow flex items-center" title="Resend Invitation (coming soon)" disabled><i class="fas fa-envelope mr-2"></i> Resend</button>
+                                {% else %}
+                                <span class="text-gray-400">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if student.first_name and student.last_name and student.contact and student.address %}
+                                <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded font-medium">Profile Complete</span>
+                                {% else %}
+                                <span class="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded font-medium">Incomplete</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-gray-500">
+                                <i class="fas fa-users-slash fa-2x mb-3"></i>
+                                <p>No students invited yet.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rank and Progress Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            {% if rank %}
+            <div class="glass-effect rounded-2xl shadow p-6 flex items-center gap-4">
+                <i class="fas fa-trophy fa-3x text-yellow-400"></i>
+                <div>
+                    <h5 class="font-semibold mb-1">Your Ranking</h5>
+                    <p class="mb-0">You're ranked <span class="inline-block bg-violet-100 text-violet-700 px-3 py-1 rounded font-medium">#{{ rank }}</span> out of {{ total_agents }} agents</p>
+                </div>
+            </div>
+            {% endif %}
+            <div class="glass-effect rounded-2xl shadow p-6">
+                <h5 class="font-semibold mb-3">Progress to Next Payout (₹500 minimum)</h5>
+                <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                    <div class="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold transition-all" style="width: {{ progress_percent }}%">{{ progress_percent }}%</div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span>₹0</span>
+                    <span>₹500</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code & Referral Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="glass-effect rounded-2xl shadow p-6 text-center">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i class="fas fa-qrcode"></i> Your Referral QR Code</h5>
+                <img src="data:image/png;base64,{{ qr_path }}" class="mx-auto mb-3 rounded-lg shadow" style="max-width: 200px;">
+                <p class="text-gray-500">Scan this QR code to register as referral</p>
+            </div>
+            <div class="glass-effect rounded-2xl shadow p-6">
+                <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i class="fas fa-share-alt"></i> Share Your Referral Link</h5>
+                <div class="flex items-center gap-2 mb-4">
+                    <input type="text" class="form-input w-full max-w-xs px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none" id="refLink" value="{{ referral_url }}" readonly>
+                    <button class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center" type="button" onclick="copyRef()">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <a href="https://wa.me/?text={{ referral_url|urlencode }}" target="_blank" class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                    </a>
+                    <button class="btn-hover-effect bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#shareModal">
+                        <i class="fas fa-share mr-2"></i> More Options
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Section -->
+        {% if referral_count >= 10 or conversion_count >= 5 or commission >= 1000 %}
+        <div class="glass-effect rounded-2xl shadow p-6 mb-8">
+            <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-yellow-700"><i class="fas fa-trophy"></i> Your Achievements</h5>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% if referral_count >= 10 %}
+                <div class="flex items-center gap-4 bg-white/80 rounded-xl p-4">
+                    <i class="fas fa-medal fa-2x text-violet-700"></i>
+                    <div>
+                        <h6 class="font-semibold mb-1">10+ Referrals</h6>
+                        <span class="text-gray-500 text-xs">Top performer badge</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% if conversion_count >= 5 %}
+                <div class="flex items-center gap-4 bg-white/80 rounded-xl p-4">
+                    <i class="fas fa-star fa-2x text-yellow-400"></i>
+                    <div>
+                        <h6 class="font-semibold mb-1">5+ Conversions</h6>
+                        <span class="text-gray-500 text-xs">Conversion expert</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% if commission >= 1000 %}
+                <div class="flex items-center gap-4 bg-white/80 rounded-xl p-4">
+                    <i class="fas fa-coins fa-2x text-green-600"></i>
+                    <div>
+                        <h6 class="font-semibold mb-1">₹1000+ Earned</h6>
+                        <span class="text-gray-500 text-xs">Top earner status</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Referred Users Section -->
+        <div class="glass-effect rounded-2xl shadow p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                <h5 class="font-semibold text-lg flex items-center gap-2 text-violet-700"><i class="fas fa-users"></i> Your Referred Users</h5>
+                <a href="{% url 'export_referred_users_csv' %}" class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-2 rounded-xl font-medium shadow flex items-center transition-all">
+                    <i class="fas fa-file-export mr-2"></i> Export CSV
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-left">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-violet-600 to-indigo-500 text-white">
+                            <th class="px-6 py-3 font-semibold">Username</th>
+                            <th class="px-6 py-3 font-semibold">Registered On</th>
+                            <th class="px-6 py-3 font-semibold">Status</th>
+                            <th class="px-6 py-3 font-semibold">Conversion</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/80">
+                        {% for ref in referred_users %}
+                        <tr class="border-b last:border-0 hover:bg-violet-50 transition-colors">
+                            <td class="px-6 py-4">{{ ref.referred.username }}</td>
+                            <td class="px-6 py-4">{{ ref.registered_on|date:"M d, Y" }}</td>
+                            <td class="px-6 py-4">
+                                {% if ref.referred.is_active %}
+                                <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded font-medium">Active</span>
+                                {% else %}
+                                <span class="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded font-medium">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if ref.is_converted %}
+                                <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded font-medium"><i class="fas fa-check-circle mr-1"></i> Converted</span>
+                                {% else %}
+                                <span class="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded font-medium"><i class="fas fa-clock mr-1"></i> Pending</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-gray-500">
+                                <i class="fas fa-users-slash fa-2x mb-3"></i>
+                                <p>No referred users yet</p>
+                                <a href="#" class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-xl font-medium shadow flex items-center justify-center" onclick="copyRef()">
+                                    <i class="fas fa-share mr-2"></i> Share your referral link
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Payout History Section -->
+        <div class="glass-effect rounded-2xl shadow p-6 mb-8">
+            <h5 class="font-semibold text-lg flex items-center gap-2 text-green-700 mb-4"><i class="fas fa-money-bill-wave"></i> Payout History</h5>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-left">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-violet-600 to-indigo-500 text-white">
+                            <th class="px-6 py-3 font-semibold">Date</th>
+                            <th class="px-6 py-3 font-semibold">Amount</th>
+                            <th class="px-6 py-3 font-semibold">Referrals</th>
+                            <th class="px-6 py-3 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/80">
+                        {% for payout in payouts %}
+                        <tr class="border-b last:border-0 hover:bg-violet-50 transition-colors">
+                            <td class="px-6 py-4">{{ payout.paid_on|date:"M d, Y" }}</td>
+                            <td class="px-6 py-4 font-bold">₹{{ payout.amount }}</td>
+                            <td class="px-6 py-4">{{ payout.referrals_paid.count }}</td>
+                            <td class="px-6 py-4"><span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded font-medium">Completed</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-gray-500">
+                                <i class="fas fa-money-bill-wave fa-2x mb-3"></i>
+                                <p>No payout history yet</p>
+                                <p>Earn ₹500 to qualify for your first payout</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Earnings Chart Section -->
+        {% if payout_dates and payout_amounts %}
+        <div class="glass-effect rounded-2xl shadow p-6 mb-8">
+            <h5 class="font-semibold text-lg flex items-center gap-2 text-blue-700 mb-4"><i class="fas fa-chart-line"></i> Earnings Over Time</h5>
+            <canvas id="earningsChart" height="250"></canvas>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div class="fixed z-50 inset-0 overflow-y-auto hidden" id="shareModal">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 relative">
+            <div class="flex items-center justify-between mb-4">
+                <h5 class="text-xl font-bold">Share Referral Link</h5>
+                <button type="button" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none" onclick="document.getElementById('shareModal').classList.add('hidden')">&times;</button>
+            </div>
+            <div class="flex flex-col gap-2">
+                <a href="https://wa.me/?text={{ referral_url|urlencode }}" target="_blank" class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                </a>
+                <a href="mailto:?body={{ referral_url|urlencode }}" class="btn-hover-effect bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                    <i class="fas fa-envelope mr-2"></i> Email
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ referral_url|urlencode }}" target="_blank" class="btn-hover-effect bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                    <i class="fab fa-facebook mr-2"></i> Facebook
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=Check%20this%20out!&url={{ referral_url|urlencode }}" target="_blank" class="btn-hover-effect bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium shadow flex items-center justify-center">
+                    <i class="fab fa-twitter mr-2"></i> Twitter
+                </a>
+            </div>
+            <div class="mt-4">
+                <label class="block font-medium text-gray-700 mb-1">Or copy this link:</label>
+                <div class="flex items-center gap-2">
+                    <input type="text" class="form-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none" id="modalRefLink" value="{{ referral_url }}" readonly>
+                    <button class="btn-hover-effect bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium shadow flex items-center" type="button" onclick="document.getElementById('shareModal').classList.add('hidden');copyModalRef();">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function copyRef() {
+        const copyText = document.getElementById("refLink");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+    }
+
+    function copyModalRef() {
+        const copyText = document.getElementById("modalRefLink");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+    }
+
+    // Client-side filter for invited students table
+    document.getElementById('studentSearch').addEventListener('keyup', function () {
+        var input = this.value.toLowerCase();
+        var rows = document.querySelectorAll('tbody tr');
+        rows.forEach(function (row) {
+            var name = row.cells[0].innerText.toLowerCase();
+            var email = row.cells[1].innerText.toLowerCase();
+            if (name.includes(input) || email.includes(input)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

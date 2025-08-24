@@ -1,0 +1,1169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s ease infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0ea5e9, #6366f1, #8b5cf6, #ec4899);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: absolute;
+            left: -6px;
+            top: 24px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        .section-heading {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #0ea5e9;
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        .footer-link {
+            transition: all 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: #0ea5e9;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span
+                        class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-violet-500">Portfolio</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">HOME</a>
+                    <a href="#about"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">ABOUT</a>
+                    <a href="#education"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">EDUCATION</a>
+                    <a href="#experience"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">EXPERIENCE</a>
+                    <a href="#skills"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">SKILLS</a>
+                    <a href="#projects"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">PROJECTS</a>
+                    <a href="#certifications"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">CERTIFICATIONS</a>
+                    <a href="#hobbies"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">HOBBIES</a>
+                    <a href="#contact"
+                        class="text-gray-700 hover:text-primary-500 transition font-medium text-sm">CONTACT</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-primary-500 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">HOME</a>
+                <a href="#about"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">ABOUT</a>
+                <a href="#education"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">EDUCATION</a>
+                <a href="#experience"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">EXPERIENCE</a>
+                <a href="#skills"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">SKILLS</a>
+                <a href="#projects"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">PROJECTS</a>
+                <a href="#certifications"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">CERTIFICATIONS</a>
+                <a href="#hobbies"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">HOBBIES</a>
+                <a href="#contact"
+                    class="block px-3 py-2 rounded-md text-gray-700 hover:text-primary-500 hover:bg-gray-50">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    {% include 'portfolio/portfolio_navigation.html' %}
+
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg min-h-screen flex items-center pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 text-white">
+                    <p class="text-sm font-medium tracking-wider mb-2 opacity-80">WELCOME TO MY PORTFOLIO</p>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6">Hi, I'm <span class="text-white">Alex Chen</span>
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90 max-w-lg">A creative developer focused on building beautiful
+                        digital experiences that make an impact.</p>
+                    <div class="flex space-x-4">
+                        <a href="#contact"
+                            class="bg-white text-primary-600 px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition shadow-lg">Get
+                            in Touch</a>
+                        <a href="#projects"
+                            class="glass text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition">View
+                            Projects</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div
+                            class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl">
+                            <svg class="w-full h-full text-white/10" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <rect width="24" height="24" fill="currentColor" />
+                                <path
+                                    d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                    fill="#ffffff" />
+                            </svg>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 bg-white rounded-full p-4 shadow-lg">
+                            <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+            <a href="#about" class="flex flex-col items-center">
+                <span class="text-sm font-medium mb-2">Scroll Down</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">About Me</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">Discover my journey and what drives me to create exceptional
+                    digital experiences.</p>
+            </div>
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <div class="relative">
+                        <div
+                            class="w-full max-w-md mx-auto bg-gradient-to-br from-primary-400 to-violet-500 rounded-2xl p-1">
+                            <div class="bg-white rounded-xl p-6">
+                                <div class="flex items-center mb-6">
+                                    <div
+                                        class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Alex Chen</h3>
+                                        <p class="text-gray-500 text-sm">Senior Frontend Developer</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                        <span class="text-gray-700">5+ Years Experience</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                            </path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">San Francisco, CA</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 text-primary-500 mr-3" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                        <span class="text-gray-700">alex@example.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute -bottom-6 -right-6 w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center z-[-1]">
+                        </div>
+                        <div class="absolute -top-6 -left-6 w-16 h-16 bg-primary-100 rounded-full z-[-1]"></div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Who I Am</h3>
+                    <p class="text-gray-600 mb-6">I'm a passionate frontend developer with a keen eye for design and a
+                        commitment to creating intuitive, user-friendly interfaces. With over 5 years of experience in
+                        the tech industry, I've had the privilege of working with leading companies to build products
+                        that millions of people use daily.</p>
+                    <p class="text-gray-600 mb-8">My approach combines technical expertise with creative
+                        problem-solving. I believe that great digital products should not only function flawlessly but
+                        also delight users with thoughtful interactions and beautiful aesthetics.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <div class="text-primary-500 font-bold text-xl mb-1">50+</div>
+                            <div class="text-gray-600 text-sm">Projects Completed</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <div class="text-primary-500 font-bold text-xl mb-1">30+</div>
+                            <div class="text-gray-600 text-sm">Happy Clients</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <div class="text-primary-500 font-bold text-xl mb-1">99%</div>
+                            <div class="text-gray-600 text-sm">Client Satisfaction</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl">
+                            <div class="text-primary-500 font-bold text-xl mb-1">15+</div>
+                            <div class="text-gray-600 text-sm">Awards Received</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">Education</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">My academic journey and qualifications.</p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-12">
+                    <!-- Education Item 1 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2018 -
+                                        2020</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">Master of Computer Science</h3>
+                                    <p class="text-gray-600">Stanford University</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">GPA:
+                                        3.9/4.0</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500">Specialized in Artificial Intelligence and Machine Learning.
+                                Graduated with honors and completed a thesis on neural networks for image recognition.
+                            </p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Dean's
+                                    List</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Research
+                                    Assistant</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Teaching
+                                    Assistant</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Item 2 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2014 -
+                                        2018</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">Bachelor of Science in Computer
+                                        Engineering</h3>
+                                    <p class="text-gray-600">Massachusetts Institute of Technology</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">GPA:
+                                        3.8/4.0</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500">Focused on software development and computer architecture.
+                                Participated in multiple hackathons and coding competitions.</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Scholarship
+                                    Recipient</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Programming Club
+                                    President</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Hackathon
+                                    Winner</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Item 3 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2010 -
+                                        2014</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">High School Diploma</h3>
+                                    <p class="text-gray-600">Tech Preparatory Academy</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">Valedictorian</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500">Advanced placement courses in Mathematics, Computer Science, and
+                                Physics. Started coding at age 15.</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Science Olympiad
+                                    Winner</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Robotics Team
+                                    Captain</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Math Competition
+                                    Finalist</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">Experience</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">My professional journey and career highlights.</p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-12">
+                    <!-- Experience Item 1 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2021 -
+                                        Present</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">Senior Frontend Developer</h3>
+                                    <p class="text-gray-600">Google, Mountain View, CA</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">Full-time</span>
+                                </div>
+                            </div>
+                            <ul class="list-disc list-inside text-gray-500 space-y-2 ml-1">
+                                <li>Lead a team of 5 developers working on Google's internal tools</li>
+                                <li>Implemented new features that improved workflow efficiency by 35%</li>
+                                <li>Architected and developed a component library used across multiple projects</li>
+                                <li>Mentored junior developers and conducted code reviews</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">React</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">TypeScript</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">GraphQL</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Team
+                                    Leadership</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Item 2 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2018 -
+                                        2021</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">Frontend Developer</h3>
+                                    <p class="text-gray-600">Facebook, Menlo Park, CA</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">Full-time</span>
+                                </div>
+                            </div>
+                            <ul class="list-disc list-inside text-gray-500 space-y-2 ml-1">
+                                <li>Developed and maintained key features for Facebook's advertising platform</li>
+                                <li>Reduced load time by 40% through code optimization and lazy loading</li>
+                                <li>Collaborated with designers and product managers to implement new features</li>
+                                <li>Wrote unit and integration tests to ensure code quality</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">React</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Redux</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Jest</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">Performance
+                                    Optimization</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Item 3 -->
+                    <div class="relative pl-8">
+                        <div class="timeline-line bg-gray-200"></div>
+                        <div class="timeline-dot bg-primary-500"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">2016 -
+                                        2018</span>
+                                    <h3 class="text-xl font-semibold text-gray-800 mt-1">Junior Web Developer</h3>
+                                    <p class="text-gray-600">Tech Startup, San Francisco, CA</p>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <span
+                                        class="bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">Full-time</span>
+                                </div>
+                            </div>
+                            <ul class="list-disc list-inside text-gray-500 space-y-2 ml-1">
+                                <li>Built responsive websites for various clients using modern web technologies</li>
+                                <li>Implemented e-commerce functionality and payment processing</li>
+                                <li>Created custom WordPress themes and plugins</li>
+                                <li>Assisted with UX research and design implementation</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">HTML/CSS</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">JavaScript</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">WordPress</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">PHP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">Skills</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">My technical expertise and professional capabilities.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <!-- Technical Skills -->
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-8 text-center">Technical Skills</h3>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">HTML/CSS</span>
+                                <span class="text-sm text-primary-500 font-medium">95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">JavaScript</span>
+                                <span class="text-sm text-primary-500 font-medium">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">React</span>
+                                <span class="text-sm text-primary-500 font-medium">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Node.js</span>
+                                <span class="text-sm text-primary-500 font-medium">80%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">TypeScript</span>
+                                <span class="text-sm text-primary-500 font-medium">75%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Python</span>
+                                <span class="text-sm text-primary-500 font-medium">70%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Skills -->
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-8 text-center">Professional Skills</h3>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">UI/UX Design</span>
+                                <span class="text-sm text-primary-500 font-medium">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Project Management</span>
+                                <span class="text-sm text-primary-500 font-medium">80%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Team Leadership</span>
+                                <span class="text-sm text-primary-500 font-medium">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Problem Solving</span>
+                                <span class="text-sm text-primary-500 font-medium">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Communication</span>
+                                <span class="text-sm text-primary-500 font-medium">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Time Management</span>
+                                <span class="text-sm text-primary-500 font-medium">80%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools & Technologies -->
+            <div class="mt-20 max-w-4xl mx-auto">
+                <h3 class="text-xl font-semibold text-gray-800 mb-8 text-center">Tools & Technologies</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Git</span>
+                    <span class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">VS
+                        Code</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Docker</span>
+                    <span class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">AWS</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Firebase</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">MongoDB</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">PostgreSQL</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Redux</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">GraphQL</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Jest</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Webpack</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Figma</span>
+                    <span class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">Adobe
+                        XD</span>
+                    <span
+                        class="bg-white px-4 py-2 rounded-full shadow-sm text-gray-700 font-medium text-sm">JIRA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">Projects</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">A selection of my recent work and personal projects.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">E-commerce Platform</h3>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Web App</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A fully responsive e-commerce platform with product filtering,
+                            cart functionality, and payment integration.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">React</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Node.js</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">MongoDB</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-pink-400 to-purple-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Task Management App</h3>
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Web App</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A productivity application with drag-and-drop interface, task
+                            prioritization, and team collaboration features.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Vue.js</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Firebase</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Tailwind</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-green-400 to-teal-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Social Media Dashboard</h3>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Web App</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">An analytics dashboard for social media managers with real-time
+                            data visualization and reporting tools.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Angular</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Express</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">D3.js</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                            <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                            <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                            <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                            <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                            <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">AI Image Generator</h3>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Web App</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A web application that uses machine learning to generate unique
+                            images based on text descriptions.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">React</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Python</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">TensorFlow</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Travel Blog</h3>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Website</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A personal travel blog with interactive maps, photo galleries, and
+                            travel tips for various destinations.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Gatsby</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">GraphCMS</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Mapbox</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <div class="h-48 bg-gradient-to-r from-purple-500 to-violet-500 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Photography Portfolio</h3>
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Website</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A minimalist photography portfolio with image galleries, filtering
+                            options, and contact form.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Next.js</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Sanity.io</span>
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Framer Motion</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#"
+                                class="text-primary-600 font-medium hover:text-primary-800 transition flex items-center text-sm">
+                                Live Demo
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="text-gray-600 font-medium hover:text-gray-800 transition flex items-center text-sm">
+                                Source Code
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#"
+                    class="inline-block bg-gradient-to-r from-primary-500 to-indigo-600 text-white px-8 py-3 rounded-full font-medium hover:opacity-90 transition shadow-lg">View
+                    All Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 section-heading">Certifications</h2>
+                <p class="text-gray-600 mt-6 max-w-3xl">Professional certifications and achievements.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Certification 1 -->
+                <div class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">AWS Certified Solutions Architect</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Amazon Web Services</p>
+                    <p class="text-gray-500 mb-4 text-sm">Comprehensive understanding of AWS architecture best practices
+                        and designing distributed systems.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-primary-600 font-medium">Issued: Jan 2022</span>
+                        <span class="text-xs text-gray-500">Credential ID: AWS-123456</span>
+                    </div>
+                </div>
+
+                <!-- Certification 2 -->
+                <div class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Google Professional Cloud Developer</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Google Cloud</p>
+                    <p class="text-gray-500 mb-4 text-sm">Building scalable and reliable applications using Google Cloud
+                        Platform services.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-primary-600 font-medium">Issued: Mar 2021</span>
+                        <span class="text-xs text-gray-500">Credential ID: GCP-789012</span>
+                    </div>
+                </div>
+
+                <!-- Certification 3 -->
+                <div class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">React Developer Certification</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Meta (Facebook)</p>
+                    <p class="text-gray-500 mb-4 text-sm">Advanced React concepts, state management, hooks, and building
+                        efficient user interfaces.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-primary-600 font-medium">Issued: Nov 2020</span>
+                        <span class="text-xs text-gray-500">Credential ID: META-345678</span>
+                    </div>
+                </div>
+
+                <!-- Certification 4 -->
+                <div class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Certified Scrum Master</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Scrum Alliance</p>
+                    <p class="text-gray-500 mb-4 text-sm">Agile project management methodologies, sprint planning, and
+                        team facilitation.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-primary-600 font-medium">Issued: Jul 2019</span>
+                        <span class="text-xs text-gray-500">Credential ID: CSM-901234</span>
+                    </div>
+                </div>
+
+                <!-- Certification 5 -->
+                <div class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9552d664c6661192',t:'MTc1MDgzNzQ0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>

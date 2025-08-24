@@ -1,0 +1,309 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout-flex">
+    <nav id="sidebar" class="admin-sidebar-flex">
+        <div class="pt-3">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-tools"></i> Admin Panel</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="{% url 'admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_user_list' %}">
+                        <i class="fas fa-users me-2"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_agent_list' %}">
+                        <i class="fas fa-user-tie me-2"></i> Manage Agents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_student_approvals' %}">
+                        <i class="fas fa-user-check me-2"></i> Student Approvals
+                        {% if pending_invitations_count > 0 %}
+                        <span class="badge bg-warning text-dark ms-1 badge-notification">
+                            {{ pending_invitations_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_portfolio_list' %}">
+                        <i class="fas fa-project-diagram me-2"></i> View Portfolios
+                    </a>
+                </li>
+
+                {% if request.session.impersonated_by %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{% url 'stop_impersonation' %}">
+                        <i class="fas fa-user-shield me-2"></i> Switch Back to Admin
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_payment_list' %}">
+                        <i class="fas fa-credit-card me-2"></i> Payments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'monitoring_dashboard' %}">
+                        <i class="fas fa-search me-2"></i> Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'admin_review_success_stories' %}">
+                        <i class="fas fa-star me-2"></i> Review Success Stories
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer mt-auto p-3 text-center">
+                <small class="text-muted">v1.0.0</small>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="admin-main-flex">
+        <div class="admin-table-container">
+            <!-- Page Header -->
+            <div class="admin-table-header">
+                <div class="admin-table-title-section">
+                    <h1 class="admin-table-title">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Management
+                    </h1>
+                    <p class="admin-table-subtitle">Monitor and manage all payment transactions</p>
+                </div>
+                <div class="admin-table-actions">
+                    <button class="admin-table-btn admin-table-btn-secondary" onclick="exportPayments()">
+                        <i class="fas fa-file-export"></i>
+                        Export
+                    </button>
+                    <button class="admin-table-btn admin-table-btn-primary" onclick="refreshPayments()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-table-stats">
+                <div class="admin-table-stat-card">
+                    <div class="admin-table-stat-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="admin-table-stat-content">
+                        <div class="admin-table-stat-number">
+                            {% if payments %}
+                            ₹{{ payments|length }}
+                            {% else %}
+                            ₹0
+                            {% endif %}
+                        </div>
+                        <div class="admin-table-stat-label">Total Revenue</div>
+                    </div>
+                </div>
+                <div class="admin-table-stat-card">
+                    <div class="admin-table-stat-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="admin-table-stat-content">
+                        <div class="admin-table-stat-number">{{ payments|length }}</div>
+                        <div class="admin-table-stat-label">Total Payments</div>
+                    </div>
+                </div>
+                <div class="admin-table-stat-card">
+                    <div class="admin-table-stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="admin-table-stat-content">
+                        <div class="admin-table-stat-number">
+                            {% if payments %}
+                            {{ payments.first.created_at|date:"M d" }}
+                            {% else %}
+                            --
+                            {% endif %}
+                        </div>
+                        <div class="admin-table-stat-label">Latest Payment</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Filters -->
+            <div class="admin-table-filters">
+                <form method="get" class="payment-filter-form" id="paymentFilterForm">
+                    <div class="admin-table-search-group">
+                        <i class="fas fa-search admin-table-search-icon"></i>
+                        <input type="text" name="q" id="searchInput" class="admin-table-search"
+                            placeholder="Search by username, invoice number..." value="{{ request.GET.q }}">
+                    </div>
+                    <div class="admin-table-filter-group">
+                        <input type="date" name="date" class="admin-table-filter" value="{{ request.GET.date }}"
+                            title="Filter by payment date">
+                    </div>
+                    <div class="admin-table-filter-group">
+                        <select name="amount_range" class="admin-table-filter">
+                            <option value="">All Amounts</option>
+                            <option value="0-1000" {% if request.GET.amount_range == "0-1000" %}selected{% endif %}>₹0 - ₹1,000</option>
+                            <option value="1000-5000" {% if request.GET.amount_range == "1000-5000" %}selected{% endif %}>₹1,000 - ₹5,000</option>
+                            <option value="5000-10000" {% if request.GET.amount_range == "5000-10000" %}selected{% endif %}>₹5,000 - ₹10,000</option>
+                            <option value="10000+" {% if request.GET.amount_range == "10000+" %}selected{% endif %}>₹10,000+</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="admin-table-btn admin-table-btn-primary">
+                        <i class="fas fa-filter"></i>
+                        Filter
+                    </button>
+                </form>
+            </div>
+
+            <!-- Payments Table -->
+            <div class="admin-table-card">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table" id="paymentsTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" class="admin-table-checkbox"></th>
+                                <th><i class="fas fa-user"></i> User</th>
+                                <th><i class="fas fa-rupee-sign"></i> Amount</th>
+                                <th><i class="fas fa-file-invoice"></i> Invoice</th>
+                                <th><i class="fas fa-calendar"></i> Date</th>
+                                <th><i class="fas fa-check-circle"></i> Status</th>
+                                <th><i class="fas fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr class="payment-row">
+                                <td><input type="checkbox" class="admin-table-checkbox payment-checkbox" value="{{ payment.id }}"></td>
+                                <td>
+                                    <div class="admin-table-user">
+                                        <div class="admin-table-user-avatar">{{ payment.user.username|first|upper }}</div>
+                                        <div class="admin-table-user-info">
+                                            <div class="admin-table-user-name">{{ payment.user.username }}</div>
+                                            <div class="admin-table-user-email">{{ payment.user.email|default:"No email" }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="payment-amount">
+                                        <span class="payment-currency">₹</span>
+                                        <span class="payment-value">{{ payment.amount|floatformat:2 }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="payment-invoice">
+                                        <span class="payment-invoice-number">#{{ payment.invoice_number }}</span>
+                                        <div class="payment-invoice-meta">
+                                            <i class="fas fa-file-pdf"></i> PDF Invoice
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="admin-table-timestamp">
+                                        <div class="admin-table-date">{{ payment.created_at|date:"M d, Y" }}</div>
+                                        <div class="admin-table-time">{{ payment.created_at|date:"g:i A" }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="admin-table-badge admin-table-badge-success">
+                                        <i class="fas fa-check"></i> Paid
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="admin-table-action-group">
+                                        <a href="{% url 'download_invoice' payment.id %}" class="admin-table-btn-sm admin-table-btn-info" title="Download Invoice">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <form action="{% url 'email_invoice' payment.id %}" method="post" class="inline-form" title="Email Invoice">
+                                            {% csrf_token %}
+                                            <button type="submit" class="admin-table-btn-sm admin-table-btn-secondary">
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                        </form>
+                                        <button class="admin-table-btn-sm admin-table-btn-outline" onclick="viewPaymentDetails({{ payment.id }})" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="admin-table-empty">
+                                    <div class="admin-table-empty-content">
+                                        <i class="fas fa-credit-card"></i>
+                                        <h3>No Payments Found</h3>
+                                        <p>No payment transactions match your current filters.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="admin-table-bulk-actions" id="bulkActions" style="display: none;">
+                    <div class="admin-table-bulk-info">
+                        <span id="selectedCount">0</span> payments selected
+                    </div>
+                    <div class="admin-table-bulk-buttons">
+                        <button class="admin-table-btn admin-table-btn-info" onclick="bulkDownload()">
+                            <i class="fas fa-download"></i> Download Invoices
+                        </button>
+                        <button class="admin-table-btn admin-table-btn-secondary" onclick="bulkEmail()">
+                            <i class="fas fa-envelope"></i> Email Invoices
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                {% if payments.has_other_pages %}
+                <div class="admin-table-pagination">
+                    <div class="admin-table-pagination-info">
+                        Showing payments {{ payments.start_index }} to {{ payments.end_index }} of {{ payments.paginator.count }}
+                    </div>
+                    <div class="admin-table-pagination-controls">
+                        {% if payments.has_previous %}
+                        <a href="?page={{ payments.previous_page_number }}" class="admin-table-pagination-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        {% endif %}
+
+                        {% for num in payments.paginator.page_range %}
+                        {% if num == payments.number %}
+                        <span class="admin-table-pagination-btn admin-table-pagination-current">{{ num }}</span>
+                        {% else %}
+                        <a href="?page={{ num }}" class="admin-table-pagination-btn">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if payments.has_next %}
+                        <a href="?page={{ payments.next_page_number }}" class="admin-table-pagination-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_payments.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Referral Payout Invoice</title>
+    <!-- Tailwind CSS & Font Awesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+    <style>
+      .glass-effect {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box, linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+      }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-[#f8f7ff] py-8">
+  <div class="glass-effect gradient-border rounded-2xl shadow-2xl w-full max-w-2xl p-8">
+    <h2 class="text-3xl font-bold gradient-text text-center mb-8 flex items-center justify-center gap-2">
+      <i class="fas fa-receipt"></i> Referral Payout Invoice
+    </h2>
+    <div class="mb-4">
+      <p class="mb-1"><span class="font-semibold">Agent:</span> {{ agent.username }}</p>
+      <p class="mb-1"><span class="font-semibold">Date:</span> {{ payout.paid_on|date:"Y-m-d H:i" }}</p>
+      <p class="mb-1"><span class="font-semibold">Total Amount:</span> ₹{{ payout.amount }}</p>
+      <p class="mb-4"><span class="font-semibold">Total Referrals:</span> {{ referrals.count }}</p>
+    </div>
+    <h3 class="text-xl font-semibold mb-4">Referral Details</h3>
+    <table class="w-full border-collapse rounded-xl overflow-hidden shadow">
+      <thead>
+        <tr class="bg-gradient-to-r from-violet-600 to-indigo-500 text-white">
+          <th class="py-3 px-4 text-left font-semibold">#</th>
+          <th class="py-3 px-4 text-left font-semibold">Referred User</th>
+          <th class="py-3 px-4 text-left font-semibold">Converted On</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in referrals %}
+        <tr class="bg-white/80">
+          <td class="py-3 px-4">{{ forloop.counter }}</td>
+          <td class="py-3 px-4">{{ r.referred.username }}</td>
+          <td class="py-3 px-4">{{ r.converted_on|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

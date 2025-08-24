@@ -1,0 +1,181 @@
+{# templates/admin/edit_user.html #}
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <!-- Form Header -->
+    <div class="admin-form-header">
+        <h1 class="admin-form-title">
+            <i class="fas fa-user-edit"></i>
+            Edit User Details
+        </h1>
+        <p class="admin-form-subtitle">Update user information and profile details</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="admin-form-card">
+        <form method="post" enctype="multipart/form-data" id="editUserForm">
+            {% csrf_token %}
+
+            <div class="admin-form-grid">
+                <!-- Personal Information Section -->
+                <div class="admin-form-group">
+                    <label class="admin-form-label required" for="{{ form.first_name.id_for_label }}">
+                        <i class="fas fa-user"></i> First Name
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.first_name }}
+                    </div>
+                    {% if form.first_name.errors %}
+                    <span class="admin-form-error">{{ form.first_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label required" for="{{ form.last_name.id_for_label }}">
+                        <i class="fas fa-user"></i> Last Name
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.last_name }}
+                    </div>
+                    {% if form.last_name.errors %}
+                    <span class="admin-form-error">{{ form.last_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="admin-form-group">
+                    <label class="admin-form-label required" for="{{ form.email.id_for_label }}">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.email }}
+                    </div>
+                    {% if form.email.errors %}
+                    <span class="admin-form-error">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="{{ form.contact.id_for_label }}">
+                        <i class="fas fa-phone"></i> Contact Number
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.contact }}
+                    </div>
+                    {% if form.contact.errors %}
+                    <span class="admin-form-error">{{ form.contact.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Address Information Section -->
+                <div class="admin-form-group admin-form-grid-full">
+                    <label class="admin-form-label" for="{{ form.address.id_for_label }}">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.address }}
+                    </div>
+                    {% if form.address.errors %}
+                    <span class="admin-form-error">{{ form.address.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="{{ form.pin_code.id_for_label }}">
+                        <i class="fas fa-map-pin"></i> PIN Code
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.pin_code }}
+                    </div>
+                    {% if form.pin_code.errors %}
+                    <span class="admin-form-error">{{ form.pin_code.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Social Links Section -->
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="{{ form.github_link.id_for_label }}">
+                        <i class="fab fa-github"></i> GitHub Profile
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.github_link }}
+                    </div>
+                    {% if form.github_link.errors %}
+                    <span class="admin-form-error">{{ form.github_link.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="{{ form.instagram_link.id_for_label }}">
+                        <i class="fab fa-instagram"></i> Instagram Profile
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.instagram_link }}
+                    </div>
+                    {% if form.instagram_link.errors %}
+                    <span class="admin-form-error">{{ form.instagram_link.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="{{ form.other_social_link.id_for_label }}">
+                        <i class="fas fa-link"></i> Other Social Link
+                    </label>
+                    <div class="admin-form-input-group">
+                        {{ form.other_social_link }}
+                    </div>
+                    {% if form.other_social_link.errors %}
+                    <span class="admin-form-error">{{ form.other_social_link.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-form-btn admin-form-btn-success">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+                <a href="{% url 'admin_user_list' %}" class="admin-form-btn admin-form-btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Form validation
+        const form = document.getElementById('editUserForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function (e) {
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+
+        // Real-time validation
+        const inputs = form.querySelectorAll('.admin-form-control');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                if (this.value.trim() !== '') {
+                    this.classList.add('valid');
+                    this.classList.remove('invalid');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <!-- Block User Header -->
+    <div class="admin-form-header"
+        style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color: #212529;">
+        <h1 class="admin-form-title">
+            <i class="fas fa-user-slash"></i>
+            Block User Account
+        </h1>
+        <p class="admin-form-subtitle">Temporarily restrict access for {{ user.username }}</p>
+    </div>
+
+    <!-- Block Form Card -->
+    <div class="admin-form-card">
+        <!-- User Information -->
+        <div class="block-user-info">
+            <div class="block-user-avatar">
+                {{ user.username|first|upper }}
+            </div>
+            <div class="block-user-details">
+                <h3>{{ user.username }}</h3>
+                <p class="block-user-email">{{ user.email }}</p>
+                <div class="block-user-meta">
+                    <span class="block-user-joined">
+                        <i class="fas fa-calendar"></i>
+                        Joined {{ user.date_joined|date:"M d, Y" }}
+                    </span>
+                    <span class="block-user-status 
+                        {% if user.is_active %}block-status-active{% else %}block-status-inactive{% endif %}">
+                        <i class="fas fa-circle"></i>
+                        {% if user.is_active %}Active{% else %}Inactive{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Block Reason Form -->
+        <form method="post" id="blockUserForm">
+            {% csrf_token %}
+
+            <div class="admin-form-group">
+                <h4 class="block-section-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Block Details
+                </h4>
+
+                {% for field in form %}
+                <div class="admin-form-group">
+                    <label class="admin-form-label {% if field.field.required %}required{% endif %}"
+                        for="{{ field.id_for_label }}">
+                        {% if field.name == 'reason' %}
+                        <i class="fas fa-comment"></i>
+                        {% elif field.name == 'duration' %}
+                        <i class="fas fa-clock"></i>
+                        {% elif field.name == 'notify_user' %}
+                        <i class="fas fa-envelope"></i>
+                        {% else %}
+                        <i class="fas fa-edit"></i>
+                        {% endif %}
+                        {{ field.label }}
+                    </label>
+                    <div class="admin-form-input-group">
+                        {% if field.name == 'reason' %}
+                        {{ field }}
+                        {% elif field.name == 'notify_user' %}
+                        <div class="admin-form-check-label">
+                            {{ field }}
+                            Send notification email to user
+                        </div>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                    </div>
+                    {% if field.errors %}
+                    <span class="admin-form-error">{{ field.errors.0 }}</span>
+                    {% endif %}
+                    {% if field.help_text %}
+                    <span class="admin-form-help">{{ field.help_text }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Block Warning -->
+            <div class="block-warning">
+                <div class="block-warning-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="block-warning-content">
+                    <h4>What happens when you block this user:</h4>
+                    <ul class="block-consequences-list">
+                        <li><i class="fas fa-ban"></i> User will be unable to log in</li>
+                        <li><i class="fas fa-eye-slash"></i> Profile will be hidden from public view</li>
+                        <li><i class="fas fa-lock"></i> All portfolio access will be restricted</li>
+                        <li><i class="fas fa-envelope"></i> Email notifications will be sent (if enabled)</li>
+                        <li><i class="fas fa-undo"></i> Block can be reversed at any time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-form-btn admin-form-btn-warning">
+                    <i class="fas fa-user-slash"></i>
+                    Confirm Block User
+                </button>
+                <a href="{% url 'admin_user_list' %}" class="admin-form-btn admin-form-btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('blockUserForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Confirmation dialog
+            if (confirm('Are you sure you want to block this user? They will be unable to access their account.')) {
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+
+                // Submit form
+                this.submit();
+            }
+        });
+
+        // Auto-resize textarea
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+    });
+</script>
+{% endblock %}

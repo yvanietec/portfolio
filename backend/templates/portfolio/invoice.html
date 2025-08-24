@@ -1,0 +1,59 @@
+{% load static %}
+<!-- templates/portfolio/invoice.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <!-- Tailwind CSS & Font Awesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+    <style>
+      .glass-effect {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box, linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+      }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-[#f8f7ff] py-8">
+  <div class="glass-effect gradient-border rounded-2xl shadow-2xl w-full max-w-xl p-8">
+    <h2 class="text-3xl font-bold gradient-text text-center mb-8 flex items-center justify-center gap-2">
+      <i class="fas fa-file-invoice"></i> Invoice
+    </h2>
+    <div class="mb-4">
+      <p class="mb-1"><span class="font-semibold">Customer:</span> {{ user.username }}</p>
+      <p class="mb-1"><span class="font-semibold">Date:</span> {{ payment.created_at|date:"Y-m-d H:i" }}</p>
+      <p class="mb-1"><span class="font-semibold">Order ID:</span> {{ payment.razorpay_order_id }}</p>
+      <p class="mb-4"><span class="font-semibold">Payment ID:</span> {{ payment.razorpay_payment_id }}</p>
+    </div>
+    <table class="w-full border-collapse rounded-xl overflow-hidden shadow">
+      <thead>
+        <tr class="bg-gradient-to-r from-violet-600 to-indigo-500 text-white">
+          <th class="py-3 px-4 text-left font-semibold">Description</th>
+          <th class="py-3 px-4 text-left font-semibold">Amount (INR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-white/80">
+          <td class="py-3 px-4">Portfolio Purchase</td>
+          <td class="py-3 px-4 font-semibold">₹{{ amount_rupees|floatformat:2 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

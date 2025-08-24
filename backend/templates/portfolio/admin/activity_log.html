@@ -1,0 +1,286 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_tables.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-table-container">
+    <!-- Page Header -->
+    <div class="admin-table-header">
+        <div class="admin-table-title-section">
+            <h1 class="admin-table-title">
+                <i class="fas fa-history"></i>
+                Activity Log
+            </h1>
+            <p class="admin-table-subtitle">Track all administrative actions and system activities</p>
+        </div>
+        <div class="admin-table-actions">
+            <button class="admin-table-btn admin-table-btn-secondary" onclick="refreshActivityLog()">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+            </button>
+            <button class="admin-table-btn admin-table-btn-primary" onclick="exportActivityLog()">
+                <i class="fas fa-download"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="admin-table-stats">
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-list-alt"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">{{ logs|length }}</div>
+                <div class="admin-table-stat-label">Total Logs</div>
+            </div>
+        </div>
+        <div class="admin-table-stat-card">
+            <div class="admin-table-stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="admin-table-stat-content">
+                <div class="admin-table-stat-number">
+                    {% if logs %}
+                    {{ logs.first.timestamp|date:"M d" }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </div>
+                <div class="admin-table-stat-label">Latest Activity</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="admin-table-filters">
+        <div class="admin-table-search-group">
+            <i class="fas fa-search admin-table-search-icon"></i>
+            <input type="text" id="searchInput" class="admin-table-search" placeholder="Search by admin or action...">
+        </div>
+        <div class="admin-table-filter-group">
+            <select id="timeFilter" class="admin-table-filter">
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Activity Log Table -->
+    <div class="admin-table-card">
+        <div class="admin-table-wrapper">
+            <table class="admin-table" id="activityTable">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="fas fa-user"></i>
+                            Admin
+                        </th>
+                        <th>
+                            <i class="fas fa-tasks"></i>
+                            Action
+                        </th>
+                        <th>
+                            <i class="fas fa-clock"></i>
+                            Timestamp
+                        </th>
+                        <th>
+                            <i class="fas fa-info-circle"></i>
+                            Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr class="activity-row" data-timestamp="{{ log.timestamp|date:'Y-m-d' }}">
+                        <td>
+                            <div class="admin-table-user">
+                                <div class="admin-table-user-avatar">
+                                    {{ log.admin.username|first|upper }}
+                                </div>
+                                <div class="admin-table-user-info">
+                                    <div class="admin-table-user-name">{{ log.admin.username }}</div>
+                                    <div class="admin-table-user-email">{{ log.admin.email|default:"No email" }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-table-action">
+                                <span class="admin-table-action-badge 
+                                    {% if 'create' in log.action|lower or 'add' in log.action|lower %}
+                                        admin-table-badge-success
+                                    {% elif 'delete' in log.action|lower or 'remove' in log.action|lower %}
+                                        admin-table-badge-danger
+                                    {% elif 'update' in log.action|lower or 'edit' in log.action|lower %}
+                                        admin-table-badge-warning
+                                    {% elif 'login' in log.action|lower %}
+                                        admin-table-badge-info
+                                    {% else %}
+                                        admin-table-badge-secondary
+                                    {% endif %}">
+                                    {% if 'create' in log.action|lower or 'add' in log.action|lower %}
+                                    <i class="fas fa-plus"></i>
+                                    {% elif 'delete' in log.action|lower or 'remove' in log.action|lower %}
+                                    <i class="fas fa-trash"></i>
+                                    {% elif 'update' in log.action|lower or 'edit' in log.action|lower %}
+                                    <i class="fas fa-edit"></i>
+                                    {% elif 'login' in log.action|lower %}
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    {% else %}
+                                    <i class="fas fa-cog"></i>
+                                    {% endif %}
+                                    {{ log.action }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-table-timestamp">
+                                <div class="admin-table-date">{{ log.timestamp|date:"M d, Y" }}</div>
+                                <div class="admin-table-time">{{ log.timestamp|date:"g:i A" }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="admin-table-btn-sm admin-table-btn-outline"
+                                onclick="viewLogDetails({{ log.id }})">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="admin-table-empty">
+                            <div class="admin-table-empty-content">
+                                <i class="fas fa-history"></i>
+                                <h3>No Activity Found</h3>
+                                <p>No administrative activities have been recorded yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if logs.has_other_pages %}
+        <div class="admin-table-pagination">
+            <div class="admin-table-pagination-info">
+                Showing {{ logs.start_index }} to {{ logs.end_index }} of {{ logs.paginator.count }} entries
+            </div>
+            <div class="admin-table-pagination-controls">
+                {% if logs.has_previous %}
+                <a href="?page={{ logs.previous_page_number }}" class="admin-table-pagination-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                {% endif %}
+
+                {% for num in logs.paginator.page_range %}
+                {% if num == logs.number %}
+                <span class="admin-table-pagination-btn admin-table-pagination-current">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="admin-table-pagination-btn">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+
+                {% if logs.has_next %}
+                <a href="?page={{ logs.next_page_number }}" class="admin-table-pagination-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const timeFilter = document.getElementById('timeFilter');
+        const table = document.getElementById('activityTable');
+        const rows = table.querySelectorAll('tbody tr:not(.admin-table-empty)');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const timeFilterValue = timeFilter.value;
+
+            rows.forEach(row => {
+                const adminText = row.cells[0].textContent.toLowerCase();
+                const actionText = row.cells[1].textContent.toLowerCase();
+                const timestamp = row.getAttribute('data-timestamp');
+
+                let matchesSearch = adminText.includes(searchTerm) || actionText.includes(searchTerm);
+                let matchesTime = true;
+
+                if (timeFilterValue) {
+                    const today = new Date();
+                    const rowDate = new Date(timestamp);
+
+                    switch (timeFilterValue) {
+                        case 'today':
+                            matchesTime = rowDate.toDateString() === today.toDateString();
+                            break;
+                        case 'week':
+                            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            matchesTime = rowDate >= weekAgo;
+                            break;
+                        case 'month':
+                            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            matchesTime = rowDate >= monthAgo;
+                            break;
+                    }
+                }
+
+                row.style.display = matchesSearch && matchesTime ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        timeFilter.addEventListener('change', filterTable);
+    });
+
+    function refreshActivityLog() {
+        window.location.reload();
+    }
+
+    function exportActivityLog() {
+        // Implement export functionality
+        const table = document.getElementById('activityTable');
+        const rows = Array.from(table.querySelectorAll('tbody tr:not([style*="display: none"])'));
+
+        let csv = 'Admin,Action,Timestamp\n';
+        rows.forEach(row => {
+            if (row.cells.length > 1) {
+                const admin = row.cells[0].textContent.trim();
+                const action = row.cells[1].textContent.trim();
+                const timestamp = row.cells[2].textContent.trim();
+                csv += `"${admin}","${action}","${timestamp}"\n`;
+            }
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `activity_log_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    function viewLogDetails(logId) {
+        // Implement view details functionality
+        alert(`View details for log ID: ${logId}`);
+    }
+</script>
+{% endblock %}

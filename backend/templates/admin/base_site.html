@@ -1,0 +1,396 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Portfolio Admin{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary: #000000;
+        --secondary: #333333;
+        --accent: #666666;
+        --text: #000000;
+        --text-light: #333333;
+        --background: #ffffff;
+        --background-light: #ffffff;
+        --border: #e0e0e0;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+        --info: #17a2b8;
+    }
+
+    /* Header */
+    #header {
+        background: #ffffff;
+        color: #000000;
+        border-bottom: 3px solid var(--border);
+    }
+
+    #header a:link,
+    #header a:visited {
+        color: #000000;
+    }
+
+    #branding h1 {
+        color: #000000;
+        font-weight: 300;
+        font-size: 24px;
+    }
+
+    #branding h1 a:link,
+    #branding h1 a:visited {
+        color: #000000;
+    }
+
+    /* Navigation */
+    .breadcrumbs {
+        background: var(--background-light);
+        color: var(--text-light);
+        border-bottom: 1px solid var(--border);
+        padding: 15px 20px;
+    }
+
+    .breadcrumbs a {
+        color: #000000;
+    }
+
+    /* Content */
+    #content {
+        background: var(--background);
+        color: var(--text);
+    }
+
+    /* Sidebar */
+    #nav-sidebar {
+        background: var(--background-light);
+        border-right: 1px solid var(--border);
+    }
+
+    #nav-sidebar .current-app .section {
+        background: #f0f0f0;
+        color: #000000;
+    }
+
+    #nav-sidebar .current-app .section a {
+        color: #000000;
+    }
+
+    #nav-sidebar .current-model {
+        background: #e0e0e0;
+        color: #000000;
+    }
+
+    #nav-sidebar .current-model a {
+        color: #000000;
+    }
+
+    #nav-sidebar a:link,
+    #nav-sidebar a:visited {
+        color: var(--text);
+    }
+
+    #nav-sidebar a:hover {
+        background: #e0e0e0;
+        color: #000000;
+    }
+
+    /* Forms */
+    .form-row {
+        background: var(--background);
+        border-bottom: 1px solid var(--border);
+        padding: 15px 0;
+    }
+
+    .form-row label {
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 8px 12px;
+        background: white;
+        color: var(--text);
+    }
+
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+        border-color: #000000;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Buttons */
+    .button,
+    input[type=submit],
+    input[type=button],
+    .submit-row input {
+        background: #000000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .button:hover,
+    input[type=submit]:hover,
+    input[type=button]:hover,
+    .submit-row input:hover {
+        background: #333333;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .button.default,
+    input[type=submit].default,
+    .submit-row input.default {
+        background: var(--success);
+    }
+
+    .button.default:hover,
+    input[type=submit].default:hover,
+    .submit-row input.default:hover {
+        background: #218838;
+    }
+
+    .deletelink {
+        background: var(--danger);
+    }
+
+    .deletelink:hover {
+        background: #c82333;
+    }
+
+    /* Tables */
+    .results {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .results thead th {
+        background: #f0f0f0;
+        color: #000000;
+        border: none;
+        padding: 15px 10px;
+        font-weight: 600;
+    }
+
+    .results tbody tr:nth-child(even) {
+        background: var(--background-light);
+    }
+
+    .results tbody tr:hover {
+        background: #f5f5f5;
+    }
+
+    .results tbody td {
+        border-bottom: 1px solid var(--border);
+        padding: 12px 10px;
+        color: var(--text);
+    }
+
+    /* Pagination */
+    .paginator {
+        background: var(--background-light);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .paginator a:link,
+    .paginator a:visited {
+        color: #000000;
+        padding: 8px 12px;
+        margin: 0 2px;
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        text-decoration: none;
+    }
+
+    .paginator a:hover {
+        background: #000000;
+        color: white;
+        border-color: #000000;
+    }
+
+    .paginator .this-page {
+        background: #000000;
+        color: white;
+        border-color: #000000;
+    }
+
+    /* Messages */
+    .messagelist {
+        margin: 20px 0;
+    }
+
+    .messagelist li {
+        padding: 15px 20px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+    }
+
+    .messagelist .success {
+        background: #d4edda;
+        border-color: var(--success);
+        color: #155724;
+    }
+
+    .messagelist .warning {
+        background: #fff3cd;
+        border-color: var(--warning);
+        color: #856404;
+    }
+
+    .messagelist .error {
+        background: #f8d7da;
+        border-color: var(--danger);
+        color: #721c24;
+    }
+
+    /* Object tools */
+    .object-tools {
+        margin: 20px 0;
+    }
+
+    .object-tools a:link,
+    .object-tools a:visited {
+        background: #000000;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        margin-left: 10px;
+        display: inline-block;
+        transition: all 0.2s ease;
+    }
+
+    .object-tools a:hover {
+        background: #333333;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Filters */
+    .filtered {
+        background: var(--background-light);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .filtered h2 {
+        color: var(--text);
+        margin: 0 0 15px 0;
+        font-size: 16px;
+    }
+
+    .filtered ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .filtered li {
+        display: inline-block;
+        margin: 5px 10px 5px 0;
+    }
+
+    .filtered a {
+        background: #666666;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .filtered a:hover {
+        background: #000000;
+    }
+
+    /* Responsive */
+    @media (max-width: 767px) {
+        #header {
+            padding: 10px;
+        }
+
+        #branding h1 {
+            font-size: 20px;
+        }
+
+        .form-row {
+            padding: 10px 0;
+        }
+
+        .button,
+        input[type=submit],
+        input[type=button],
+        .submit-row input {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    }
+
+    /* Custom animations */
+    .fade-in {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Status indicators */
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+    .status-active {
+        background: var(--success);
+    }
+
+    .status-pending {
+        background: var(--warning);
+    }
+
+    .status-inactive {
+        background: var(--danger);
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        🎯 Portfolio Management System
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -1,0 +1,424 @@
+/* Skill Formset Enhancements */
+
+/* Skill Formset Container - Standardized Width and Height */
+.skill-formset-container {
+    max-width: 700px;
+    /* Allow container to expand with content */
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    /* Allow content to expand naturally */
+}
+
+/* Skill Formset Form Structure */
+#language-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.skill-form-content {
+    flex: 1;
+    padding-right: 0.5rem;
+    /* Space for scrollbar */
+}
+
+/* Skill Formset Header */
+.skill-formset-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+.skill-formset-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6d28d9;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.skill-formset-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Skill Entry Section */
+.skill-entry {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(109, 40, 217, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.skill-entry:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: rgba(109, 40, 217, 0.15);
+}
+
+.skill-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(109, 40, 217, 0.1);
+}
+
+.skill-entry-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6d28d9;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skill-entry-number {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.remove-skill-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.remove-skill-btn:hover {
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Skill Form Grid */
+.skill-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Skill Form Groups */
+.skill-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.skill-form-group label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+
+.skill-form-group input,
+.skill-form-group select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    min-height: 3rem;
+}
+
+.skill-form-group input:focus,
+.skill-form-group select:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Skill Suggestions */
+.skill-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.skill-suggestion-chip {
+    background: rgba(109, 40, 217, 0.1);
+    color: #6d28d9;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(109, 40, 217, 0.2);
+}
+
+.skill-suggestion-chip:hover {
+    background: rgba(109, 40, 217, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(109, 40, 217, 0.2);
+}
+
+/* Add Skill Button */
+.add-skill-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+    margin-bottom: 2rem;
+}
+
+.add-skill-btn:hover {
+    background: linear-gradient(135deg, #5b21b6, #7c3aed);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.4);
+}
+
+.add-skill-btn i {
+    font-size: 1.1rem;
+}
+
+/* Standardized Button Group - Consistent Alignment */
+.skill-btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(109, 40, 217, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.skill-btn-group-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.skill-btn {
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.skill-btn-primary {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+}
+
+.skill-btn-primary:hover {
+    background: linear-gradient(135deg, #5b21b6, #7c3aed);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.4);
+}
+
+.skill-btn-secondary {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    color: #374151;
+    border: 2px solid #d1d5db;
+}
+
+.skill-btn-secondary:hover {
+    background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.skill-btn-gray {
+    background: linear-gradient(135deg, #6b7280, #9ca3af);
+    color: white;
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.skill-btn-gray:hover {
+    background: linear-gradient(135deg, #4b5563, #6b7280);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(107, 114, 128, 0.4);
+}
+
+/* Error and Help Text */
+.skill-error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(220, 38, 38, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #dc2626;
+}
+
+.skill-help-text {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .skill-formset-container {
+        max-width: 95%;
+        padding: 1.5rem;
+    }
+
+    .skill-entry {
+        padding: 1.5rem;
+    }
+
+    .skill-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .skill-btn-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .skill-btn-group-right {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .skill-btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-formset-container {
+        max-width: 100%;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .skill-entry {
+        padding: 1rem;
+    }
+
+    .skill-formset-title {
+        font-size: 1.25rem;
+    }
+
+    .skill-formset-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .skill-form-group input,
+    .skill-form-group select {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .skill-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .add-skill-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Animations */
+.skill-fade-in {
+    animation: skillFadeIn 0.6s ease-out;
+}
+
+@keyframes skillFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus Management */
+.skill-form-group input:focus-visible,
+.skill-form-group select:focus-visible {
+    outline: 2px solid #6d28d9;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+
+    .skill-form-group input,
+    .skill-form-group select {
+        border-width: 3px;
+    }
+
+    .skill-btn {
+        border-width: 2px;
+    }
+
+    .skill-entry {
+        border-width: 2px;
+    }
+}

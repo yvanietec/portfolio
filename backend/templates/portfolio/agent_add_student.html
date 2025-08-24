@@ -1,0 +1,180 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+{% endblock %}
+{% load static %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="glass-effect gradient-border rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-auto">
+        <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center gradient-text">Add Student</h2>
+        <form method="post" id="agentAddStudentForm" novalidate autocomplete="off" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="id_student_username" class="block font-medium text-gray-700 mb-1">Username</label>
+                {{ form.student_username }}
+                <div id="username-availability" class="text-xs mt-1"></div>
+                {% if form.student_username.errors %}
+                <div class="text-red-500 text-xs mt-1">{{ form.student_username.errors.0 }}</div>
+                {% else %}
+                <div class="text-red-500 text-xs mt-1">Please enter a valid username (min 3 characters).</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_student_email" class="block font-medium text-gray-700 mb-1">Email</label>
+                {{ form.student_email }}
+                <div id="email-availability" class="text-xs mt-1"></div>
+                {% if form.student_email.errors %}
+                <div class="text-red-500 text-xs mt-1">{{ form.student_email.errors.0 }}</div>
+                {% else %}
+                <div class="text-red-500 text-xs mt-1">Please enter a valid email address.</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_student_first_name" class="block font-medium text-gray-700 mb-1">First Name</label>
+                {{ form.student_first_name }}
+                {% if form.student_first_name.errors %}
+                <div class="text-red-500 text-xs mt-1">{{ form.student_first_name.errors.0 }}</div>
+                {% else %}
+                <div class="text-red-500 text-xs mt-1">First name is required.</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_student_last_name" class="block font-medium text-gray-700 mb-1">Last Name</label>
+                {{ form.student_last_name }}
+                {% if form.student_last_name.errors %}
+                <div class="text-red-500 text-xs mt-1">{{ form.student_last_name.errors.0 }}</div>
+                {% else %}
+                <div class="text-red-500 text-xs mt-1">Last name is required.</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white w-full px-6 py-3 rounded-xl font-medium shadow-lg transition-all flex items-center justify-center text-lg">
+                <i class="fas fa-user-plus mr-2"></i> Add Student
+            </button>
+        </form>
+        {% if messages %}
+        <ul class="mt-4">
+            {% for message in messages %}
+            <li class="text-{{ message.tags }} text-center">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+            <a href="" class="btn-hover-effect bg-white border-2 border-violet-600 text-violet-600 hover:bg-violet-50 px-6 py-3 rounded-xl font-medium shadow flex items-center transition-all" onclick="window.location.reload();return false;">
+                <i class="fas fa-plus mr-2"></i> Add Another Student
+            </a>
+            <a href="{% url 'user_profile' %}" class="btn-hover-effect bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium shadow flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Go Back to Profile
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simple frontend validation for agent add student form
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('agentAddStudentForm');
+        if (!form) return;
+        form.addEventListener('submit', function (e) {
+            let valid = true;
+            form.querySelectorAll('input').forEach(function (input) {
+                if (!input.checkValidity()) {
+                    input.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+        form.querySelectorAll('input').forEach(function (input) {
+            input.addEventListener('input', function () {
+                if (input.checkValidity()) {
+                    input.classList.remove('is-invalid');
+                }
+            });
+        });
+
+        // If there is a success message, clear the form fields
+        var successMsg = document.querySelector('li.text-success');
+        if (successMsg) {
+            form.reset();
+            // Also clear AJAX feedback
+            var usernameFeedback = document.getElementById('username-availability');
+            var emailFeedback = document.getElementById('email-availability');
+            if (usernameFeedback) usernameFeedback.textContent = '';
+            if (emailFeedback) emailFeedback.textContent = '';
+        }
+
+        // Username AJAX availability check
+        const usernameInput = document.getElementById('id_student_username');
+        const usernameFeedback = document.getElementById('username-availability');
+        let usernameTimeout = null;
+        if (usernameInput && usernameFeedback) {
+            usernameInput.addEventListener('input', function () {
+                const value = this.value.trim();
+                usernameFeedback.textContent = '';
+                usernameFeedback.className = 'field-feedback';
+                if (value.length < 3) {
+                    return;
+                }
+                clearTimeout(usernameTimeout);
+                usernameTimeout = setTimeout(function () {
+                    fetch('/ajax/check/?field=username&value=' + encodeURIComponent(value))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.available) {
+                                usernameFeedback.textContent = 'Username is available';
+                                usernameFeedback.style.color = 'green';
+                            } else {
+                                usernameFeedback.textContent = data.error ? data.error : 'Username is already taken';
+                                usernameFeedback.style.color = 'red';
+                            }
+                        })
+                        .catch(() => {
+                            usernameFeedback.textContent = 'Could not check username';
+                            usernameFeedback.style.color = 'orange';
+                        });
+                }, 400);
+            });
+        }
+
+        // Email AJAX availability check
+        const emailInput = document.getElementById('id_student_email');
+        const emailFeedback = document.getElementById('email-availability');
+        let emailTimeout = null;
+        if (emailInput && emailFeedback) {
+            emailInput.addEventListener('input', function () {
+                const value = this.value.trim();
+                emailFeedback.textContent = '';
+                emailFeedback.className = 'field-feedback';
+                if (value.length < 5 || value.indexOf('@') === -1) {
+                    return;
+                }
+                clearTimeout(emailTimeout);
+                emailTimeout = setTimeout(function () {
+                    fetch('/ajax/check/?field=email&value=' + encodeURIComponent(value))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.available) {
+                                emailFeedback.textContent = 'Email is available';
+                                emailFeedback.style.color = 'green';
+                            } else {
+                                emailFeedback.textContent = data.error ? data.error : 'Email is already registered';
+                                emailFeedback.style.color = 'red';
+                            }
+                        })
+                        .catch(() => {
+                            emailFeedback.textContent = 'Could not check email';
+                            emailFeedback.style.color = 'orange';
+                        });
+                }, 400);
+            });
+        }
+    });
+</script>
+{% endblock %}

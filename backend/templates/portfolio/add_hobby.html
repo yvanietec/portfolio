@@ -1,0 +1,90 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Hobbies - Step 8{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container" data-current-step="add_hobby">
+    <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+        <!-- Wizard Progress Component -->
+        {% include "portfolio/wizard_progress.html" %}
+
+        <div class="portfolio-form-container portfolio-fade-in">
+
+
+            <div class="portfolio-text-center">
+                <h1 class="portfolio-title">Step 8: Hobbies & Interests</h1>
+                <p class="portfolio-subtitle">Add your hobbies and interests to show your personality</p>
+            </div>
+
+            <form method="post" autocomplete="off">
+                {% csrf_token %}
+                {{ formset.management_form }}
+
+                {% if formset.non_form_errors %}
+                <div class="portfolio-alert portfolio-alert-error">
+                    {% for error in formset.non_form_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="portfolio-form-content">
+                    {% for form in formset %}
+                    <div class="portfolio-form-section">
+                        <div
+                            class="portfolio-flex portfolio-items-center portfolio-justify-between portfolio-spacing-sm">
+                            <h3 class="portfolio-section-title">Hobbies & Interests</h3>
+                        </div>
+                        {% if form.non_field_errors %}
+                        <div class="portfolio-alert portfolio-alert-error">
+                            {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="portfolio-form-row">
+                            {% for field in form.visible_fields %}
+                            <div class="portfolio-form-group">
+                                <label for="{{ field.id_for_label }}" class="portfolio-label">
+                                    {{ field.label }}
+                                    {% if field.field.required %}<span style="color: #dc2626;">*</span>{% endif %}
+                                </label>
+                                {{ field }}
+                                <div class="hobby-suggestions" id="hobby-suggestions-{{ forloop.counter0 }}"></div>
+                                {% if field.help_text %}
+                                <small class="portfolio-help-text">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <div class="portfolio-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+
+                            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Standardized Button Group - Consistent Alignment -->
+                <div class="portfolio-btn-group">
+                    <button type="submit" name="skip" class="portfolio-btn portfolio-btn-gray">Skip</button>
+                    <button type="submit" class="portfolio-btn portfolio-btn-primary">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/sidebar.js' %}"></script>
+{% endblock %}

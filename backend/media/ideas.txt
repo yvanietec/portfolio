@@ -1,0 +1,22 @@
+1. school 
+2. dental clinic
+3. pet shop
+4. water supply
+5. car wash
+6. church
+7. cake shops
+8. celebrities connection
+9. studios
+10. photographers review based contact
+11. personal finance and budget app
+12. online lost and found platform
+13. home service booking app
+14. parenting and child development tracker
+15. portfolio website 
+16.  Smart QR-Based Payments for Everything (No Cash, No Cards, No Apps Needed)
+💡 Problem: Cash is becoming obsolete, but not everyone wants to use a mobile app for every small payment.
+✅ Solution: A QR-based universal payment web app where users link their bank account and pay directly by scanning a QR code on any website or store—without an app.
+💰 Monetization: Charge a small transaction fee for businesses and offer premium analytics tools.
+🚀 Why It Works: Frictionless payments will dominate the future, and no one likes downloading 10+ apps just to make a payment.
+
+17. an app for verifying legit people, the police should get all details of someone, with just one swipe or scanning of an id. when a case registered on that person, it should be recorded. 

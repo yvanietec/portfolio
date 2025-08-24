@@ -1,0 +1,22 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>Edit Portfolio</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Status</label>
+           <select name="status" class="form-control">
+    <option value="in_progress" {% if portfolio.status == "in_progress" %}selected{% endif %}>In Progress</option>
+    <option value="completed" {% if portfolio.status == "completed" %}selected{% endif %}>Completed</option>
+    <option value="draft" {% if portfolio.status == "draft" %}selected{% endif %}>Draft</option>
+</select>
+
+        </div>
+        <!-- Add more fields as needed -->
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'admin_portfolio_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

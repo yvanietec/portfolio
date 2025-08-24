@@ -1,0 +1,164 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Approve Student - {{ invitation.student_first_name }} {{ invitation.student_last_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .gradient-text {
+        background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .gradient-border {
+        position: relative;
+        border-radius: 0.75rem;
+        background: linear-gradient(#f8f7ff, #f8f7ff) padding-box,
+                    linear-gradient(135deg, #6d28d9, #8b5cf6) border-box;
+        border: 2px solid transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-[#f8f7ff] py-12 px-4">
+    <div class="w-full max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-2 flex items-center justify-center gap-2"><i class="fas fa-user-check"></i> Student Approval</h2>
+            <p class="text-gray-500">Review the details and approve or reject this student invitation</p>
+        </div>
+
+        <!-- Agent Information -->
+        <div class="glass-effect gradient-border rounded-2xl shadow-lg p-6 mb-6">
+            <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-violet-700"><i class="fas fa-user-tie"></i> Agent Information</h5>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <p><span class="font-semibold">Name:</span> {{ invitation.agent.first_name }} {{ invitation.agent.last_name }}</p>
+                    <p><span class="font-semibold">Username:</span> {{ invitation.agent.user.username }}</p>
+                    <p><span class="font-semibold">Email:</span> {{ invitation.agent.email }}</p>
+                </div>
+                <div>
+                    <p><span class="font-semibold">User Type:</span> {{ invitation.agent.get_user_type_display }}</p>
+                    <p><span class="font-semibold">Joined:</span> {{ invitation.agent.user.date_joined|date:"M d, Y" }}</p>
+                    <p><span class="font-semibold">Active:</span>
+                        {% if invitation.agent.user.is_active %}
+                        <span class="inline-block px-2 py-1 rounded bg-green-100 text-green-700 text-xs font-semibold">Yes</span>
+                        {% else %}
+                        <span class="inline-block px-2 py-1 rounded bg-red-100 text-red-700 text-xs font-semibold">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Information -->
+        <div class="glass-effect gradient-border rounded-2xl shadow-lg p-6 mb-6">
+            <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-blue-700"><i class="fas fa-user-graduate"></i> Student Information</h5>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <p><span class="font-semibold">Name:</span> {{ invitation.student_first_name }} {{ invitation.student_last_name }}</p>
+                    <p><span class="font-semibold">Username:</span> {{ invitation.student_username }}</p>
+                    <p><span class="font-semibold">Email:</span> {{ invitation.student_email }}</p>
+                </div>
+                <div>
+                    <p><span class="font-semibold">College:</span> {{ invitation.student_college|default:"Not specified" }}</p>
+                    <p><span class="font-semibold">Course:</span> {{ invitation.student_course|default:"Not specified" }}</p>
+                    <p><span class="font-semibold">Requested:</span> {{ invitation.created_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approval Workflow -->
+        <div class="glass-effect gradient-border rounded-2xl shadow-lg p-6 mb-8">
+            <h5 class="font-semibold text-lg mb-4 flex items-center gap-2 text-yellow-700"><i class="fas fa-clipboard-check"></i> Approval Workflow</h5>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <p><span class="font-semibold">Current Status:</span>
+                        <span class="inline-block px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-semibold">⏳ Pending Admin Approval</span>
+                    </p>
+                    <p><span class="font-semibold">Requested:</span> {{ invitation.created_at|date:"M d, Y H:i" }}</p>
+                </div>
+                <div>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                        <i class="fas fa-info-circle text-blue-400 mr-2"></i>
+                        <span class="font-semibold">Note:</span> Payment will be handled manually after approval.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+            <form method="post" class="inline" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="approve">
+                <button type="submit" class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-medium shadow transition-all flex items-center justify-center text-lg"
+                    onclick="return confirm('Are you sure you want to approve this student invitation? This will create an account and send an activation email to the student.')">
+                    <i class="fas fa-check mr-2"></i> Approve Student
+                </button>
+            </form>
+
+            <button type="button" class="btn-hover-effect bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-medium shadow transition-all flex items-center justify-center text-lg" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                <i class="fas fa-times mr-2"></i> Reject
+            </button>
+
+            <a href="{% url 'admin_student_approvals' %}" class="btn-hover-effect bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl font-medium shadow transition-all flex items-center justify-center text-lg">
+                <i class="fas fa-arrow-left mr-2"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="fixed z-50 inset-0 overflow-y-auto hidden" id="rejectModal">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 relative">
+            <div class="flex items-center justify-between mb-4">
+                <h5 class="text-xl font-bold">Reject Student Invitation</h5>
+                <button type="button" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none" onclick="document.getElementById('rejectModal').classList.add('hidden')">&times;</button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="reject">
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-4">
+                    <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
+                    <span class="font-semibold">Warning:</span> This action cannot be undone.
+                </div>
+                <p class="mb-2">Are you sure you want to reject this student invitation?</p>
+                <p class="mb-2"><span class="font-semibold">Student:</span> {{ invitation.student_first_name }} {{ invitation.student_last_name }}</p>
+                <p class="mb-4"><span class="font-semibold">Agent:</span> {{ invitation.agent.first_name }} {{ invitation.agent.last_name }}</p>
+                <div class="mb-4">
+                    <label for="rejection_reason" class="block font-medium text-gray-700 mb-1">Reason for rejection (optional):</label>
+                    <textarea name="rejection_reason" id="rejection_reason" class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none" rows="3" placeholder="Enter reason for rejection..."></textarea>
+                    <small class="text-gray-400">This reason will be sent to the agent.</small>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" class="btn-hover-effect bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-xl font-medium shadow" onclick="document.getElementById('rejectModal').classList.add('hidden')">Cancel</button>
+                    <button type="submit" class="btn-hover-effect bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl font-medium shadow flex items-center">
+                        <i class="fas fa-times mr-2"></i> Reject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // Modal open/close logic for Tailwind modal
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('rejectModal').classList.remove('hidden');
+        });
+    });
+</script>
+{% endblock %}

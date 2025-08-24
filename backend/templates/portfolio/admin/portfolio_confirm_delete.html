@@ -1,0 +1,13 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>Delete Portfolio</h2>
+    <p>Are you sure you want to delete the portfolio for <strong>{{ portfolio.user.username }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'admin_portfolio_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

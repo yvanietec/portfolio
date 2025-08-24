@@ -1,0 +1,431 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/portfolio_standardized.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-container">
+    <div class="portfolio-main-content">
+        <div class="portfolio-form-container portfolio-fade-in">
+            <h2
+                class="portfolio-title portfolio-text-center portfolio-flex portfolio-items-center portfolio-justify-center portfolio-spacing-sm">
+                <i class="fas fa-file-contract"></i> Terms and Conditions
+            </h2>
+
+            <div class="portfolio-spacing-lg portfolio-text-gray-800 portfolio-text-sm">
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">1. Introduction and Acceptance</h3>
+                    <p>Welcome to PortfolioPro ("Service," "Platform," "we," "us," or "our"). These Terms and Conditions
+                        ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and
+                        PortfolioPro regarding your use of our portfolio creation and hosting platform.</p>
+                    <p>By accessing, registering, or using our Service, you acknowledge that you have read, understood,
+                        and agree to be bound by these Terms. If you do not agree to these Terms, you must not use our
+                        Service. These Terms apply to all users, including but not limited to students, professionals,
+                        and any other individuals using our platform.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">2. Service Description</h3>
+                    <p>PortfolioPro provides an online platform for creating, hosting, and managing professional
+                        portfolios. Our services include but are not limited to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Portfolio template creation and customization</li>
+                        <li>Web hosting and domain services</li>
+                        <li>Analytics and tracking tools</li>
+                        <li>User support and maintenance</li>
+                        <li>Data storage and backup services</li>
+                    </ul>
+                    <p>We reserve the right to modify, suspend, or discontinue any aspect of our Service at any time
+                        without prior notice.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">3. User Registration and Account</h3>
+                    <p>To access certain features of our Service, you must register for an account. You agree to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Provide accurate, current, and complete information during registration</li>
+                        <li>Maintain and update your account information to keep it accurate and current</li>
+                        <li>Maintain the security of your account credentials</li>
+                        <li>Accept responsibility for all activities under your account</li>
+                        <li>Notify us immediately of any unauthorized use of your account</li>
+                    </ul>
+                    <p>You must be at least 13 years old to create an account. If you are under 18, you represent that
+                        you have parental or guardian consent to use our Service.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">4. User Content and Intellectual Property</h3>
+                    <p>You retain ownership of all content you upload, create, or submit to our platform ("User
+                        Content"). However, by submitting User Content, you grant us a worldwide, non-exclusive,
+                        royalty-free license to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Host, display, and distribute your content on our platform</li>
+                        <li>Use your content for platform improvement and development</li>
+                        <li>Backup and archive your content</li>
+                        <li>Display your content in promotional materials (with your consent)</li>
+                    </ul>
+                    <p>You represent and warrant that:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>You own or have the necessary rights to all User Content</li>
+                        <li>Your content does not infringe on any third-party rights</li>
+                        <li>Your content complies with applicable laws and regulations</li>
+                        <li>Your content does not contain malicious code or harmful elements</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">5. Acceptable Use Policy</h3>
+                    <p>You agree not to use our Service to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Violate any applicable laws, regulations, or third-party rights</li>
+                        <li>Upload, post, or transmit illegal, harmful, threatening, abusive, or defamatory content</li>
+                        <li>Impersonate any person or entity or misrepresent your affiliation</li>
+                        <li>Attempt to gain unauthorized access to our systems or other users' accounts</li>
+                        <li>Interfere with or disrupt the Service or servers</li>
+                        <li>Use automated systems to access our Service without permission</li>
+                        <li>Engage in any form of harassment, discrimination, or hate speech</li>
+                        <li>Upload content containing viruses, malware, or other harmful code</li>
+                        <li>Use our Service for commercial purposes without proper authorization</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">6. Privacy and Data Protection</h3>
+                    <p>Your privacy is important to us. Our collection, use, and protection of your personal information
+                        is governed by our Privacy Policy, which is incorporated into these Terms by reference.</p>
+                    <p>You acknowledge that:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>We may collect and process your personal data as described in our Privacy Policy</li>
+                        <li>Your data may be transferred to and processed in countries other than your own</li>
+                        <li>We implement reasonable security measures to protect your data</li>
+                        <li>No method of transmission over the internet is 100% secure</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">7. Data Breach and Security Incidents</h3>
+                    <p>In the event of a data breach, security incident, or unauthorized access to our systems:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>We will investigate the incident and take appropriate remedial actions</li>
+                        <li>We will notify affected users and relevant authorities as required by law</li>
+                        <li>We will provide reasonable assistance to affected users</li>
+                        <li>We are not liable for any damages resulting from such incidents</li>
+                        <li>Users are responsible for maintaining their own data backups</li>
+                    </ul>
+                    <p><strong>LIMITATION OF LIABILITY:</strong> In no event shall PortfolioPro be liable for any
+                        direct, indirect, incidental, special, consequential, or punitive damages arising from data
+                        breaches, security incidents, or unauthorized access to our systems, including but not limited
+                        to loss of data, business interruption, or financial losses.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">8. Service Availability and Maintenance</h3>
+                    <p>We strive to maintain high service availability but cannot guarantee uninterrupted access. We
+                        may:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Perform scheduled maintenance that may temporarily affect service availability</li>
+                        <li>Suspend or terminate service for security, legal, or technical reasons</li>
+                        <li>Modify or discontinue features without prior notice</li>
+                        <li>Limit access during periods of high usage or system stress</li>
+                    </ul>
+                    <p>We are not liable for any damages resulting from service interruptions, maintenance, or
+                        modifications.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">9. Payment Terms and Refunds</h3>
+                    <p>Some features of our Service may require payment. By making a payment, you agree to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Provide accurate billing information</li>
+                        <li>Pay all fees in full and on time</li>
+                        <li>Authorize recurring charges for subscription services</li>
+                        <li>Accept that all fees are non-refundable unless otherwise stated</li>
+                    </ul>
+                    <p>We reserve the right to change our pricing with 30 days' notice. Refunds are provided at our sole
+                        discretion and in accordance with our refund policy.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">10. Termination and Account Deletion</h3>
+                    <p>Either party may terminate this agreement at any time:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>You may delete your account through your account settings</li>
+                        <li>We may terminate your account for violation of these Terms</li>
+                        <li>We may terminate your account for extended periods of inactivity</li>
+                    </ul>
+                    <p>Upon termination:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Your access to the Service will cease immediately</li>
+                        <li>We may delete your account and all associated data</li>
+                        <li>You are responsible for backing up your content before termination</li>
+                        <li>Provisions that survive termination will remain in effect</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">11. Company Bankruptcy and Business Continuity</h3>
+                    <p>In the event of bankruptcy, insolvency, or business closure:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>We will provide reasonable notice to users before service termination</li>
+                        <li>Users will have the opportunity to export their data</li>
+                        <li>We are not liable for any damages resulting from business closure</li>
+                        <li>User data may be permanently deleted without further notice</li>
+                        <li>No refunds will be provided for prepaid services</li>
+                        <li>Users are responsible for maintaining their own data backups</li>
+                    </ul>
+                    <p><strong>DISCLAIMER:</strong> We make no guarantees regarding business continuity, service
+                        availability, or data preservation in the event of bankruptcy, insolvency, or business closure.
+                    </p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">12. Third-Party Services and Links</h3>
+                    <p>Our Service may contain links to third-party websites or integrate with third-party services. We:
+                    </p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Do not endorse or control third-party content or services</li>
+                        <li>Are not responsible for third-party privacy practices or content</li>
+                        <li>Do not guarantee the availability or functionality of third-party services</li>
+                        <li>Are not liable for any damages resulting from third-party services</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">13. Disclaimers and Limitations of Liability</h3>
+                    <p><strong>DISCLAIMER OF WARRANTIES:</strong> Our Service is provided "as is" and "as available"
+                        without any warranties, express or implied. We disclaim all warranties, including but not
+                        limited to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Warranties of merchantability and fitness for a particular purpose</li>
+                        <li>Warranties that the Service will be uninterrupted or error-free</li>
+                        <li>Warranties regarding the accuracy or completeness of content</li>
+                        <li>Warranties that defects will be corrected</li>
+                    </ul>
+                    <p><strong>LIMITATION OF LIABILITY:</strong> To the maximum extent permitted by law, PortfolioPro
+                        shall not be liable for any:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Direct, indirect, incidental, special, consequential, or punitive damages</li>
+                        <li>Loss of profits, revenue, data, or business opportunities</li>
+                        <li>Damages resulting from service interruptions or data loss</li>
+                        <li>Damages resulting from security breaches or unauthorized access</li>
+                        <li>Damages resulting from third-party actions or content</li>
+                    </ul>
+                    <p>Our total liability shall not exceed the amount paid by you for our Service in the 12 months
+                        preceding the claim.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">14. Indemnification</h3>
+                    <p>You agree to indemnify, defend, and hold harmless PortfolioPro and its officers, directors,
+                        employees, and agents from and against any claims, damages, losses, costs, or expenses
+                        (including reasonable attorneys' fees) arising from:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Your use of the Service</li>
+                        <li>Your violation of these Terms</li>
+                        <li>Your User Content</li>
+                        <li>Your violation of any third-party rights</li>
+                        <li>Your violation of applicable laws or regulations</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">15. Force Majeure</h3>
+                    <p>We shall not be liable for any failure to perform our obligations due to circumstances beyond our
+                        reasonable control, including but not limited to:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Natural disasters, acts of God, or weather events</li>
+                        <li>War, terrorism, civil unrest, or government actions</li>
+                        <li>Power outages, internet failures, or telecommunications issues</li>
+                        <li>Labor disputes, strikes, or work stoppages</li>
+                        <li>Technical failures or system malfunctions</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">16. Governing Law and Dispute Resolution</h3>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of [Your
+                        Jurisdiction], without regard to conflict of law principles.</p>
+                    <p>Any disputes arising from these Terms or your use of our Service shall be resolved through:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Good faith negotiations between the parties</li>
+                        <li>Mediation if negotiations fail</li>
+                        <li>Binding arbitration in accordance with [Arbitration Rules]</li>
+                        <li>Court proceedings only as a last resort</li>
+                    </ul>
+                    <p>You waive any right to participate in class action lawsuits or class-wide arbitration.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">17. Changes to Terms</h3>
+                    <p>We reserve the right to modify these Terms at any time. Changes will be effective immediately
+                        upon posting. We will:</p>
+                    <ul class="portfolio-list-disc portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Notify users of material changes via email or platform notification</li>
+                        <li>Post updated Terms on our website</li>
+                        <li>Provide a summary of significant changes</li>
+                    </ul>
+                    <p>Your continued use of the Service after changes constitutes acceptance of the new Terms.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">18. Severability and Waiver</h3>
+                    <p>If any provision of these Terms is found to be unenforceable or invalid, the remaining provisions
+                        shall remain in full force and effect.</p>
+                    <p>Our failure to enforce any provision of these Terms does not constitute a waiver of that
+                        provision or any other provision.</p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">19. Entire Agreement</h3>
+                    <p>These Terms, together with our Privacy Policy and any other policies referenced herein,
+                        constitute the entire agreement between you and PortfolioPro regarding your use of our Service.
+                    </p>
+                </div>
+
+                <div class="portfolio-spacing-md">
+                    <h3 class="portfolio-section-title">20. Contact Information</h3>
+                    <p>If you have any questions about these Terms, please contact us at:</p>
+                    <ul class="portfolio-list-none portfolio-ml-6 portfolio-spacing-sm">
+                        <li>Email: legal@portfoliopro.com</li>
+                        <li>Address: [Your Company Address]</li>
+                        <li>Phone: [Your Phone Number]</li>
+                    </ul>
+                </div>
+
+                <div class="portfolio-spacing-md portfolio-bg-gray-100 portfolio-p-4 portfolio-rounded">
+                    <p class="portfolio-text-sm portfolio-text-gray-600"><strong>Last Updated:</strong> August 12, 2025
+                    </p>
+                    <p class="portfolio-text-sm portfolio-text-gray-600"><strong>Effective Date:</strong> August 12,
+                        2025</p>
+                </div>
+
+                <!-- Terms Acceptance Section -->
+                <div
+                    class="portfolio-spacing-md portfolio-bg-gradient-to-br portfolio-from-violet-50 portfolio-to-purple-50 portfolio-p-8 portfolio-rounded-2xl portfolio-border-2 portfolio-border-violet-200 portfolio-shadow-lg portfolio-relative portfolio-overflow-hidden">
+                    <!-- Decorative background elements -->
+                    <div
+                        class="portfolio-absolute portfolio-top-0 portfolio-right-0 portfolio-w-32 portfolio-h-32 portfolio-bg-violet-100 portfolio-rounded-full portfolio-opacity-20 portfolio-transform portfolio-translate-x-16 portfolio-translate-y-16">
+                    </div>
+                    <div
+                        class="portfolio-absolute portfolio-bottom-0 portfolio-left-0 portfolio-w-24 portfolio-h-24 portfolio-bg-purple-100 portfolio-rounded-full portfolio-opacity-20 portfolio-transform portfolio-translate-x-12 portfolio-translate-y-12">
+                    </div>
+
+                    <div class="portfolio-relative portfolio-z-10">
+                        <!-- Header -->
+                        <div class="portfolio-text-center portfolio-mb-6">
+                            <div
+                                class="portfolio-inline-flex portfolio-items-center portfolio-justify-center portfolio-w-16 portfolio-h-16 portfolio-bg-gradient-to-r portfolio-from-violet-500 portfolio-to-purple-600 portfolio-rounded-full portfolio-mb-4 portfolio-shadow-lg">
+                                <i class="fas fa-file-contract portfolio-text-white portfolio-text-2xl"></i>
+                            </div>
+                            <h3 class="portfolio-text-2xl portfolio-font-bold portfolio-text-gray-800 portfolio-mb-2">
+                                Accept Terms & Conditions</h3>
+                            <p class="portfolio-text-gray-600 portfolio-text-sm">Complete your registration by accepting
+                                our terms</p>
+                        </div>
+
+                        <!-- Checkbox Section -->
+                        <div
+                            class="portfolio-bg-white portfolio-p-6 portfolio-rounded-xl portfolio-shadow-sm portfolio-border portfolio-border-violet-100 portfolio-mb-6">
+                            <div class="portfolio-flex portfolio-items-start portfolio-gap-4">
+                                <div class="portfolio-flex-shrink-0 portfolio-mt-0.5">
+                                    <input type="checkbox" id="terms-acceptance"
+                                        class="portfolio-h-5 portfolio-w-5 portfolio-text-violet-600 portfolio-focus:ring-violet-500 portfolio-border-gray-300 portfolio-rounded portfolio-transition-all portfolio-duration-200 portfolio-cursor-pointer">
+                                </div>
+                                <div class="portfolio-flex-1">
+                                    <label for="terms-acceptance"
+                                        class="portfolio-block portfolio-text-lg portfolio-font-semibold portfolio-text-gray-800 portfolio-mb-3 portfolio-cursor-pointer portfolio-leading-relaxed portfolio-select-none">
+                                        I have read and agree to these <span class="portfolio-text-violet-600">Terms and
+                                            Conditions</span>
+                                    </label>
+                                    <p class="portfolio-text-gray-600 portfolio-leading-relaxed portfolio-text-sm">
+                                        By checking this box, you acknowledge that you have read, understood, and agree
+                                        to be
+                                        bound by all the terms and conditions outlined above. This agreement is legally
+                                        binding and constitutes acceptance of our service terms.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div
+                            class="portfolio-flex portfolio-flex-col sm:portfolio-flex-row portfolio-gap-4 portfolio-justify-center">
+
+                            <!-- Primary Accept Button -->
+                            <button type="button" id="accept-and-return"
+                                class="portfolio-bg-violet-600 portfolio-hover:bg-violet-700 portfolio-text-white portfolio-px-8 portfolio-py-3 portfolio-rounded-lg portfolio-text-base portfolio-font-semibold portfolio-transition-colors portfolio-duration-200 portfolio-opacity-50 portfolio-cursor-not-allowed portfolio-flex portfolio-items-center portfolio-justify-center portfolio-gap-2 portfolio-min-w-[200px] portfolio-shadow-md portfolio-hover:portfolio-shadow-lg"
+                                disabled>
+                                <i class="fas fa-check portfolio-text-sm"></i>
+                                <span>Accept & Continue</span>
+                            </button>
+
+                            <!-- Secondary Back Button -->
+                            <a href="{% url 'register' %}"
+                                class="portfolio-bg-white portfolio-hover:bg-gray-50 portfolio-text-gray-700 portfolio-border portfolio-border-gray-300 portfolio-hover:border-violet-400 portfolio-px-8 portfolio-py-3 portfolio-rounded-lg portfolio-text-base portfolio-font-semibold portfolio-transition-colors portfolio-duration-200 portfolio-flex portfolio-items-center portfolio-justify-center portfolio-gap-2 portfolio-min-w-[200px] portfolio-shadow-sm portfolio-hover:portfolio-shadow-md">
+                                <i class="fas fa-arrow-left portfolio-text-sm"></i>
+                                <span>Back to Registration</span>
+                            </a>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="portfolio-mt-6 portfolio-text-center">
+                            <p class="portfolio-text-xs portfolio-text-gray-500 portfolio-leading-relaxed">
+                                <i class="fas fa-shield-alt portfolio-mr-1"></i>
+                                Your data is protected and secure. You can review these terms anytime in your account
+                                settings.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const termsCheckbox = document.getElementById('terms-acceptance');
+        const acceptButton = document.getElementById('accept-and-return');
+
+        // Check if terms were already accepted
+        if (localStorage.getItem('termsAccepted') === 'true') {
+            termsCheckbox.checked = true;
+            acceptButton.disabled = false;
+            acceptButton.classList.remove('portfolio-opacity-50', 'portfolio-cursor-not-allowed');
+            acceptButton.classList.add('portfolio-opacity-100', 'portfolio-cursor-pointer');
+        }
+
+        // Handle checkbox change
+        termsCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                acceptButton.disabled = false;
+                acceptButton.classList.remove('portfolio-opacity-50', 'portfolio-cursor-not-allowed');
+                acceptButton.classList.add('portfolio-opacity-100', 'portfolio-cursor-pointer');
+                // Add a subtle animation
+                acceptButton.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    acceptButton.style.transform = '';
+                }, 200);
+            } else {
+                acceptButton.disabled = true;
+                acceptButton.classList.add('portfolio-opacity-50', 'portfolio-cursor-not-allowed');
+                acceptButton.classList.remove('portfolio-opacity-100', 'portfolio-cursor-pointer');
+            }
+        });
+
+        // Handle accept and return button
+        acceptButton.addEventListener('click', function () {
+            if (termsCheckbox.checked) {
+                // Store the acceptance in localStorage
+                localStorage.setItem('termsAccepted', 'true');
+
+                // Redirect back to registration page
+                window.location.href = "{% url 'register' %}";
+            }
+        });
+    });
+</script>
+{% endblock %}

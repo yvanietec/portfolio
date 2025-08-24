@@ -1,0 +1,30 @@
+# Core Django and REST framework
+Django==5.2.3
+djangorestframework==3.16.0
+django-cors-headers==4.7.0
+
+# PDF Generation (actually used)
+pdfkit==1.0.0
+
+# Payment Processing (actually used)
+razorpay==1.4.2
+
+# QR Code Generation (actually used)
+qrcode==8.2
+
+# Image Processing (used by Django)
+Pillow==11.2.1
+
+# Core dependencies
+asgiref==3.8.1
+sqlparse==0.5.3
+tzdata==2025.2
+
+# Security and encryption
+cryptography==45.0.4
+certifi==2025.6.15
+urllib3==2.5.0
+
+# Utility packages
+requests==2.32.4
+setuptools==80.9.0

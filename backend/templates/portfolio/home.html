@@ -1,0 +1,995 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/portfolio_universal.css' %}">
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+<style>
+    /* Professional Typography System */
+    :root {
+        --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-display: 'Playfair Display', Georgia, serif;
+        --font-weight-light: 300;
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
+        --font-weight-extrabold: 800;
+    }
+
+    /* Professional Font Hierarchy */
+    body {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-normal);
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    .hero-title {
+        font-family: var(--font-display);
+        font-weight: var(--font-weight-bold);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+    }
+
+    .section-title {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-bold);
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    .feature-title {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-semibold);
+        font-size: 1.25rem;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+    }
+
+    .body-text {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-normal);
+        font-size: 1.125rem;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+    }
+
+    .caption-text {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-medium);
+        font-size: 0.875rem;
+        line-height: 1.5;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+    }
+
+    .stats-number {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-extrabold);
+        font-size: 2.5rem;
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+
+    .button-text {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-semibold);
+        font-size: 1rem;
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+    }
+
+    /* Professional Text Enhancements */
+    .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: var(--font-weight-bold);
+    }
+
+    .text-gradient-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .text-gradient-secondary {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Professional Spacing */
+    .text-spacing-tight {
+        letter-spacing: -0.02em;
+    }
+
+    .text-spacing-normal {
+        letter-spacing: -0.01em;
+    }
+
+    .text-spacing-wide {
+        letter-spacing: 0.01em;
+    }
+
+    /* Professional Font Weights */
+    .font-thin {
+        font-weight: 100;
+    }
+
+    .font-light {
+        font-weight: var(--font-weight-light);
+    }
+
+    .font-normal {
+        font-weight: var(--font-weight-normal);
+    }
+
+    .font-medium {
+        font-weight: var(--font-weight-medium);
+    }
+
+    .font-semibold {
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .font-bold {
+        font-weight: var(--font-weight-bold);
+    }
+
+    .font-extrabold {
+        font-weight: var(--font-weight-extrabold);
+    }
+
+    /* Professional Responsive Typography */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3rem);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+        }
+
+        .body-text {
+            font-size: 1rem;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+        }
+    }
+
+    /* Professional Text Shadows */
+    .text-shadow-sm {
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-shadow-md {
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .text-shadow-lg {
+        text-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Professional Button Typography */
+    .btn-hover-effect {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.01em;
+        text-transform: none;
+    }
+
+    /* Professional Card Typography */
+    .feature-card h3 {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-semibold);
+        font-size: 1.25rem;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-normal);
+        font-size: 1rem;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+    }
+
+    /* Professional Testimonial Typography */
+    .testimonial-card h4 {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-semibold);
+        font-size: 1.125rem;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+    }
+
+    .testimonial-card p {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-normal);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+        font-style: italic;
+    }
+
+    /* Professional Stats Typography */
+    .stat-item .stats-counter {
+        font-family: var(--font-heading);
+        font-weight: var(--font-weight-extrabold);
+        font-size: 2.5rem;
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+
+    .stat-item p {
+        font-family: var(--font-primary);
+        font-weight: var(--font-weight-medium);
+        font-size: 0.875rem;
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+    }
+
+    /* Enhanced CTA Section Styles */
+    .cta-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section .relative {
+        box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .shadow-3xl {
+        box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.35);
+    }
+
+    .text-shadow-lg {
+        text-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced button hover effects */
+    .btn-hover-effect:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Decorative blur effects */
+    .blur-sm {
+        filter: blur(4px);
+    }
+
+    .blur-md {
+        filter: blur(8px);
+    }
+
+    /* Gradient animation */
+    .cta-section .absolute:first-child {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+        animation: gradientShift 8s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+
+        0%,
+        100% {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+        }
+
+        50% {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+        }
+    }
+
+    /* Template Showcase Styles */
+    .template-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .template-preview {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .template-preview::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .template-card:hover .template-preview::before {
+        opacity: 1;
+    }
+
+    .template-preview img {
+        transition: transform 0.3s ease;
+    }
+
+    .template-card:hover .template-preview img {
+        transform: scale(1.05);
+    }
+
+    /* Animation for template cards */
+    .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+        flex-shrink: 0;
+    }
+
+    .carousel-indicator.active {
+        background-color: #8b5cf6;
+        transform: scale(1.2);
+    }
+</style>
+{% endblock %}
+{% load static %}
+
+{% block title %}Home - Portfolio{% endblock %}
+
+{% block content %}
+<div class="">
+    <!-- Hero Section -->
+    <div class="hero-section flex flex-col items-center justify-center gap-8 py-8">
+        <div class="hero-content w-full max-w-2xl opacity-0 mx-auto" id="hero-content">
+
+            <h1 class="hero-title font-bold mb-4 leading-tight text-center text-shadow-md">
+                Showcase Your <span class="gradient-text">Creative Journey</span>
+            </h1>
+            <p class="body-text text-gray-600 mb-6 max-w-lg mx-auto text-center">
+                Build a professional portfolio that highlights your skills, projects, and achievements. Stand out in the
+                competitive job market.
+            </p>
+            {% if user.is_authenticated %}
+            <div class="glass-effect p-4 rounded-xl border-l-4 border-violet-500 mb-6 mx-auto max-w-md">
+                <p class="flex items-center justify-center body-text">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    {% if user.is_agent %}
+                    Welcome back, Agent <span class="font-semibold ml-1">{{
+                        user.userprofile.first_name|default:user.username }}</span>!
+                    {% else %}
+                    Welcome back, <span class="font-semibold ml-1">{{ user.username }}</span>!
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Agent Quick Stats -->
+            {% if user.is_agent and agent_stats %}
+            <div class="glass-effect p-6 rounded-xl border-l-4 border-blue-500 mb-6 mx-auto max-w-4xl">
+                <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">
+                    <i class="fas fa-chart-bar mr-2"></i>Your Performance Overview
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">{{ agent_stats.pending_invitations }}</div>
+                        <div class="text-sm text-gray-600">Pending Approvals</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600">{{ agent_stats.approved_students }}</div>
+                        <div class="text-sm text-gray-600">Approved Students</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600">₹{{ agent_stats.total_earnings|floatformat:0 }}
+                        </div>
+                        <div class="text-sm text-gray-600">Total Earnings</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-orange-600">#{{ agent_stats.agent_rank }}</div>
+                        <div class="text-sm text-gray-600">Rank (of {{ agent_stats.total_agents }})</div>
+                    </div>
+                </div>
+                {% if agent_stats.recent_invitations > 0 %}
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-green-600">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        {{ agent_stats.recent_invitations }} new invitations this week
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                {% if user.is_authenticated %}
+
+                {% if user.is_superuser %}
+                <a href="{% url 'admin_dashboard' %}"
+                    class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                    <i class="fas fa-tachometer-alt mr-2"></i> <span class="button-text">Admin Dashboard</span>
+                </a>
+                {% elif user.is_agent %}
+                <!-- Agent Home Page with Multiple Options -->
+                <div class="flex flex-col gap-4 w-full max-w-4xl">
+                    <!-- Primary Agent Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="{% url 'agent_dashboard' %}"
+                            class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                            <i class="fas fa-tachometer-alt mr-2"></i> <span class="button-text">Agent Dashboard</span>
+                        </a>
+                        <a href="{% url 'agent_analytics' %}"
+                            class="btn-hover-effect bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                            <i class="fas fa-chart-line mr-2"></i> <span class="button-text">Analytics</span>
+                        </a>
+                        <a href="{% url 'agent_student_communication' %}"
+                            class="btn-hover-effect bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                            <i class="fas fa-users mr-2"></i> <span class="button-text">Students</span>
+                        </a>
+                    </div>
+                    <!-- Secondary Agent Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="{% url 'agent_add_student' %}"
+                            class="btn-hover-effect bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                            <i class="fas fa-user-plus mr-2"></i> <span class="button-text">Add Student</span>
+                        </a>
+                        <a href="{% url 'agent_bulk_payment' %}"
+                            class="btn-hover-effect bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                            <i class="fas fa-credit-card mr-2"></i> <span class="button-text">Bulk Payment</span>
+                        </a>
+                        <a href="{% url 'user_profile' %}"
+                            class="btn-hover-effect bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-xl font-medium shadow-md flex items-center justify-center group">
+                            <i class="fas fa-user-circle mr-2"></i> <span class="button-text">My Profile</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent Quick Tips -->
+                {% if user.is_agent %}
+                <div class="glass-effect p-4 rounded-xl border-l-4 border-green-500 mb-6 mx-auto max-w-4xl">
+                    <h4 class="text-md font-semibold mb-3 text-gray-800">
+                        <i class="fas fa-lightbulb mr-2"></i>Quick Tips
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Use <strong>Analytics</strong> to track your performance and identify growth
+                                opportunities</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Check <strong>Students</strong> section to manage your student portfolio
+                                progress</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Make <strong>Bulk Payments</strong> for multiple approved students at once</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Monitor <strong>Pending Approvals</strong> and follow up with admin if needed</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% if portfolio and not user.is_agent %}
+                <a href="{% url 'select_template' portfolio.pk %}"
+                    class="btn-hover-effect bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-xl font-medium shadow-md flex items-center justify-center group">
+                    <i class="fas fa-palette mr-2"></i> <span class="button-text">Choose a Template</span>
+                </a>
+                {% endif %}
+                {% if not user.is_agent %}
+                <a href="{% url 'user_profile' %}"
+                    class="btn-hover-effect bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-xl font-medium shadow-md flex items-center justify-center group">
+                    <i class="fas fa-user-circle mr-2"></i> <span class="button-text">My Profile</span>
+                </a>
+                {% endif %}
+                <a href="{% url 'logout' %}"
+                    class="btn-hover-effect bg-transparent hover:bg-gray-100 text-gray-700 border-2 border-gray-300 px-6 py-3 rounded-xl font-medium shadow-sm flex items-center justify-center group">
+                    <i class="fas fa-sign-out-alt mr-2"></i> <span class="button-text">Logout</span>
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}"
+                    class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center justify-center group">
+                    <i class="fas fa-user-plus mr-2"></i> <span class="button-text">Register</span>
+                </a>
+                <a href="{% url 'login' %}"
+                    class="btn-hover-effect bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-xl font-medium shadow-md flex items-center justify-center group">
+                    <i class="fas fa-sign-in-alt mr-2"></i> <span class="button-text">Login</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Removed hero-image-container -->
+    </div>
+    <!-- Features Section -->
+    <div id="features-section" class="features-section py-12">
+        <div class="text-center mb-12 opacity-0" id="features-heading">
+            <h2 class="section-title font-bold mb-4">Elevate Your <span class="gradient-text">Professional
+                    Presence</span></h2>
+            <p class="body-text text-gray-600 max-w-2xl mx-auto">Our platform provides everything you need to create a
+                stunning portfolio that showcases your unique talents and achievements.</p>
+        </div>
+        <div class="features-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="feature-card glass-effect p-6 rounded-2xl shadow-lg opacity-0" id="feature-1">
+                <div
+                    class="feature-icon bg-violet-100 text-violet-600 w-14 h-14 rounded-xl flex items-center justify-center text-xl mb-4 mx-auto">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="feature-title text-center mb-3">Career Acceleration</h3>
+                <p class="text-gray-600 text-center text-sm">Stand out to employers with a professional portfolio that
+                    highlights your unique skills and accomplishments.</p>
+            </div>
+            <div class="feature-card glass-effect p-6 rounded-2xl shadow-lg opacity-0" id="feature-2">
+                <div
+                    class="feature-icon bg-violet-100 text-violet-600 w-14 h-14 rounded-xl flex items-center justify-center text-xl mb-4 mx-auto">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3 class="feature-title text-center mb-3">Project Showcase</h3>
+                <p class="text-gray-600 text-center text-sm">Display your best work with beautiful layouts that
+                    highlight the details and impact of your projects.</p>
+            </div>
+            <div class="feature-card glass-effect p-6 rounded-2xl shadow-lg opacity-0" id="feature-3">
+                <div
+                    class="feature-icon bg-violet-100 text-violet-600 w-14 h-14 rounded-xl flex items-center justify-center text-xl mb-4 mx-auto">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title text-center mb-3">Growth Tracking</h3>
+                <p class="text-gray-600 text-center text-sm">Document your learning journey and skill development with
+                    interactive timelines and progress indicators.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Showcase Section -->
+    {% if portfolio_templates %}
+    <div class="template-showcase-section py-16 opacity-0" id="template-showcase-section">
+        <div class="text-center mb-12">
+            <h2 class="section-title font-bold mb-4">Beautiful <span class="gradient-text">Portfolio Templates</span>
+            </h2>
+            <p class="body-text text-gray-600 max-w-2xl mx-auto">Choose from our professionally designed templates to
+                showcase your skills and achievements in style.</p>
+        </div>
+        <div class="template-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
+            {% for template in portfolio_templates %}
+            <div
+                class="template-card glass-effect rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="template-preview relative overflow-hidden">
+                    <img src="{{ template.preview_image.url }}" alt="{{ template.name }}"
+                        class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                        <button
+                            onclick="openTemplateModal('{{ template.id }}', '{{ template.name }}', '{{ template.preview_image.url }}')"
+                            class="btn-hover-effect bg-white text-violet-600 px-6 py-3 rounded-xl font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                            <i class="fas fa-eye mr-2"></i> Preview Template
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="feature-title mb-2 text-center">{{ template.name }}</h3>
+                    <p class="text-gray-600 text-sm text-center mb-4">Professional design perfect for showcasing your
+                        portfolio</p>
+                    <div class="flex justify-center">
+                        <span class="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-xs font-semibold">
+                            <i class="fas fa-star mr-1"></i> Premium Template
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if success_stories %}
+    <div class="testimonials-section py-16 opacity-0" id="testimonials-section">
+        <div class="text-center mb-12">
+            <h2 class="section-title font-bold mb-4">Student <span class="gradient-text">Success Stories</span></h2>
+            <p class="body-text text-gray-600 max-w-2xl mx-auto">Hear from students who have transformed their
+                professional presence with our platform.</p>
+        </div>
+
+        <!-- Success Stories Carousel -->
+        <div class="testimonials-carousel relative max-w-7xl mx-auto px-6">
+            <!-- Navigation Arrows -->
+            <button id="carouselPrev"
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 hover:bg-white text-violet-600 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center">
+                <i class="fas fa-chevron-left text-lg"></i>
+            </button>
+            <button id="carouselNext"
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 hover:bg-white text-violet-600 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center">
+                <i class="fas fa-chevron-right text-lg"></i>
+            </button>
+
+            <!-- Carousel Container -->
+            <div class="carousel-container overflow-hidden rounded-2xl">
+                <div id="carouselTrack" class="carousel-track flex transition-transform duration-500 ease-in-out">
+                    {% for story in success_stories %}
+                    <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="testimonial-card glass-effect p-6 rounded-2xl h-full cursor-pointer hover:transform hover:scale-105 transition-all duration-300"
+                            onclick="window.location.href='{% url 'success_stories_page' %}'">
+                            <div class="testimonial-header flex items-center mb-4">
+                                <div
+                                    class="testimonial-avatar w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
+                                    {{ story.user.username|slice:":2"|upper }}
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold text-gray-800">{{ story.title }}</h4>
+                                    <p class="text-sm text-gray-600">{{
+                                        story.user.get_full_name|default:story.user.username }}</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-content">
+                                <div class="text-violet-600 text-3xl mb-2">"</div>
+                                <p class="text-gray-600 italic leading-relaxed">{{ story.story|truncatewords:25 }}</p>
+                                <div class="text-violet-600 text-3xl text-right mt-2">"</div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200">
+                                <div class="flex items-center justify-between text-sm text-gray-500">
+                                    <span>{{ story.created_at|date:"M d, Y" }}</span>
+                                    <div class="flex items-center gap-1">
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Carousel Indicators -->
+            <div class="flex justify-center mt-8 space-x-2">
+                {% for story in success_stories %}
+                <button
+                    class="carousel-indicator w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-violet-400"
+                    data-slide="{{ forloop.counter0 }}"></button>
+                {% endfor %}
+            </div>
+
+            <!-- View All Stories Button -->
+            <div class="text-center mt-8">
+                <a href="{% url 'success_stories_page' %}"
+                    class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-8 py-3 rounded-xl font-medium transition-all inline-flex items-center gap-2">
+                    <span>View All Success Stories</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- CTA Section -->
+    <div class="cta-section py-16 opacity-0" id="cta-section">
+        <div class="relative overflow-hidden rounded-3xl">
+            <!-- Enhanced gradient background -->
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-violet-500 via-purple-600 to-indigo-700 transform -skew-y-2 origin-top-right">
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="absolute -top-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-sm"></div>
+            <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-sm"></div>
+            <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full blur-md"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full blur-md"></div>
+
+            <!-- Content -->
+            <div class="relative p-12 md:p-16 text-center">
+                <h2 class="section-title font-bold text-white mb-6 text-shadow-lg">
+                    Ready to Build Your Professional Portfolio?
+                </h2>
+                <p class="body-text text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Join thousands of students who have created stunning portfolios to showcase their talents and
+                    advance their careers.
+                </p>
+                <a href="{% url 'smart_get_started' %}"
+                    class="btn-hover-effect bg-white text-violet-600 hover:text-violet-800 px-10 py-4 rounded-xl font-medium shadow-2xl transition-all transform hover:scale-105 hover:shadow-3xl group inline-flex items-center">
+                    <span class="button-text font-semibold">Get Started Today</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 ml-3 transition-transform group-hover:translate-x-1" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template Preview Modal -->
+<div id="templateModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 id="modalTemplateName" class="text-2xl font-bold text-gray-800"></h3>
+            <button onclick="closeTemplateModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Template Preview Image -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-semibold text-gray-700">Template Preview</h4>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <img id="modalTemplateImage" src="" alt="Template Preview" class="w-full h-auto">
+                    </div>
+                </div>
+
+                <!-- Template Details -->
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-3">Template Features</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-3"></i>
+                                Responsive design for all devices
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-3"></i>
+                                Professional layout and typography
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-3"></i>
+                                Easy customization options
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-3"></i>
+                                SEO optimized structure
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-3"></i>
+                                Fast loading performance
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-violet-50 border border-violet-200 rounded-lg p-4">
+                        <h5 class="font-semibold text-violet-800 mb-2">Ready to get started?</h5>
+                        <p class="text-violet-700 text-sm mb-4">Create your professional portfolio with this beautiful
+                            template and showcase your skills to the world.</p>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="{% url 'smart_get_started' %}"
+                                class="btn-hover-effect bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-semibold text-center">
+                                <i class="fas fa-rocket mr-2"></i> Get Started Now
+                            </a>
+                            <a id="modalFullPreviewLink" href="" target="_blank"
+                                class="btn-hover-effect bg-white hover:bg-gray-50 text-violet-600 border-2 border-violet-600 px-6 py-3 rounded-xl font-semibold text-center">
+                                <i class="fas fa-external-link-alt mr-2"></i> View Full Preview
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.classList.add('animate-fadeInUp');
+                // Stop observing after animation
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    const animatedElements = [
+        document.getElementById('hero-content'),
+        document.getElementById('features-heading'),
+        document.getElementById('feature-1'),
+        document.getElementById('feature-2'),
+        document.getElementById('feature-3'),
+        document.getElementById('template-showcase-section'),
+        document.getElementById('testimonials-section'),
+        document.getElementById('cta-section')
+    ];
+
+    animatedElements.forEach((el, index) => {
+        if (el) {
+            el.style.opacity = '0';
+            observer.observe(el);
+        }
+    });
+
+    // Template Modal Functions
+    function openTemplateModal(templateId, templateName, templateImage) {
+        const modal = document.getElementById('templateModal');
+        const modalName = document.getElementById('modalTemplateName');
+        const modalImage = document.getElementById('modalTemplateImage');
+        const fullPreviewLink = document.getElementById('modalFullPreviewLink');
+
+        // Set modal content
+        modalName.textContent = templateName;
+        modalImage.src = templateImage;
+        modalImage.alt = templateName + ' Preview';
+        fullPreviewLink.href = `/template-preview/${templateId}/`;
+
+        // Show modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeTemplateModal() {
+        const modal = document.getElementById('templateModal');
+
+        // Hide modal
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('templateModal');
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeTemplateModal();
+            }
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeTemplateModal();
+            }
+        });
+
+        // Success Stories Carousel
+        let currentSlide = 0;
+        const carouselTrack = document.getElementById('carouselTrack');
+        const carouselSlides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+
+        if (carouselTrack && carouselSlides.length > 0) {
+            const slidesPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+            const totalSlides = carouselSlides.length;
+            const maxSlide = Math.max(0, totalSlides - slidesPerView);
+
+            function updateCarousel() {
+                const slideWidth = 100 / slidesPerView;
+                const translateX = -currentSlide * slideWidth;
+                carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+                // Update indicators
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentSlide);
+                });
+
+                // Update navigation buttons
+                prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+                nextBtn.style.opacity = currentSlide >= maxSlide ? '0.5' : '1';
+            }
+
+            function nextSlide() {
+                if (currentSlide < maxSlide) {
+                    currentSlide++;
+                    updateCarousel();
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateCarousel();
+                }
+            }
+
+            // Event listeners
+            if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+            if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateCarousel();
+                });
+            });
+
+            // Auto-play carousel
+            let autoPlayInterval = setInterval(nextSlide, 5000);
+
+            // Pause auto-play on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', () => {
+                    clearInterval(autoPlayInterval);
+                });
+
+                carouselContainer.addEventListener('mouseleave', () => {
+                    autoPlayInterval = setInterval(nextSlide, 5000);
+                });
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                const newSlidesPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+                if (newSlidesPerView !== slidesPerView) {
+                    location.reload(); // Simple solution for responsive carousel
+                }
+            });
+
+            // Initialize carousel
+            updateCarousel();
+        }
+    });
+</script>
+{% endblock %}

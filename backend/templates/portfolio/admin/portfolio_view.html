@@ -1,0 +1,15 @@
+{% extends 'portfolio/admin/admin_base.html' %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>Portfolio Details</h2>
+    <ul>
+        <li><strong>User:</strong> {{ portfolio.user.username }} ({{ portfolio.user.email }})</li>
+        <li><strong>Status:</strong> {{ portfolio.status }}</li>
+        <li><strong>Template:</strong> {{ portfolio.template }}</li>
+        <li><strong>Created:</strong> {{ portfolio.created_at }}</li>
+        <li><strong>Slug:</strong> {{ portfolio.slug }}</li>
+    </ul>
+    <a href="{% url 'admin_portfolio_list' %}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}

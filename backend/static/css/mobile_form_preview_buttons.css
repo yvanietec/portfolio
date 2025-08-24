@@ -1,0 +1,122 @@
+/**
+ * Mobile Form Preview Buttons Optimization
+ * Makes Dashboard and Edit Forms buttons more mobile-friendly
+ */
+
+/* Mobile styles for form preview buttons */
+@media (max-width: 768px) {
+
+    /* Header container - stack vertically on mobile */
+    .flex.flex-col.md\\:flex-row.md\\:items-center.md\\:justify-between {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+
+    /* Title - center on mobile */
+    .text-2xl.font-bold.gradient-text.flex.items-center.gap-2 {
+        text-align: center !important;
+        justify-content: center !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Buttons container - horizontal layout on mobile */
+    .flex.gap-3 {
+        flex-direction: row !important;
+        gap: 0.5rem !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+    }
+
+    /* Individual buttons - smaller and more compact */
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+        min-height: 40px !important;
+        border-radius: 8px !important;
+        flex: 1 !important;
+        max-width: 140px !important;
+        justify-content: center !important;
+    }
+
+    /* Button icons - smaller on mobile */
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300 i,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 i {
+        font-size: 0.8rem !important;
+        margin-right: 0.25rem !important;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+
+    /* Buttons container - stack vertically on very small screens */
+    .flex.gap-3 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+    }
+
+    /* Individual buttons - full width on very small screens */
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 {
+        flex: none !important;
+        max-width: none !important;
+        width: 100% !important;
+        padding: 0.6rem 1rem !important;
+        font-size: 0.8rem !important;
+        min-height: 44px !important;
+    }
+
+    /* Button icons - slightly larger on very small screens */
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300 i,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 i {
+        font-size: 0.9rem !important;
+        margin-right: 0.5rem !important;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+}
+
+/* Hover effects for mobile */
+@media (max-width: 768px) {
+
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300:hover,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300:hover {
+        transform: scale(1.02) !important;
+    }
+
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300:active,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300:active {
+        transform: scale(0.98) !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300 {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        color: #6d28d9 !important;
+    }
+
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300 {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        color: #6d28d9 !important;
+    }
+
+    .btn-hover-effect.bg-gray-100.text-gray-700.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-gray-300:hover,
+    .btn-hover-effect.bg-yellow-100.text-yellow-800.px-5.py-2.rounded-xl.font-semibold.flex.items-center.gap-2.border.border-yellow-300:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+    }
+}
