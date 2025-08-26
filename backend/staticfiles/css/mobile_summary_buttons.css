@@ -1,0 +1,128 @@
+/**
+ * Mobile Summary AI Buttons Optimization
+ * Makes AI Suggest and Regenerate buttons more mobile-friendly
+ */
+
+/* Mobile styles for summary AI buttons */
+@media (max-width: 768px) {
+
+    /* Container for textarea and buttons */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Textarea container - full width on mobile */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md>div:first-child {
+        flex: none !important;
+        width: 100% !important;
+        margin-right: 0 !important;
+    }
+
+    /* Buttons container - horizontal layout on mobile */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md>div:last-child {
+        flex: none !important;
+        width: 100% !important;
+        flex-direction: row !important;
+        gap: 0.5rem !important;
+        justify-content: center !important;
+    }
+
+    /* Individual AI buttons */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button {
+        flex: 1 !important;
+        max-width: 120px !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+        min-height: 40px !important;
+        border-radius: 6px !important;
+        color: #6d28d9 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid #6d28d9 !important;
+    }
+
+    /* Ensure text color is applied to all text elements inside buttons */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button span,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button strong,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button em {
+        color: #6d28d9 !important;
+    }
+
+    /* Button icons */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button i {
+        font-size: 0.8rem !important;
+        margin-right: 0.25rem !important;
+        color: #6d28d9 !important;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+
+    /* Buttons container - stack vertically on very small screens */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md>div:last-child {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Individual AI buttons - full width on very small screens */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button {
+        flex: none !important;
+        max-width: none !important;
+        width: 100% !important;
+        padding: 0.6rem 1rem !important;
+        font-size: 0.8rem !important;
+        min-height: 44px !important;
+        color: #6d28d9 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid #6d28d9 !important;
+    }
+
+    /* Ensure text color is applied to all text elements inside buttons on small screens */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button span,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button strong,
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button em {
+        color: #6d28d9 !important;
+    }
+
+    /* Button icons */
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button i {
+        font-size: 0.9rem !important;
+        margin-right: 0.5rem !important;
+        color: #6d28d9 !important;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+}
+
+/* Hover effects for mobile */
+@media (max-width: 768px) {
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button:hover {
+        transform: scale(1.02) !important;
+    }
+
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button:active {
+        transform: scale(0.98) !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(139, 92, 246, 0.3) !important;
+        color: #6d28d9 !important;
+    }
+
+    .portfolio-flex.portfolio-flex-row.portfolio-spacing-md button:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+    }
+}

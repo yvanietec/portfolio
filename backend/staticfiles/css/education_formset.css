@@ -1,0 +1,493 @@
+/* Education Formset Enhancements */
+
+/* Education Formset Container */
+.education-formset-container {
+    max-width: 700px;
+    /* Allow container to expand with content */
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    /* Allow content to expand naturally */
+}
+
+/* Education Formset Form Structure */
+.education-formset-container form {
+    display: flex;
+    flex-direction: column;
+    /* Allow form to expand with content */
+}
+
+.education-form-content {
+    flex: 1;
+    padding-right: 0.5rem;
+    /* Allow natural page scrolling */
+}
+
+/* Education Formset Header */
+.education-formset-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+.education-formset-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6d28d9;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.education-formset-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Education Entry Section */
+.education-entry {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(109, 40, 217, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.education-entry:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: rgba(109, 40, 217, 0.15);
+}
+
+.education-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(109, 40, 217, 0.1);
+}
+
+.education-entry-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6d28d9;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.education-entry-number {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.remove-education-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.remove-education-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Education Form Grid */
+.education-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.education-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.education-form-group label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+.education-form-group input,
+.education-form-group select,
+.education-form-group textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    min-height: 3rem;
+    font-family: inherit;
+}
+
+.education-form-group input:focus,
+.education-form-group select:focus,
+.education-form-group textarea:focus {
+    outline: none;
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.education-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* Date Range Styling */
+.date-range-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.date-range-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+/* Currently Studying Checkbox */
+.currently-studying-group {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(109, 40, 217, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+}
+
+.currently-studying-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    margin: 0;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.currently-studying-label:hover {
+    background: rgba(109, 40, 217, 0.1);
+}
+
+.currently-studying-checkbox {
+    transform: scale(1.2);
+    accent-color: #6d28d9;
+}
+
+/* Description Field */
+.description-field {
+    grid-column: 1 / -1;
+}
+
+.description-field textarea {
+    min-height: 120px;
+}
+
+/* Add Education Button */
+.add-education-btn {
+    width: 100%;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+}
+
+.add-education-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.3);
+}
+
+.add-education-btn i {
+    font-size: 1.1rem;
+}
+
+/* Button Group */
+.education-btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(109, 40, 217, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.education-btn-group-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.education-btn {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    min-height: 3rem;
+    min-width: 140px;
+    box-sizing: border-box;
+}
+
+.education-btn-primary {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+}
+
+.education-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
+}
+
+.education-btn-secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: #6d28d9;
+    border: 2px solid #6d28d9;
+}
+
+.education-btn-secondary:hover {
+    background: #6d28d9;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.education-btn-gray {
+    background: #6b7280;
+    color: white;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.2);
+}
+
+.education-btn-gray:hover {
+    background: #4b5563;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+/* Error and Help Text */
+.education-error {
+    font-size: 0.8rem;
+    color: #dc2626;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(220, 38, 38, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #dc2626;
+    line-height: 1.4;
+}
+
+.education-help-text {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(109, 40, 217, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #6d28d9;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .education-formset-container {
+        padding: 1.5rem;
+        margin: 0.5rem;
+    }
+
+    .education-entry {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .education-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .date-range-group {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .education-btn-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .education-btn-group-right {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .education-btn {
+        width: 100%;
+        min-width: auto;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+        min-height: 2.75rem;
+    }
+
+    .education-form-group input,
+    .education-form-group select,
+    .education-form-group textarea {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+        min-height: 2.75rem;
+    }
+
+    .add-education-btn {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .education-formset-container {
+        padding: 1rem;
+        margin: 0.25rem;
+    }
+
+    .education-entry {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .education-formset-title {
+        font-size: 1.25rem;
+    }
+
+    .education-formset-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .education-form-group input,
+    .education-form-group select,
+    .education-form-group textarea {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.85rem;
+        min-height: 2.5rem;
+    }
+
+    .education-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+        min-height: 2.5rem;
+    }
+
+    .add-education-btn {
+        padding: 0.875rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Animation Enhancements */
+.education-fade-in {
+    animation: educationFadeIn 0.5s ease-out;
+}
+
+@keyframes educationFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus Management */
+.education-form-group input:focus-visible,
+.education-form-group select:focus-visible,
+.education-form-group textarea:focus-visible {
+    outline: 2px solid #6d28d9;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+
+    .education-form-group input,
+    .education-form-group select,
+    .education-form-group textarea {
+        border-width: 2px;
+    }
+
+    .education-btn {
+        border-width: 2px;
+    }
+
+    .education-entry {
+        border-width: 2px;
+    }
+}

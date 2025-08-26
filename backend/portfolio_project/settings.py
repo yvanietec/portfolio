@@ -36,8 +36,9 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+import os
+ALLOWED_HOSTS = ['139.59.42.69', 'profolio1.com', 'www.profolio1.com']
+
 
 # Security Settings
 SECURE_BROWSER_XSS_FILTER = True

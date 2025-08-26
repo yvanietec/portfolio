@@ -15683,3 +15683,12 @@ INFO 2025-08-23 22:16:01,667 autoreload 5500 50464 Watching for file changes wit
 INFO 2025-08-23 22:16:08,393 autoreload 5500 50464 D:\1108\1808\18.1\my_portfolio1208\backend\users\urls.py changed, reloading.
 INFO 2025-08-23 22:16:09,269 autoreload 43324 46728 Watching for file changes with StatReloader
 WARNING 2025-08-23 22:16:37,474 log 43324 34580 Not Found: /favicon.ico
+INFO 2025-08-24 19:50:15,565 autoreload 16012 34204 Watching for file changes with StatReloader
+WARNING 2025-08-24 19:50:23,244 log 16012 37120 Not Found: /favicon.ico
+INFO 2025-08-24 22:15:03,098 autoreload 12252 15304 Watching for file changes with StatReloader
+INFO 2025-08-25 20:37:33,828 autoreload 45820 16344 Watching for file changes with StatReloader
+WARNING 2025-08-25 20:37:40,462 log 45820 26272 Not Found: /favicon.ico
+INFO 2025-08-25 20:56:52,238 autoreload 18332 45800 Watching for file changes with StatReloader
+WARNING 2025-08-25 20:56:55,918 log 18332 48356 Not Found: /favicon.ico
+INFO 2025-08-25 20:57:13,573 autoreload 41244 1472 Watching for file changes with StatReloader
+WARNING 2025-08-25 20:57:24,672 log 41244 48048 Not Found: /favicon.ico

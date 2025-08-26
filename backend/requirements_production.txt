@@ -1,0 +1,50 @@
+# Production requirements for DigitalOcean deployment
+# Core Django and REST framework
+Django==5.2.3
+djangorestframework==3.16.0
+django-cors-headers==4.7.0
+
+# Production server
+gunicorn==23.0.0
+
+# Database
+psycopg2-binary==2.9.12
+
+# PDF Generation
+pdfkit==1.0.0
+
+# Payment Processing
+razorpay==1.4.2
+
+# QR Code Generation
+qrcode==8.2
+
+# Image Processing
+Pillow==11.2.1
+
+# Core dependencies
+asgiref==3.8.1
+sqlparse==0.5.3
+tzdata==2025.2
+
+# Security and encryption
+cryptography==45.0.4
+certifi==2025.6.15
+urllib3==2.5.0
+
+# Utility packages
+requests==2.32.4
+setuptools==80.9.0
+
+# Production monitoring (optional)
+sentry-sdk[django]==2.17.0
+
+# Environment variables
+python-decouple==3.8
+
+# Caching (optional - for Redis)
+# redis==5.2.0
+# django-redis==5.4.0
+
+# Performance monitoring (optional)
+# django-debug-toolbar==4.5.0

@@ -1,0 +1,323 @@
+/* Agents Admin Page Styling */
+
+/* Layout */
+.admin-dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar Styling */
+.admin-sidebar-flex {
+    width: 280px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid #34495e;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header h4 {
+    color: #ecf0f1;
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.sidebar-header i {
+    color: #3498db;
+    margin-right: 0.5rem;
+}
+
+/* Navigation Links */
+.admin-sidebar-flex .nav {
+    padding: 1rem 0;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+}
+
+.admin-sidebar-flex .nav-item {
+    margin: 0.25rem 0;
+    width: 100%;
+}
+
+.admin-sidebar-flex .nav-link {
+    color: #bdc3c7 !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    font-weight: 500;
+    display: block !important;
+    width: 100%;
+    text-decoration: none;
+}
+
+.admin-sidebar-flex .nav-link:hover {
+    color: #ecf0f1 !important;
+    background-color: rgba(52, 152, 219, 0.1);
+    border-left-color: #3498db;
+    transform: translateX(5px);
+}
+
+.admin-sidebar-flex .nav-link.active {
+    color: #ecf0f1 !important;
+    background-color: rgba(52, 152, 219, 0.2);
+    border-left-color: #3498db;
+    font-weight: 600;
+}
+
+.admin-sidebar-flex .nav-link i {
+    width: 20px;
+    text-align: center;
+    margin-right: 0.75rem;
+}
+
+/* Badge Styling */
+.badge-notification {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    border-top: 1px solid #34495e;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-footer small {
+    color: #95a5a6;
+}
+
+/* Main Content Area */
+.admin-container {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+.admin-main {
+    background-color: #f8f9fa;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dashboard-title i {
+    color: #3498db;
+    margin-right: 0.5rem;
+}
+
+/* Action Buttons */
+.btn-toolbar {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-create {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-create:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-edit {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+}
+
+/* Agent Cards */
+.agent-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.agent-card:hover {
+    transform: translateY(-5px);
+}
+
+.agent-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #ecf0f1;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.agent-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.agent-email {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.agent-body {
+    padding: 1.5rem;
+}
+
+.agent-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.agent-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+}
+
+.btn-outline-primary {
+    color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.btn-outline-danger {
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.btn-outline-danger:hover {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-sidebar-flex {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .admin-sidebar-flex.show {
+        transform: translateX(0);
+    }
+
+    .admin-container {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .agent-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .agent-actions {
+        justify-content: center;
+    }
+}
+
+/* Scrollbar Styling for Sidebar */
+.admin-sidebar-flex::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-sidebar-flex::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar-flex::-webkit-scrollbar-thumb {
+    background: rgba(52, 152, 219, 0.5);
+    border-radius: 3px;
+}
+
+.admin-sidebar-flex::-webkit-scrollbar-thumb:hover {
+    background: rgba(52, 152, 219, 0.7);
+}

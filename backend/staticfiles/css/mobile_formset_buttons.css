@@ -1,0 +1,179 @@
+/**
+ * Mobile Responsive Formset Remove Buttons
+ * Shows only the delete icon on mobile devices to save space
+ */
+
+/* Target all remove buttons in formsets */
+.portfolio-btn-danger.remove-entry,
+button.remove-entry,
+.remove-formset {
+    transition: all 0.3s ease;
+}
+
+/* Mobile styles - hide text, show only icon */
+@media (max-width: 768px) {
+
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        /* Make button smaller and icon-only */
+        padding: 8px 12px !important;
+        min-width: 44px;
+        height: 44px;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 14px !important;
+        /* White background with red border */
+        background: white !important;
+        border: 2px solid #dc2626 !important;
+        color: #dc2626 !important;
+    }
+
+    /* Hide the text, show only icon */
+    .portfolio-btn-danger.remove-entry span,
+    button.remove-entry span,
+    .remove-formset span {
+        display: none !important;
+    }
+
+    /* Hide the text content after the icon */
+    .portfolio-btn-danger.remove-entry i+*,
+    button.remove-entry i+*,
+    .remove-formset i+* {
+        display: none !important;
+    }
+
+    /* Hide all text in the button by setting font-size to 0 */
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        font-size: 0 !important;
+        /* Hide all text */
+    }
+
+    /* Show only the icon with proper size */
+    .portfolio-btn-danger.remove-entry i,
+    button.remove-entry i,
+    .remove-formset i {
+        font-size: 16px !important;
+        /* Show only icon */
+        color: #dc2626 !important;
+    }
+
+    /* Ensure icon is visible and properly sized */
+    .portfolio-btn-danger.remove-entry i,
+    button.remove-entry i,
+    .remove-formset i {
+        display: inline-block !important;
+        font-size: 16px !important;
+        margin: 0 !important;
+        color: #dc2626 !important;
+    }
+
+    /* If no icon exists, add a trash icon */
+    .portfolio-btn-danger.remove-entry:not(:has(i)),
+    button.remove-entry:not(:has(i)),
+    .remove-formset:not(:has(i))::before {
+        content: '\f2ed';
+        /* FontAwesome trash icon */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 16px;
+        color: #dc2626 !important;
+    }
+
+    /* Hover effects for mobile */
+    .portfolio-btn-danger.remove-entry:hover,
+    button.remove-entry:hover,
+    .remove-formset:hover {
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        background: #fef2f2 !important;
+        border-color: #dc2626 !important;
+    }
+
+    /* Active state for better touch feedback */
+    .portfolio-btn-danger.remove-entry:active,
+    button.remove-entry:active,
+    .remove-formset:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        padding: 6px 10px !important;
+        min-width: 40px;
+        height: 40px;
+        font-size: 12px !important;
+    }
+
+    .portfolio-btn-danger.remove-entry i,
+    button.remove-entry i,
+    .remove-formset i {
+        font-size: 14px !important;
+        color: #dc2626 !important;
+    }
+
+    /* Ensure text is hidden on extra small devices too */
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        font-size: 0 !important;
+    }
+}
+
+/* Ensure proper spacing in form headers */
+@media (max-width: 768px) {
+    .portfolio-flex.portfolio-items-center.portfolio-justify-between.portfolio-spacing-sm {
+        gap: 8px !important;
+    }
+
+    .portfolio-section-title {
+        font-size: 16px !important;
+        margin-right: 8px !important;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        /* Ensure minimum touch target size */
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+
+    .portfolio-btn-danger.remove-entry,
+    button.remove-entry,
+    .remove-formset {
+        background: white !important;
+        border-color: black !important;
+        color: #dc2626 !important;
+    }
+
+    .portfolio-btn-danger.remove-entry:hover,
+    button.remove-entry:hover,
+    .remove-formset:hover {
+        background: #374151 !important;
+        border-color: #dc2626 !important;
+    }
+
+    .portfolio-btn-danger.remove-entry i,
+    button.remove-entry i,
+    .remove-formset i {
+        color: #dc2626 !important;
+    }
+}
