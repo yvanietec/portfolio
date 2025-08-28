@@ -3,17 +3,23 @@ Django==5.2.3
 djangorestframework==3.16.0
 django-cors-headers==4.7.0
 
+
 # PDF Generation (actually used)
 pdfkit==1.0.0
+xhtml2pdf
+
 
 # Payment Processing (actually used)
 razorpay==1.4.2
 
+
 # QR Code Generation (actually used)
 qrcode==8.2
 
+
 # Image Processing (used by Django)
 Pillow==11.2.1
+widget_tweaks
 
 # Core dependencies
 asgiref==3.8.1
