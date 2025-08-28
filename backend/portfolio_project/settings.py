@@ -37,25 +37,28 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'false'
 
 ALLOWED_HOSTS = ['139.59.42.69', 'profolio1.com', 'www.profolio1.com']
-# Security Settings
+
+# Security Headers
+SECURE_SSL_REDIRECT = not DEBUG
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'SAMEORIGIN'
-SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+X_FRAME_OPTIONS = 'DENY'  # You can change this to 'SAMEORIGIN' if embedding is needed
 
-# CSRF Settings
+# CSRF
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-# Session Settings
+# Session
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 
 # Application definition
+CSRF_TRUSTED_ORIGINS = ['https://profolio1.com', 'https://www.profolio1.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
