@@ -221,7 +221,7 @@ urlpatterns = [
          views.reject_success_story, name='reject_success_story'),
 
 
- 
+
     # NEW: Agent approval system URLs
     path('staff/student-approvals/', views.admin_student_approvals,
          name='admin_student_approvals'),
@@ -249,8 +249,8 @@ urlpatterns = [
          name='export_monitoring_data'),
 
     path('accept-terms/', views.accept_terms, name='accept_terms'),
-  
- 
+
+
     # Smart get started routing
     path('get-started/', views.smart_get_started_view, name='smart_get_started'),
 ]

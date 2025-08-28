@@ -15692,3 +15692,134 @@ INFO 2025-08-25 20:56:52,238 autoreload 18332 45800 Watching for file changes wi
 WARNING 2025-08-25 20:56:55,918 log 18332 48356 Not Found: /favicon.ico
 INFO 2025-08-25 20:57:13,573 autoreload 41244 1472 Watching for file changes with StatReloader
 WARNING 2025-08-25 20:57:24,672 log 41244 48048 Not Found: /favicon.ico
+INFO 2025-08-26 21:18:24,007 autoreload 30084 37396 Watching for file changes with StatReloader
+ERROR 2025-08-26 21:18:28,483 log 30084 40820 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\profolio1\backend\users\views.py", line 858, in home
+    return render(request, 'portfolio/home.html', context)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template_name,
+        ^^^^^^^^^^^^^^
+        skip=history,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+        "'%s' tag with name '%s' appears more than once" % (bits[0], block_name)
+    )
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'extra_css' appears more than once
+WARNING 2025-08-26 21:18:28,665 log 30084 40820 Not Found: /favicon.ico
+INFO 2025-08-26 21:21:18,438 autoreload 30084 37396 D:\profolio1\backend\users\urls.py changed, reloading.
+INFO 2025-08-26 21:21:19,308 autoreload 31348 2284 Watching for file changes with StatReloader
+INFO 2025-08-27 12:42:20,149 autoreload 33208 19964 Watching for file changes with StatReloader
+INFO 2025-08-27 17:35:33,008 autoreload 33208 19964 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
+INFO 2025-08-27 17:35:34,287 autoreload 30884 34360 Watching for file changes with StatReloader
+INFO 2025-08-27 17:35:40,860 autoreload 12888 46404 Watching for file changes with StatReloader
+INFO 2025-08-27 17:36:25,366 autoreload 4604 31996 Watching for file changes with StatReloader
+ERROR 2025-08-27 17:36:31,181 log 4604 47284 Invalid HTTP_HOST header: '127.0.0.1:7485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:7485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+ERROR 2025-08-27 17:36:31,353 log 4604 38568 Invalid HTTP_HOST header: '127.0.0.1:7485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:7485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+INFO 2025-08-27 17:36:55,998 autoreload 14052 17360 Watching for file changes with StatReloader
+INFO 2025-08-28 08:00:46,960 autoreload 14052 17360 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
+INFO 2025-08-28 08:00:50,599 autoreload 33132 35496 Watching for file changes with StatReloader
+INFO 2025-08-28 08:12:52,816 autoreload 33132 35496 D:\profolio1\backend\portfolio_project\urls.py changed, reloading.
+INFO 2025-08-28 08:12:54,396 autoreload 25024 32468 Watching for file changes with StatReloader
+INFO 2025-08-28 08:13:16,516 autoreload 25024 32468 D:\profolio1\backend\portfolio_project\urls.py changed, reloading.
+INFO 2025-08-28 08:13:17,871 autoreload 39808 30180 Watching for file changes with StatReloader
+INFO 2025-08-28 08:13:28,187 autoreload 39808 30180 D:\profolio1\backend\portfolio_project\urls.py changed, reloading.
+INFO 2025-08-28 08:13:29,695 autoreload 17684 48980 Watching for file changes with StatReloader
+INFO 2025-08-28 08:33:56,797 autoreload 36200 14308 Watching for file changes with StatReloader
+INFO 2025-08-28 08:34:18,719 autoreload 30100 48500 Watching for file changes with StatReloader
+ERROR 2025-08-28 08:34:24,105 log 30100 1212 Invalid HTTP_HOST header: '127.0.0.1:5485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:5485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+ERROR 2025-08-28 08:34:24,239 log 30100 44128 Invalid HTTP_HOST header: '127.0.0.1:5485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\nidhi\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:5485'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+INFO 2025-08-28 08:34:39,833 autoreload 30572 48448 Watching for file changes with StatReloader
