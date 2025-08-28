@@ -15825,3 +15825,7 @@ django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:5485
 INFO 2025-08-28 08:34:39,833 autoreload 30572 48448 Watching for file changes with StatReloader
 INFO 2025-08-28 08:52:52,734 autoreload 30572 48448 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
 INFO 2025-08-28 08:52:54,130 autoreload 18024 36004 Watching for file changes with StatReloader
+INFO 2025-08-28 08:59:59,000 autoreload 18024 36004 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
+INFO 2025-08-28 09:00:00,014 autoreload 32560 12232 Watching for file changes with StatReloader
+INFO 2025-08-28 09:00:03,301 autoreload 32560 12232 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
+INFO 2025-08-28 09:00:04,730 autoreload 29584 33408 Watching for file changes with StatReloader
