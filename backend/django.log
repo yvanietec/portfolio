@@ -15898,3 +15898,5 @@ Traceback (most recent call last):
 django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
 INFO 2025-08-28 10:21:55,995 autoreload 41060 34408 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
 INFO 2025-08-28 10:21:56,893 autoreload 31772 25856 Watching for file changes with StatReloader
+INFO 2025-08-28 10:22:46,015 autoreload 31772 25856 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
+INFO 2025-08-28 10:22:46,960 autoreload 40488 21048 Watching for file changes with StatReloader

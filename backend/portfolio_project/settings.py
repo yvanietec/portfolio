@@ -38,7 +38,8 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'false'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '139.59.42.69', 'profolio1.com', 'www.profolio1.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 '139.59.42.69', 'profolio1.com', 'www.profolio1.com']
 
 # Security Headers
 SECURE_SSL_REDIRECT = not DEBUG
