@@ -15900,3 +15900,5 @@ INFO 2025-08-28 10:21:55,995 autoreload 41060 34408 D:\profolio1\backend\portfol
 INFO 2025-08-28 10:21:56,893 autoreload 31772 25856 Watching for file changes with StatReloader
 INFO 2025-08-28 10:22:46,015 autoreload 31772 25856 D:\profolio1\backend\portfolio_project\settings.py changed, reloading.
 INFO 2025-08-28 10:22:46,960 autoreload 40488 21048 Watching for file changes with StatReloader
+INFO 2025-09-01 12:31:43,651 autoreload 43072 21560 Watching for file changes with StatReloader
+WARNING 2025-09-01 12:31:48,958 log 43072 21592 Not Found: /favicon.ico
